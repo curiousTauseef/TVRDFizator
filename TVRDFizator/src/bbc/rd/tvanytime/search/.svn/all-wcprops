@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/search
+END
+MetadataSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/search/MetadataSearch.java
+END
+LocationResolution.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/search/LocationResolution.java
+END
+SearchInterfaceNotSupportedException.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/search/SearchInterfaceNotSupportedException.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/search/package.html
+END

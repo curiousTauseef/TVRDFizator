@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/xml
+END
+SAXServiceInformationHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/xml/SAXServiceInformationHandler.java
+END
+NonFatalXMLException.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/xml/NonFatalXMLException.java
+END
+SAXSegmentInformationHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/xml/SAXSegmentInformationHandler.java
+END
+SAXProgramInformationHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/xml/SAXProgramInformationHandler.java
+END
+SAXXMLParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/xml/SAXXMLParser.java
+END
+SAXProgramLocationHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/xml/SAXProgramLocationHandler.java
+END
+SAXContentReferencingHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/xml/SAXContentReferencingHandler.java
+END
+SAXGroupInformationHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/xml/SAXGroupInformationHandler.java
+END
+XMLParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/xml/XMLParser.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/xml/package.html
+END

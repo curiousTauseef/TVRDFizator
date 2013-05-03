@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/programInformation
+END
+ProgramInformationTable.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/programInformation/ProgramInformationTable.java
+END
+AudioAttributes.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/programInformation/AudioAttributes.java
+END
+AVAttributes.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/programInformation/AVAttributes.java
+END
+ProgramInformation.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/programInformation/ProgramInformation.java
+END
+VideoAttributes.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/programInformation/VideoAttributes.java
+END
+AspectRatio.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/programInformation/AspectRatio.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/programInformation/package.html
+END

@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/linkedtv/!svn/ver/271/projects/metadata-viewer/application/RDF-generator/src/linkedtv/generator/writers
+END
+RDFWriterSubtitleEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/linkedtv/!svn/ver/271/projects/metadata-viewer/application/RDF-generator/src/linkedtv/generator/writers/RDFWriterSubtitleEntity.java
+END
+RDFWriterAnalisys.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/linkedtv/!svn/ver/271/projects/metadata-viewer/application/RDF-generator/src/linkedtv/generator/writers/RDFWriterAnalisys.java
+END
+RDFWriterLegacy.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/linkedtv/!svn/ver/271/projects/metadata-viewer/application/RDF-generator/src/linkedtv/generator/writers/RDFWriterLegacy.java
+END

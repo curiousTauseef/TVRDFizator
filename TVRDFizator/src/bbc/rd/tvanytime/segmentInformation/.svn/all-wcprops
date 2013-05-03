@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/segmentInformation
+END
+SegmentInformationTable.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/segmentInformation/SegmentInformationTable.java
+END
+SegmentGroupType.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/segmentInformation/SegmentGroupType.java
+END
+SegmentReference.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/segmentInformation/SegmentReference.java
+END
+SegmentGroupInformation.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/segmentInformation/SegmentGroupInformation.java
+END
+SegmentLocator.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/segmentInformation/SegmentLocator.java
+END
+BasicSegmentDescription.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/segmentInformation/BasicSegmentDescription.java
+END
+SegmentInformation.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/segmentInformation/SegmentInformation.java
+END
+SegmentGroupList.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/segmentInformation/SegmentGroupList.java
+END
+SegmentList.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/segmentInformation/SegmentList.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/segmentInformation/package.html
+END

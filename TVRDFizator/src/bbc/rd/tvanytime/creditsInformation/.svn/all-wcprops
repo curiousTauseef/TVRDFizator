@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/creditsInformation
+END
+Name.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/creditsInformation/Name.java
+END
+OrganizationName.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/creditsInformation/OrganizationName.java
+END
+PersonName.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/creditsInformation/PersonName.java
+END
+CreditsList.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/creditsInformation/CreditsList.java
+END
+Character.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/creditsInformation/Character.java
+END
+CreditsItem.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/creditsInformation/CreditsItem.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/creditsInformation/package.html
+END

@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime
+END
+URI.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/URI.java
+END
+TVAnytimeException.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/TVAnytimeException.java
+END
+RelatedMaterial.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/RelatedMaterial.java
+END
+Genre.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/Genre.java
+END
+CaptionLanguage.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/CaptionLanguage.java
+END
+SignLanguage.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/SignLanguage.java
+END
+PromotionalInformation.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/PromotionalInformation.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/package.html
+END
+Title.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/Title.java
+END
+InstanceMetadataId.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/InstanceMetadataId.java
+END
+Keyword.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/Keyword.java
+END
+BasicDescription.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/BasicDescription.java
+END
+Duration.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/Duration.java
+END
+Synopsis.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/Synopsis.java
+END
+ContentReference.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/ContentReference.java
+END
+MemberOf.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/MemberOf.java
+END

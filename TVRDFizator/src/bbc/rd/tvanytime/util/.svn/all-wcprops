@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/util
+END
+TimeToolbox.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/util/TimeToolbox.java
+END
+DVBLocatorToolbox.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/util/DVBLocatorToolbox.java
+END
+TVAnytimeHowRelatedToolbox.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/util/TVAnytimeHowRelatedToolbox.java
+END
+GenreToolbox.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/util/GenreToolbox.java
+END
+ScheduleManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/util/ScheduleManager.java
+END
+TVAnytimeGenreToolbox.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/util/TVAnytimeGenreToolbox.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/tvanytime/util/package.html
+END

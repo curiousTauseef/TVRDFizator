@@ -1,0 +1,54 @@
+package linkedtv.generator.main;
+
+public class LinkedTV_xml2rdf {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+
+	Processing p = new Processing();
+	if (args.length > 1){
+		
+		
+		if (args[0].equals("-legacy")){ 
+			for (int i = 1; i < args.length; i ++){
+				String in_legacy_file_path = args[i];
+				String out_legacy_file_path = args[i].substring(0, args[i].length()-4) + ".ttl";
+				p.legacy_process( in_legacy_file_path, out_legacy_file_path);
+			}
+			
+		}
+		else {
+			if (args[0].equals("-analysis")){
+				for (int i = 1; i < args.length; i ++){
+					String in_analisys_file_path = args[i];
+					String out_analisys_file_path = args[i].substring(0, args[i].length()-4) + ".ttl";
+					p.analisys_process( in_analisys_file_path, out_analisys_file_path);
+				}
+			}
+			else {
+				if (args[0].equals("-subtitles_entities")){
+					for (int i = 1; i < args.length; i ++){
+						String in_subtitle_file_path = args[i];
+						String in_entity_file_path = args[i+1];
+						String out_entity_file_path = args[i].substring(0, args[i+1].length()-5) + ".ttl";
+						p.entity_process( in_entity_file_path, in_subtitle_file_path, out_entity_file_path);
+						i++;
+					}
+				}
+				else System.out.println("You need to specify a valid translation process (-legacy/-analysis/-entity)");
+			}
+		}
+	}
+	
+
+	else {
+		System.out.println("At least two parameters are expected: please specify the kind of process (-legacy/-analysis), and the files to be translated.");
+	}
+		
+  }
+	
+
+}

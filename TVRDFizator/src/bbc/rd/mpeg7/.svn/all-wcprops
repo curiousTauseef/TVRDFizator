@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/mpeg7
+END
+MPEG7MediaIncrDuration.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/mpeg7/MPEG7MediaIncrDuration.java
+END
+MPEG7MediaLocator.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/mpeg7/MPEG7MediaLocator.java
+END
+MPEG7MediaDuration.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/mpeg7/MPEG7MediaDuration.java
+END
+MPEG7MediaRelIncrTimePoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/mpeg7/MPEG7MediaRelIncrTimePoint.java
+END
+MPEG7MediaTimePoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/mpeg7/MPEG7MediaTimePoint.java
+END
+MPEG7MediaRelTimePoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/mpeg7/MPEG7MediaRelTimePoint.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/linkedtv/!svn/ver/137/projects/metadata-viewer/application/RDF-generator/src/bbc/rd/mpeg7/package.html
+END
