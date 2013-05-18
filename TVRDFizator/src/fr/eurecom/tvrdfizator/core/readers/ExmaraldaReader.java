@@ -31,12 +31,11 @@ public class ExmaraldaReader{
 	private String videoURL;
 	
 	
-	public ExmaraldaReader(String f, VideoMetaData md){
+	public ExmaraldaReader(String f, VideoMetaData md) throws ParserConfigurationException, SAXException, IOException{
 		file = f;
 		mdata = md;
 
 
-		try {
 			
 			File fXmlFile = new File(file);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -45,16 +44,7 @@ public class ExmaraldaReader{
 			doc = dBuilder.parse(fXmlFile);
 			doc.getDocumentElement().normalize();
 			
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 
 		
 	}

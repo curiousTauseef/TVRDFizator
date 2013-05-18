@@ -27,7 +27,7 @@ public class SubtitleReader {
 		file = f;
 	}
 	
-	public  List<Subtitle> read() throws FileNotFoundException{
+	public  List<Subtitle> read() throws IOException{
 
 		
 
@@ -35,19 +35,13 @@ public class SubtitleReader {
 		List<Line> subs = null;
 		//Read SRT File
 		InputStream is;
-		try {
+
 			String text = read_text();
 			System.out.println(text);
 			is = new ByteArrayInputStream(text.getBytes());
 			TextTrackImpl textTrack = SrtParser.parse(is);
 			subs = textTrack.getSubs();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+
 		
 		//Create subtitles from Lines
 		for (int i = 0; i< subs.size(); i++){

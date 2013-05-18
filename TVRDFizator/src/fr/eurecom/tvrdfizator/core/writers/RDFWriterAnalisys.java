@@ -83,39 +83,40 @@ public class RDFWriterAnalisys {
 
 	
 	
-	public RDFWriterAnalisys(String f_analisys, VideoMetaData md, String media_item_id){
+	public RDFWriterAnalisys(String f_analisys, VideoMetaData md, String media_item_id, String namespace, String locator){
 		file_exmaralda = f_analisys;
 		mediaResourceID = media_item_id;
+		
 		mdata = md;
+
+	
+		if (!namespace.equals("")){
+			LINKEDTV_URL = namespace;
+		}
+		
+		if (!locator.equals("")){
+			mdata.setVideoURL(locator);
+		}
 	}
 	
 	
 	
-	public void create_exmeralda(){
-		try {
+	public void create_exmeralda() throws FileNotFoundException{
+
 			createModel();
 			generateExmaralda();
 			writeExmaralda();
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 
 	}
 	
 	
-	private void writeExmaralda() {
+	private void writeExmaralda() throws FileNotFoundException {
 		
-    	try {
 			FileOutputStream out_File = new FileOutputStream(new File(file_exmaralda));
 			model_exmaralda.write(out_File, "TURTLE");
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//model.write(System.out, "TURTLE");
+
 	}
 	
 	

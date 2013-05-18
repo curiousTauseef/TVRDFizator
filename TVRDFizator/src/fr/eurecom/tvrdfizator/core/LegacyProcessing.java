@@ -2,23 +2,35 @@ package fr.eurecom.tvrdfizator.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSInputFile;
 
 public class LegacyProcessing extends Thread {
 
-	long idMediaResource;
+	UUID idMediaResource;
 	String metadataType;
 	String metadataFile;
 	DBCollection mediaresources;
 	DBObject mr;
-	
-	public LegacyProcessing (long idMediaResource, String metadataType, String metadataFile, DBCollection mediaresources, DBObject mr){
+	DB db;
+	String namespace;
+	String locator;
 
+	
+	public LegacyProcessing (DB db,UUID idMediaResource, String metadataType, String metadataFile, DBCollection mediaresources, DBObject mr,  String namespace, String locator){
+
+		
+		this.namespace = namespace;
+		this.locator = locator;
+		this.db = db;
 		this.idMediaResource = idMediaResource;
 		this.metadataType = metadataType;
 		this.metadataFile = metadataFile;
@@ -31,9 +43,13 @@ public class LegacyProcessing extends Thread {
     public void run() {
         System.out.println("Entering Processing!");
         
+		GridFS gfsmr = new GridFS(db);
+		
         
 		 //Create inputFile & outputFile
-		 File metadataFileDisk = new File("./data/legacy.tva");
+		 File metadataFileDisk = new File("./data/legacy_"+idMediaResource.toString()+".tva");
+		 File fileSerializationDisk  = new File("./data/legacy_"+idMediaResource.toString()+".ttl");
+
 		try {
 			FileUtils.writeStringToFile(metadataFileDisk, metadataFile, "UTF-8");
 		} catch (IOException e) {
@@ -43,27 +59,31 @@ public class LegacyProcessing extends Thread {
 
 		//SERIALIZATION
 		 Processing p = new Processing();
-		 p.legacy_process( "./data/legacy.tva", "./data/legacy.ttl", Long.toString(idMediaResource));
+		 if (p.legacy_process( "./data/legacy_"+idMediaResource.toString()+".tva", "./data/legacy_"+idMediaResource.toString()+".ttl", idMediaResource.toString(), namespace, locator)){
 		 
-		 
-		 //Storing in the database
-		 File fileSerializationDisk  = new File("./data/legacy.ttl");
-		 String textSerialization = null;
-		try {
-			textSerialization = FileUtils.readFileToString(fileSerializationDisk, "UTF-8");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		 BasicDBObject auxMediaResource = new BasicDBObject();
-		 auxMediaResource.append("$set", new BasicDBObject().append(metadataType+"Serialization", textSerialization));
-		 mediaresources.update(mr,auxMediaResource);
-		 
-		 //Delete both created files
-		 metadataFileDisk.delete();
-		 fileSerializationDisk.delete();
-		 
-		 
+			 //Storing in the database
+			 
+			 
+			GridFSInputFile gfsFile = null;
+			try {
+				gfsFile = gfsmr.createFile(fileSerializationDisk);
+				gfsFile.setFilename(idMediaResource.toString()+"_"+metadataType+"_serialization");
+				gfsFile.save();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			
+			mr.put(metadataType+"Serialization", gfsFile);
+			mediaresources.save(mr);
+
+		 }
+			metadataFileDisk.delete();
+			fileSerializationDisk.delete();
+
+
+			
         System.out.println("Finishing Processing!");
     }
 

@@ -19,8 +19,7 @@ public class Processing {
 
 	
 	
-	public void legacy_process(String in_legacy_file_path, String out_legacy_file_path, String idMediaResource){
-		boolean errors= false; 
+	public boolean legacy_process(String in_legacy_file_path, String out_legacy_file_path, String idMediaResource, String namespace, String locator){
 		
 
 		//Generate the data structures
@@ -39,31 +38,33 @@ public class Processing {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				errors = true;
+				System.out.println("ERROR when generating the RDF model.");
+				return false;
 			}
 		else System.out.println("No legacy information available. Continuing processing XML. ");
 		
 		
 		//Write the RDF Data for Legacy information
 		try {
-			RDFWriterLegacy wt = new RDFWriterLegacy (out_legacy_file_path, "", mdata, idMediaResource);	
+			RDFWriterLegacy wt = new RDFWriterLegacy (out_legacy_file_path, "", mdata, idMediaResource,  namespace, locator);	
 			wt.create_legacy();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("ERROR when generating the RDF model.");
+
+			return false;
 		}
 		
 		
-		if (!errors) System.out.println("RDF model generated sucessfully.");
-		else System.out.println("ERROR when generating the RDF model.");
-		//END
+		System.out.println("RDF model generated sucessfully.");
+		return true;
 		
 		
 	}
 	
 	
-	public void analisys_process(String in_exmaralda_file_path, String out_exmaralda_file_path, String media_item_id){
-		boolean errors= false; 
+	public boolean analisys_process(String in_exmaralda_file_path, String out_exmaralda_file_path, String media_item_id, String namespace, String locator){
 		
 
 
@@ -81,8 +82,9 @@ public class Processing {
 				ExmaraldaReader er = new ExmaraldaReader (in_exmaralda_file_path, mdata);	
 				er.read();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.out.println("ERROR when generating the RDF model.");
+				return false;
 			}
 		else System.out.println("No analysis information available. Continuing processing XML. ");
 		
@@ -90,24 +92,23 @@ public class Processing {
 
 		//Write the RDF Data for Legacy information
 		try {
-			RDFWriterAnalisys wt = new RDFWriterAnalisys (out_exmaralda_file_path, mdata, media_item_id);	
+			RDFWriterAnalisys wt = new RDFWriterAnalisys (out_exmaralda_file_path, mdata, media_item_id, namespace, locator);	
 			wt.create_exmeralda();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("ERROR when generating the RDF model.");
+			return false;
 		}
 
 		
-		if (!errors) System.out.println("RDF model generated sucessfully.");
-		else System.out.println("ERROR when generating the RDF model.");
-		//END
+		System.out.println("RDF model generated sucessfully.");
+		return true;
 		
 		
 	}
 	
 	
-	public void entity_process(String in_entity_file_path, String in_subtitle_file_path, String out_entity_file_path, String media_resource_id){
-		boolean errors= false; 
+	public boolean entity_process(String in_entity_file_path, String in_subtitle_file_path, String out_entity_file_path, String media_resource_id, String namespace, String locator){
 		
 		List <Subtitle> subtitles = null;
 		// - Entities file.
@@ -116,8 +117,9 @@ public class Processing {
 				SubtitleReader subtitler = new SubtitleReader (in_subtitle_file_path);	
 				subtitles = subtitler.read();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.out.println("ERROR when generating the RDF model.");
+				return false;
 			}
 		else System.out.println("No subtitle information available. Continuing processing XML. ");
 		System.out.println("The number of subtitles is " + subtitles.size());
@@ -131,25 +133,26 @@ public class Processing {
 				EntityReader entityr = new EntityReader (in_entity_file_path);	
 				entities = entityr.read();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.out.println("ERROR when generating the RDF model.");
+				return false;
 			}
 		else System.out.println("No entity information available. Continuing processing XML. ");
 		
 
 		//Write the RDF Data from subtitles and entities
 		try {
-			RDFWriterSubtitleEntity wt = new RDFWriterSubtitleEntity (out_entity_file_path, subtitles, entities, media_resource_id);	
+			RDFWriterSubtitleEntity wt = new RDFWriterSubtitleEntity (out_entity_file_path, subtitles, entities, media_resource_id, namespace, locator);	
 			wt.create_subtitles_entities();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("ERROR when generating the RDF model.");
+			return false;
 		}
 
 		
-		if (!errors) System.out.println("RDF model generated sucessfully.");
-		else System.out.println("ERROR when generating the RDF model.");
-		//END
+		System.out.println("RDF model generated sucessfully.");
+		return true;
 		
 		
 	}

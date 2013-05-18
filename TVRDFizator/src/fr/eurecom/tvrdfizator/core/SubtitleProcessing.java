@@ -2,6 +2,7 @@ package fr.eurecom.tvrdfizator.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 
@@ -18,15 +19,23 @@ import fr.eurecom.nerd.client.type.ExtractorType;
 
 public class SubtitleProcessing extends Thread {
 
-	long idMediaResource;
+	UUID idMediaResource;
 	String metadataType;
 	String metadataFile;
 	DBCollection mediaresources;
 	DBObject mr;
 	DB db;
-	
-	public SubtitleProcessing (DB db, long idMediaResource, String metadataType, String metadataFile, DBCollection mediaresources, DBObject mr){
+	String locator;
+	String namespace;
 
+	
+	public SubtitleProcessing (DB db, UUID idMediaResource, String metadataType, String metadataFile, DBCollection mediaresources, DBObject mr,  String namespace, String locator){
+
+		
+		this.namespace = namespace;
+		this.locator = locator;
+		this.namespace = namespace;
+		this.locator = locator;
 		this.db = db;
 		this.idMediaResource = idMediaResource;
 		this.metadataType = metadataType;
@@ -39,10 +48,11 @@ public class SubtitleProcessing extends Thread {
 	
     public void run() {
         System.out.println("Entering Processing!");
-        
+		GridFS gfsmr = new GridFS(db);
+
         
 		 //Create inputFile & outputFile
-		File metadataFileDisk = new File("./data/subtitle.str");
+		File metadataFileDisk = new File("./data/subtitle_"+idMediaResource+".str");
 		try {
 			FileUtils.writeStringToFile(metadataFileDisk, metadataFile, "UTF-8");
 		} catch (IOException e) {
@@ -51,48 +61,49 @@ public class SubtitleProcessing extends Thread {
 		}
 		
 	    NERD nerd = new NERD("loq6asma69tgfq2aijbubh2t5klm7pk0");
-	    String json = nerd.annotateJSON(ExtractorType.ALCHEMYAPI, 
+	    String json = nerd.annotateJSON(ExtractorType.COMBINED, 
 	                                    DocumentType.TIMEDTEXT,
 	                                    metadataFile);
 	    
 
+	    File entitiesNerd = new File("./data/entities_"+idMediaResource+".json");
 	    try {
-			FileUtils.writeStringToFile(new File("./data/entities.json"), json, "UTF-8");
+			FileUtils.writeStringToFile(entitiesNerd, json, "UTF-8");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+		 File fileSerializationDisk  = new File("./data/entities_"+idMediaResource+".ttl");
+
+		 
 		//SERIALIZATION
 		 Processing p = new Processing();
-		 p.entity_process("./data/entities.json", "./data/subtitle.str", "./data/entities.ttl", Long.toString(idMediaResource));
+		 if (p.entity_process("./data/entities_"+idMediaResource+".json", "./data/subtitle_"+idMediaResource+".str", "./data/entities_"+idMediaResource+".ttl", idMediaResource.toString(), namespace, locator)){
 		 
 		 
-		 //Storing in the database
-		 File fileSerializationDisk  = new File("./data/entities.ttl");
-		
+			 //Storing in the database
+			
+	
+			GridFSInputFile gfsFile = null;
+			try {
+				gfsFile = gfsmr.createFile(fileSerializationDisk);
+				gfsFile.setFilename(idMediaResource+"_"+metadataType+"_serialization");
+				gfsFile.save();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-		GridFS gfsmr = new GridFS(db, "mediaResources");
-		GridFSInputFile gfsFile = null;
-		try {
-			gfsFile = gfsmr.createFile(fileSerializationDisk);
-			gfsFile.setFilename(idMediaResource+"_"+metadataType+"_serialization");
-			gfsFile.save();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		metadataFileDisk.delete();
+			
+			mr.put(metadataType+"Serialization", gfsFile);
+			mediaresources.save(mr);
 		 
-		
-		 BasicDBObject auxMediaResource = new BasicDBObject();
-		 auxMediaResource.append("$set", new BasicDBObject().append(metadataType+"Serialization", gfsFile));
-		 mediaresources.update(mr,auxMediaResource);
+		 }
 		 
-		 //Delete both created files
-		 metadataFileDisk.delete();
-		 
-		 
+			metadataFileDisk.delete();
+			fileSerializationDisk.delete();
+			entitiesNerd.delete();
         System.out.println("Finishing Processing!");
     }
 

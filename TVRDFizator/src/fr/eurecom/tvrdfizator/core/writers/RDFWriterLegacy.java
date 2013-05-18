@@ -72,36 +72,39 @@ public class RDFWriterLegacy {
 
 
 	
-	public RDFWriterLegacy(String f_legacy, String f_exmaralda, VideoMetaData md, String idMediaResource){
+	public RDFWriterLegacy(String f_legacy, String f_exmaralda, VideoMetaData md, String idMediaResource, String namespace, String locator){
 		file_legacy = f_legacy;
 		file_exmaralda = f_exmaralda;
 		this.idMediaResource = idMediaResource;
 		mdata = md;
+		
+		
+		if (!namespace.equals("")){
+			LINKEDTV_URL = namespace;
+		}
+		
+		if (!locator.equals("")){
+			mdata.setVideoURL(locator);
+		}
+		
+		
 	}
 	
-	public void create_legacy(){
-		try {
+	public void create_legacy() throws FileNotFoundException{
+
 			createModel();
 			generateLegacyMetadata();
 			writeLegacy();
 					
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 	
-	public void create_exmeralda(){
-		try {
+	public void create_exmeralda() throws FileNotFoundException{
+
 			createModel();
 			generateExmaralda();
 			writeExmaralda();
 			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 	
@@ -814,29 +817,21 @@ public class RDFWriterLegacy {
 			mediaFragmentI.addProperty(captioning_OWL, mf.getValue());*/
 		}
 	}
-	private void writeLegacy() {
-		
-    	try {
+	private void writeLegacy() throws FileNotFoundException {
+
 			FileOutputStream out_File = new FileOutputStream(new File(file_legacy));
 			model_legacy.write(out_File, "TURTLE");
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		//model.write(System.out, "TURTLE");
 	}
 	
-	private void writeExmaralda() {
+	private void writeExmaralda() throws FileNotFoundException {
 		
-    	try {
+
 			FileOutputStream out_File = new FileOutputStream(new File(file_exmaralda));
 			model_exmaralda.write(out_File, "TURTLE");
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		//model.write(System.out, "TURTLE");
 	}
 

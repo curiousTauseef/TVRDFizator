@@ -96,17 +96,26 @@ public class RDFWriterSubtitleEntity {
 	
 	Individual documentI = null;
 	
-	public RDFWriterSubtitleEntity (String f_entity, List<Subtitle> subtitles, List<NERDEntity> entities, String media_resource_id){
+	public RDFWriterSubtitleEntity (String f_entity, List<Subtitle> subtitles, List<NERDEntity> entities, String media_resource_id, String namespace, String locator){
+		
+		
 		file_entity_json = f_entity;
 		this.entities = entities;
 		this.subtitles = subtitles;
 		this.mediaResource = media_resource_id;
 		
 		
+		
+		
+		if (!namespace.equals("")){
+			LINKEDTV_URL = namespace;
+		}
+		
+		
 	}
 	
-	public void create_subtitles_entities(){
-		try {
+	public void create_subtitles_entities() throws FileNotFoundException{
+
 			createModel();
 			
 			generateSubtitles();
@@ -115,10 +124,6 @@ public class RDFWriterSubtitleEntity {
 			writeAll();
 
 			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 	
@@ -215,17 +220,14 @@ public class RDFWriterSubtitleEntity {
 		
 	}
 
-	private void writeAll() {
+	private void writeAll() throws FileNotFoundException {
 		
-    	try {
+
 			FileOutputStream out_File = new FileOutputStream(new File(file_entity_json));
+			
 			model_entity.write(out_File, "TURTLE");
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//model.write(System.out, "TURTLE");
+
 	}
 	
 	
@@ -342,8 +344,10 @@ public class RDFWriterSubtitleEntity {
 				nerdI.addProperty(RDF.type, modelNerd.createClass(entity.getNerdType()));
 
 				//Type plaintext
-				OntProperty typeProperty = modelDC.createOntProperty(Dublin_Core_URL+"type");
-				nerdI.addProperty(typeProperty, entity.getExtractorType());
+				if (entity.getExtractorType() != null){
+					OntProperty typeProperty = modelDC.createOntProperty(Dublin_Core_URL+"type");
+					nerdI.addProperty(typeProperty, entity.getExtractorType());
+				}
 
 				//Source (extractor)
 				OntProperty sourceProperty = modelDC.createOntProperty(Dublin_Core_URL+"source");

@@ -15,7 +15,7 @@ public class Server {
     public static void main(String[] args) {
               
         // static content is linked from here
-        GrizzlyWebServer server = new GrizzlyWebServer(8889);
+        GrizzlyWebServer server = new GrizzlyWebServer(8003);
        
         //create UI resources
         ServletAdapter ui = new ServletAdapter();

@@ -2,23 +2,33 @@ package fr.eurecom.tvrdfizator.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSInputFile;
 
 public class ExmeraldaProcessing extends Thread {
 
-	long idMediaResource;
+	UUID idMediaResource;
 	String metadataType;
 	String metadataFile;
 	DBCollection mediaresources;
 	DBObject mr;
+	DB db;
+	String namespace;
+	String locator;
 	
-	public ExmeraldaProcessing (long idMediaResource, String metadataType, String metadataFile, DBCollection mediaresources, DBObject mr){
+	public ExmeraldaProcessing (DB db, UUID idMediaResource, String metadataType, String metadataFile, DBCollection mediaresources, DBObject mr, String namespace, String locator){
 
+		this.locator = locator;
+		this.namespace = namespace;
+		this.db = db;
 		this.idMediaResource = idMediaResource;
 		this.metadataType = metadataType;
 		this.metadataFile = metadataFile;
@@ -30,40 +40,49 @@ public class ExmeraldaProcessing extends Thread {
 	
     public void run() {
         System.out.println("Entering Processing!");
-        
+		GridFS gfsmr = new GridFS(db);
+
         
 		 //Create inputFile & outputFile
-		 File metadataFileDisk = new File("./data/exmeralda.exb");
+		 File metadataFileDisk = new File("./data/exmeralda_"+idMediaResource+".exb");
 		try {
 			FileUtils.writeStringToFile(metadataFileDisk, metadataFile, "UTF-8");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		 File fileSerializationDisk  = new File("./data/exmeralda_"+idMediaResource+".ttl");
+
 
 		//SERIALIZATION
 		 Processing p = new Processing();
-		 p.analisys_process( "./data/exmeralda.exb", "./data/exmeralda.ttl", Long.toString(idMediaResource));
+		 if (p.analisys_process( "./data/exmeralda_"+idMediaResource+".exb",  "./data/exmeralda_"+idMediaResource+".ttl", idMediaResource.toString(), namespace, locator)){
+
+		 
+
+			
+			 //Storing in the database
+	
+				GridFSInputFile gfsFile = null;
+				try {
+					gfsFile = gfsmr.createFile(fileSerializationDisk);
+					gfsFile.setFilename(idMediaResource+"_"+metadataType+"_serialization");
+					gfsFile.save();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				mr.put(metadataType+"Serialization", gfsFile);
+				mediaresources.save(mr);
+		 }
 		 
 		 
-		 //Storing in the database
-		 File fileSerializationDisk  = new File("./data/exmeralda.ttl");
-		 String textSerialization = null;
-		try {
-			textSerialization = FileUtils.readFileToString(fileSerializationDisk, "UTF-8");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		 BasicDBObject auxMediaResource = new BasicDBObject();
-		 auxMediaResource.append("$set", new BasicDBObject().append(metadataType+"Serialization", textSerialization));
-		 mediaresources.update(mr,auxMediaResource);
-		 
-		 //Delete both created files
-		 metadataFileDisk.delete();
-		 fileSerializationDisk.delete();
-		 
-		 
+			metadataFileDisk.delete();
+			fileSerializationDisk.delete();
+
+
         System.out.println("Finishing Processing!");
     }
 

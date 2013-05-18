@@ -46,13 +46,13 @@ public class LegacyReader{
 		mdata = md;
 	}
 	
-	public void read(){
+	public void read() throws TVAnytimeException, IOException{
 		parseXML(file);
 		
 	}
 	
-	public void parseXML(String filename) {
-	    try {
+	public void parseXML(String filename) throws TVAnytimeException, IOException {
+
 	      // Create parser
 	      SAXXMLParser parser = new SAXXMLParser();
 	      // Configure the parser to parse the standard profile (ie. everything).
@@ -60,20 +60,13 @@ public class LegacyReader{
 	      
 
 	      
-	      try {
-	        // Do the parsing...
+
 
 	        parser.parse(new File(filename));
 	        
 
 			   //parser.getProgramInformationTable().getProgramInformation(0).getBasicDescription().getRelatedMaterial(0).getHowRelated()
-	      } catch (NonFatalXMLException nfxe) {
-	        // Handle non-fatal XML exceptions
-	        // Contain any invalid TVAnytime data values from XML source. 
-	        // These are all collated by the parser and thrown at the end to avoid
-	        // having to abort the parsing.
-	        nfxe.printStackTrace();
-	      }
+
 	      // Print out the contents of the parsed ProgramInformationTable...
 	      System.out.println(parser.getProgramInformationTable());
 	      
@@ -86,18 +79,6 @@ public class LegacyReader{
 
 	      
 
-
-	    }
-	    catch (TVAnytimeException tvae) {
-	      // Handle any other TVAnytime-specific exceptions that may be generated.
-	      // E.g. if the XML parser cannot be initialised.
-	      tvae.printStackTrace();      
-	      
-	    }
-	    catch (IOException ioe) {
-	      // Handle IOExceptions: things like missing file
-	      ioe.printStackTrace();
-	    }
 
 
 	  }
