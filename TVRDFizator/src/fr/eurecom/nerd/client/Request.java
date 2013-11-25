@@ -28,16 +28,23 @@ public class Request {
       POST
     }    
     
+    static int timeout = 600000;
     protected static synchronized String request(
                                         String uri,
                                         RequestType method, 
                                         MultivaluedMap<String, String> queryParams
                                     )
     {
-        Client client = Client.create();        
+        Client client = Client.create();    
+        
+      client.setReadTimeout(timeout);
+      client.setConnectTimeout(timeout);
+        
+        
         WebResource webResource = client.resource(uri);
         
         String json = null;
+        System.out.println("Doing a request... ");
         
         switch (method) {
         case GET:

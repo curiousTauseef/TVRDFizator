@@ -34,7 +34,7 @@ public class Index {
     	
     	String html = null;
     	try {
-			 html = FileUtils.readFileToString(new File("ui/html/index.html"));
+			 html = FileUtils.readFileToString(new File("ui/index.html"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

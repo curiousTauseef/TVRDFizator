@@ -756,7 +756,17 @@ class SAXProgramInformationHandler extends DefaultHandler {
           mediaLocator.setMediaURI(new bbc.rd.tvanytime.URI(characterData.trim()));
         }
         catch (TVAnytimeException tvae) {
-          addError("MediaUri: "+tvae.getMessage());
+        	
+          try {
+        	System.out.println("Creating URL out of a non Web Resource: "+characterData.trim());
+			mediaLocator.setMediaURI(new bbc.rd.tvanytime.URI("http://api.linkedtv.eu/"+characterData.trim()));
+		} catch (TVAnytimeException e) {
+			// TODO Auto-generated catch block
+			
+	        addError("MediaUri: 4"+tvae.getMessage());
+			e.printStackTrace();
+		}
+
         }
         state = MEDIA_LOCATOR;
         break;
@@ -778,7 +788,7 @@ class SAXProgramInformationHandler extends DefaultHandler {
           sourceMediaLocator.setMediaURI(new bbc.rd.tvanytime.URI(characterData.trim()));
         }
         catch (TVAnytimeException tvae) {
-          addError("SourceMediaUri: "+tvae.getMessage());
+          addError("SourceMediaUri: 5"+tvae.getMessage());
         }
         state = SOURCE_MEDIA_LOCATOR;
         break;

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.AbstractMap;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -80,7 +81,7 @@ public class RDFWriterSubtitleEntity {
 	private String FOAF_URL = "http://xmlns.com/foaf/0.1/";
 	private String PROV_URL = "http://www.w3.org/ns/prov#";
 	private String LINKEDTV_URL = "http://data.linkedtv.eu/";
-	private String LINKEDTV_URL_ONT = "http://data.linkedtv.eu/ontology/";
+	private String LINKEDTV_URL_ONT = "http://data.linkedtv.eu/ontologies/core#";
 	private String DBPEDIA_URL_ONT = "http://dbpedia.org/ontology/";
 	private String NINSUNA_URL_ONT = "http://multimedialab.elis.ugent.be/organon/ontologies/ninsuna#";
 	private String NERD_URL_ONT = "http://nerd.eurecom.fr/ontology#";
@@ -97,20 +98,15 @@ public class RDFWriterSubtitleEntity {
 	Individual documentI = null;
 	
 	public RDFWriterSubtitleEntity (String f_entity, List<Subtitle> subtitles, List<NERDEntity> entities, String media_resource_id, String namespace, String locator){
-		
-		
+	
 		file_entity_json = f_entity;
 		this.entities = entities;
 		this.subtitles = subtitles;
 		this.mediaResource = media_resource_id;
 		
-		
-		
-		
 		if (!namespace.equals("")){
 			LINKEDTV_URL = namespace;
 		}
-		
 		
 	}
 	
@@ -168,10 +164,18 @@ public class RDFWriterSubtitleEntity {
 			Literal temporalStart = model_entity.createTypedLiteral(start);	
 			OntProperty temporalStartProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalStart");
 			mediaFragmentI.addProperty(temporalStartProperty, temporalStart);
+		
+			
 			
 			Literal temporalEnd = model_entity.createTypedLiteral(end);	
 			OntProperty temporalEndProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalEnd");
 			mediaFragmentI.addProperty(temporalEndProperty, temporalEnd);
+			
+			
+			Literal duration = model_entity.createTypedLiteral(end-start);	
+			OntProperty temporalDurationProperty = modelMA.createOntProperty(Media_Resources_URL+"duration");
+			mediaFragmentI.addProperty(temporalDurationProperty, duration);
+			
 			
 			
 			OntProperty temporalUnitProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalUnit");
@@ -223,7 +227,7 @@ public class RDFWriterSubtitleEntity {
 	private void writeAll() throws FileNotFoundException {
 		
 
-			FileOutputStream out_File = new FileOutputStream(new File(file_entity_json));
+			FileOutputStream out_File = new FileOutputStream(new File(file_entity_json) );
 			
 			model_entity.write(out_File, "TURTLE");
 
@@ -296,7 +300,7 @@ public class RDFWriterSubtitleEntity {
 
 		//Create the organization.
 		OntClass organizationOWL = modelPROV.getOntClass( PROV_URL + "Organization" );
-		Individual organizationI = model_linkedtv.createIndividual(LINKEDTV_URL + "organization/"+"EURECOM", organizationOWL );
+		Individual organizationI = model_linkedtv.createIndividual(LINKEDTV_URL + "organization/"+"NERD", organizationOWL );
 		organizationI.addProperty(RDF.type, modelPROV.createClass(PROV_URL + "Agent"));
 		
 
@@ -317,10 +321,10 @@ public class RDFWriterSubtitleEntity {
 
 				Individual mediaFragmentI = mediasubtitle.getKey();
 
-				System.out.println("Entity Aligned with a Media Fragment. Smooooth.");
+				System.out.println("Entity Aligned with a Media Fragment. Smooooth. ");
 				System.out.println(entity.getLabel() + " --> " + start + " --> " + mediaFragmentI.getURI());
 				//NERD
-				OntClass nerdClassOWL = modelMA.createClass( LINKEDTV_URL + "Entity" );
+				OntClass nerdClassOWL = modelMA.createClass( LINKEDTV_URL_ONT + "Entity" );
 				Individual nerdI = model_entity.createIndividual(LINKEDTV_URL + "entity/" + UUID.randomUUID(), nerdClassOWL );
 
 				//identifier (DC)
@@ -331,12 +335,13 @@ public class RDFWriterSubtitleEntity {
 				System.out.println(entity.getLabel());
 				nerdI.addProperty(RDFS.label, entity.getLabel());	
 				
-				
-				if (entity.getUri() != null && !entity.getUri().equals("null") && !entity.getUri().equals("NORDF")) {
-					//Create Resource
-					String desambiguationuri = entity.getUri().replaceAll(" ", "%20");
-					Individual resource = modelExmeralda.createIndividual(desambiguationuri, RDFS.Resource );
-					nerdI.addProperty(OWL.sameAs, resource);			
+				if (entity.getUri() != null){
+					if (!entity.getUri().equals("") && !entity.getUri().equals("null") && !entity.getUri().equals("NORDF")) {
+						//Create Resource
+						String desambiguationuri = entity.getUri().replaceAll(" ", "%20");
+						Individual resource = modelExmeralda.createIndividual(desambiguationuri, RDFS.Resource );
+						nerdI.addProperty(OWL.sameAs, resource);			
+					}
 				}
 
 

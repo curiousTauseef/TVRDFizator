@@ -2,6 +2,8 @@ package fr.eurecom.tvrdfizator.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -50,9 +52,11 @@ public class SubtitleProcessing extends Thread {
         System.out.println("Entering Processing!");
 		GridFS gfsmr = new GridFS(db);
 
-        
+
+		
+		UUID idtransaction = UUID.randomUUID();
 		 //Create inputFile & outputFile
-		File metadataFileDisk = new File("./data/subtitle_"+idMediaResource+".str");
+		File metadataFileDisk = new File("./data/subtitle_"+idMediaResource+idtransaction+".str");
 		try {
 			FileUtils.writeStringToFile(metadataFileDisk, metadataFile, "UTF-8");
 		} catch (IOException e) {
@@ -61,12 +65,15 @@ public class SubtitleProcessing extends Thread {
 		}
 		
 	    NERD nerd = new NERD("loq6asma69tgfq2aijbubh2t5klm7pk0");
-	    String json = nerd.annotateJSON(ExtractorType.COMBINED, 
+	    //NERD nerd = new NERD("1g0stre00us2jjgtb2g80190rv7bpm4v");
+
+
+		String json = nerd.annotateJSON(ExtractorType.TEXTRAZOR, 
 	                                    DocumentType.TIMEDTEXT,
 	                                    metadataFile);
 	    
 
-	    File entitiesNerd = new File("./data/entities_"+idMediaResource+".json");
+	    File entitiesNerd = new File("./data/entities_"+idMediaResource+idtransaction+".json");
 	    try {
 			FileUtils.writeStringToFile(entitiesNerd, json, "UTF-8");
 		} catch (IOException e) {
@@ -74,12 +81,12 @@ public class SubtitleProcessing extends Thread {
 			e.printStackTrace();
 		}
 
-		 File fileSerializationDisk  = new File("./data/entities_"+idMediaResource+".ttl");
+		 File fileSerializationDisk  = new File("./data/entities_"+idMediaResource+idtransaction+".ttl");
 
 		 
 		//SERIALIZATION
 		 Processing p = new Processing();
-		 if (p.entity_process("./data/entities_"+idMediaResource+".json", "./data/subtitle_"+idMediaResource+".str", "./data/entities_"+idMediaResource+".ttl", idMediaResource.toString(), namespace, locator)){
+		 if (p.entity_process("./data/entities_"+idMediaResource+idtransaction+".json", "./data/subtitle_"+idMediaResource+idtransaction+".str", "./data/entities_"+idMediaResource+idtransaction+".ttl", idMediaResource.toString(), namespace, locator)){
 		 
 		 
 			 //Storing in the database
@@ -103,7 +110,7 @@ public class SubtitleProcessing extends Thread {
 		 
 			metadataFileDisk.delete();
 			fileSerializationDisk.delete();
-			entitiesNerd.delete();
+			//entitiesNerd.delete();
         System.out.println("Finishing Processing!");
     }
 

@@ -2,6 +2,8 @@ package fr.eurecom.tvrdfizator.web.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +23,12 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.validator.routines.UrlValidator;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -37,12 +44,11 @@ import fr.eurecom.tvrdfizator.core.LegacyProcessing;
 import fr.eurecom.tvrdfizator.core.SubtitleProcessing;
 import fr.eurecom.tvrdfizator.db.MongoDBUtil;
 
-
 @Path("/mediaresource")
 public class MediaResource {
 
 	//Those are the current types 
-	public String[] metadataTypes = {"legacy", "subtitle", "exmeralda"};
+	public String[] metadataTypes = {"legacy", "subtitle", "exmaralda"};
 
 	
 	
@@ -110,7 +116,42 @@ public class MediaResource {
 		return Response.status(200).entity("OK").build();
 	}
 	
+	@GET
+	@Path("/list")
+	public Response doGETLISTRESOURCES(
+            @PathParam("idMediaResource") String idMediaResourceString) {
+		
+		MongoClient client= MongoDBUtil.getSessionMongo();
+		DB db = client.getDB("TVRDFizatorDB" );
+
+		DBCollection mediaresources = db.getCollection("mediaResources");
+		
+		DBCursor cursor = mediaresources.find();
+		
+		Vector <String> ids = new Vector<String>();
+		
+		while (cursor.hasNext()){
+			DBObject document = cursor.next();
+			String id = (String) document.get("_id");
+			ids.add(id);
+
+		}
+		
+		
+		GsonBuilder gsonbuilder = new GsonBuilder();
+		Gson gson = gsonbuilder.create();
+		String itemsjson = gson.toJson(ids);
+		
+		
+        return Response.ok().entity(itemsjson).header("Access-Control-Allow-Origin", "*").build();
+
+		
+	}
 	
+	
+	
+	
+		
 	@GET
 	@Path("/{idMediaResource}")
 	public Response doGETRESOURCE(
@@ -161,9 +202,13 @@ public class MediaResource {
 	@Consumes(MediaType.TEXT_XML)
 	public Response doPOSTMETADATA(String metadataFile,
 			@QueryParam("metadataType") String metadataType,
-			@QueryParam("metadataResource") String metadataResource,
             @PathParam("idMediaResource") String idMediaResourceString) {
  
+		
+		System.out.println("Receiving metadata");
+		Boolean isWebResource = false;
+		String resourceURLString = "";
+		
 		
 		//Parse UUID
 		UUID idMediaResource;
@@ -183,12 +228,8 @@ public class MediaResource {
 			System.out.println("Wrong metadata type or not specified.");
 			return Response.status(404).build();
 		}
-		
-		//If the metadata is comming from a file
-		if (metadataResource != null){
-			
-		}
-		
+			    
+
 		MongoClient client= MongoDBUtil.getSessionMongo();
 		DB db = client.getDB("TVRDFizatorDB" );
 
@@ -200,13 +241,43 @@ public class MediaResource {
 		DBCursor cursor = mediaresources.find(whereQuery);
 		DBObject mr = null;
 
-		if (cursor.count() == 0 ){ //Create new MediaResource
+		if (cursor.count() == 0 ){ //There is no MediaResource
 			System.out.println("MediaResource "+idMediaResource+" not found.");
 	        return Response.status(404).build();
 		}
 		else{ //update existing mediaresource
-			System.out.println("Attaching "+ metadataType + " file to existing MediaResource "+idMediaResource+".");
+			
 			mr = cursor.next();
+			
+			
+			//By default, we delete the URL of the resource.
+			mr.removeField(metadataType+"URL");
+
+			
+			//We check if what we are receiving is actually a Resource and not a local file.
+		    UrlValidator urlValidator = new UrlValidator();
+			if (urlValidator.isValid(metadataFile)){
+				System.out.println("Web Resource identified. Starting the download.");
+				isWebResource = true;
+				resourceURLString = metadataFile;	
+				
+				
+				//Bring metadataContent
+				URL resourceURL;
+				try {
+					resourceURL = new URL(resourceURLString);
+					metadataFile = IOUtils.toString(resourceURL, "UTF-8");
+				} catch (MalformedURLException e) {
+					System.out.println("ERROR creating the URL specified.");
+					e.printStackTrace();
+				} catch (IOException e) {
+					System.out.println("ERROR accessing the Web resource " + resourceURLString);
+					e.printStackTrace();
+				}
+				
+			}
+			
+			System.out.println("Attaching "+ metadataType + " file to existing MediaResource "+idMediaResource+".");
 
 			
 
@@ -251,7 +322,10 @@ public class MediaResource {
 		//Launch Serialization process 
 		executeSerialization(db, idMediaResource, metadataType, metadataFile, mediaresources, mr);
 	
-		
+		if (isWebResource){
+			mr.put(metadataType+"URL", resourceURLString);
+			mediaresources.save(mr);
+		}
 		return Response.status(200).entity("OK").build();
 	}
 
@@ -437,7 +511,7 @@ public class MediaResource {
                         			@QueryParam("metadataType") String metadataType,
                         			@PathParam("idMediaResource") String idMediaResourceString) {
 		
-		
+
 		//Parse UUID
 		UUID idMediaResource;
 		try {
@@ -482,15 +556,21 @@ public class MediaResource {
 			if (metadataType == null){
 				
 				 filebody = getAllSerialization(db, mr, idMediaResource);
-				return Response.ok().entity(filebody).header("Access-Control-Allow-Origin", "*").header("filename","downloaded.pdf").build();
+				return Response.ok().entity(filebody).build();
 			}
 			
 			
 			else  {    
 				
 				filebody = getSerialization(db, mr, metadataType, idMediaResource);
-				
-				return Response.ok().entity(filebody).header("Access-Control-Allow-Origin", "*").header("filename","downloaded.pdf").build();
+				System.out.println("Retrieving the serialization for " + metadataType);
+				if (!filebody.equals("")){
+					return Response.ok().entity(filebody).build();
+				}
+				else {
+					System.out.println("The "+metadataType+" serialization for the resource "+idMediaResource+ "  is not available.");
+			        return Response.status(404).build();
+				}
 			}
 
 		}
@@ -505,9 +585,8 @@ public class MediaResource {
 		for (int i = 0; i<metadataTypes.length; i++){
 			String metadataType = metadataTypes[i];
 			String serializationPart = getSerialization(db, mr, metadataType, idMediaResource);
-			System.out.println(serializationPart);
 			if (i != 0){ //remove prefixes except the first time
-				serializationPart = serializationPart.replaceAll("@prefix", "");
+				serializationPart = serializationPart.replaceAll("@prefix.*\n", "");
 			}
 			System.out.println(serializationPart);
 
@@ -519,23 +598,31 @@ public class MediaResource {
 
 
 	private String getSerialization(DB db, DBObject mr, String metadataType, UUID idMediaResource) {
+		
+		
+		System.out.println("Looking for serialization about "+ metadataType);
 		BasicDBObject fileInformation = (BasicDBObject) mr.get(metadataType+"Serialization");
 
-		GridFS gfsmr = new GridFS(db);
-		//System.out.println(fileName);
-		GridFSDBFile fileText = gfsmr.findOne(fileInformation);
-		String filebody = "";
-		try {
-			File fileMetadataDisk  = new File("./data/serialization"+ idMediaResource +".ttl");
-			fileText.writeTo(fileMetadataDisk);
-			filebody = FileUtils.readFileToString(fileMetadataDisk, "UTF-8");
-			fileMetadataDisk.delete();
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		return filebody;
+		if (fileInformation != null){
+			GridFS gfsmr = new GridFS(db);
+			//System.out.println(fileName);
+			GridFSDBFile fileText = gfsmr.findOne(fileInformation);
+			String filebody = "";
+			try {
+				File fileMetadataDisk  = new File("./data/serialization"+ idMediaResource +".ttl");
+				fileText.writeTo(fileMetadataDisk);
+				filebody = FileUtils.readFileToString(fileMetadataDisk, "UTF-8");
+				fileMetadataDisk.delete();
+	
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+			return filebody;
+		}
+		else{
+			return "";
+		}
 	}
 
 }

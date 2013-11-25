@@ -24,8 +24,10 @@ import fr.eurecom.nerd.client.type.GranularityType;
 public class NERD {
     
     /** API URI */
-    private String API_HOST = "http://nerd.eurecom.fr/api/";
-       
+   private String API_HOST = "http://nerd.eurecom.fr/api/";
+   //private String API_HOST = "http://localhost:8888/api/";
+
+    
     /** Currently used API key for API calls */
     private String apiKey;
 

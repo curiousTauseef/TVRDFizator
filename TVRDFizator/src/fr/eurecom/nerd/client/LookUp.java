@@ -49,7 +49,9 @@ public class LookUp {
             return "zemanta";
         case COMBINED:
             return "combined";
-        }
+    	case THD:
+    		return "thd";
+    	}
         return null;
     }
 

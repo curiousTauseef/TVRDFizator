@@ -37,7 +37,7 @@ package bbc.rd.tvanytime;
  	public static final int MAIN = 0;
  	public static final int SECONDARY = 1;
  	public static final int OTHER = 2;
- 	public static final int GENRE_CS_NUM = 8;
+ 	public static final int GENRE_CS_NUM = 9;
 
  	//Despite the setHref method there can only be one form of href (shown below).
  	//To vary the format of href would cause difficult implementations of methods.
@@ -49,7 +49,8 @@ package bbc.rd.tvanytime;
     "urn:tva:metadata:cs:IntendedAudienceCS:2002:",
     "urn:tva:metadata:cs:ContentAlertCS:2002:",
     "urn:tva:metadata:cs:MediaTypeCS:2002:",
-    "urn:tva:metadata:cs:AtmosphereCS:2002:"
+    "urn:tva:metadata:cs:AtmosphereCS:2002:",
+    "urn:tva:metadata:cs:ContentCS:2004:"
   };
   // CS number for above schemes
   private static final int[] csNumbers = {1,2,3,5,4,6,7,8};
@@ -132,6 +133,7 @@ package bbc.rd.tvanytime;
  					try
  					{
  						//get value of genre at this level
+ 						System.out.println("NUMBER :"+nameSubstring.substring(0, dot)+"/");
  						genreNum = Integer.parseInt(nameSubstring.substring(0, dot));
  					}
  					catch (NumberFormatException exp)

@@ -1,0 +1,1049 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>TV Metadata Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/jasny-bootstrap.css" rel="stylesheet">
+    
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/jasny-bootstrap-responsive.css" rel="stylesheet">
+    
+    <link href="css/docs.css" rel="stylesheet">
+    <link href="css/metadata.css" rel="stylesheet">
+    <link href="js/google-code-prettify/prettify.css" rel="stylesheet">
+    <link href="css/ui-lightness/jquery-ui-1.10.0.custom.css" rel="stylesheet">
+    
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="ico/favicon.png">
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-146052-10']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+
+  <body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+
+
+
+
+
+<pre class="prettyprint linenums">
+@prefix dc:      &#60http://purl.org/dc/elements/1.1/&#62 .
+@prefix dbpedia-owl:  &#60http://dbpedia.org/ontology/&#62 .
+@prefix nsa:     &#60http://multimedialab.elis.ugent.be/organon/ontologies/ninsuna/&#62 .
+@prefix opmv:    &#60http://purl.org/net/opmv/ns/&#62 .
+@prefix foaf:    &#60http://xmlns.com/foaf/0.1/&#62 .
+@prefix timeline:  &#60http://purl.org/NET/c4dm/timeline.owl/&#62 .
+@prefix lscom:   &#60http://vocab.linkeddata.es/lscom/&#62 .
+@prefix linkedtv:  &#60http://data.linkedtv.eu/ontology/&#62 .
+@prefix rdfs:    &#60http://www.w3.org/2000/01/rdf-schema#&#62 .
+@prefix nerd:    &#60http://nerd.eurecom.fr/ontology#&#62 .
+@prefix oa:      &#60http://www.w3.org/ns/openannotation/core/&#62 .
+@prefix str:     &#60http://nlp2rdf.lod2.eu/schema/string/&#62 .
+@prefix event:   &#60http://purl.org/NET/c4dm/event.owl/&#62 .
+@prefix ma:      &#60http://www.w3.org/ns/ma-ont/&#62 .
+@prefix xsd:     &#60http://www.w3.org/2001/XMLSchema#&#62 .
+@prefix owl:     &#60http://www.w3.org/2002/07/owl#&#62 .
+@prefix rdf:     &#60http://www.w3.org/1999/02/22-rdf-syntax-ns#&#62 .
+@prefix po:      &#60http://purl.org/ontology/po/&#62 .
+
+&#60http://data.linkedtv.eu/entity/e88d89e5-a436-49b6-87b3-f456847d05b7&#62
+      a       nerd:Location , &#60http://data.linkedtv.eu/Entity&#62 ;
+      rdfs:label "ºdamerika" ;
+      linkedtv:hasConfidence
+              "0.215225"^^xsd:float ;
+      linkedtv:hasRelevance
+              "0.5"^^xsd:float ;
+      dc:identifier "37845" ;
+      dc:source "alchemyapi" ;
+      dc:type "Continent" .
+
+&#60http://data.linkedtv.eu/entity/1cd50b28-1c39-4ab6-8145-062c520809ce&#62
+      a       &#60http://data.linkedtv.eu/Entity&#62 , nerd:Thing ;
+      rdfs:label "Pankowe" ;
+      linkedtv:hasConfidence
+              "-1.0"^^xsd:float ;
+      linkedtv:hasRelevance
+              "0.5"^^xsd:float ;
+      dc:identifier "37901" ;
+      dc:source "semitags" ;
+      dc:type "miscellaneous" .
+
+&#60http://data.linkedtv.eu/entity/d3546cfb-6bd9-4ae3-819b-46abaeb58a01&#62
+      a       &#60http://data.linkedtv.eu/Entity&#62 , nerd:Thing ;
+      rdfs:label "Brandenburge" ;
+      linkedtv:hasConfidence
+              "-1.0"^^xsd:float ;
+      linkedtv:hasRelevance
+              "0.5"^^xsd:float ;
+      dc:identifier "37852" ;
+      dc:source "semitags" ;
+      dc:type "miscellaneous" .
+
+&#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457#t=1563560,1566800&#62
+      a       nsa:TemporalFragment , ma:MediaFragment ;
+      linkedtv:hasSubtitle
+              &#60http://data.linkedtv.eu/text/a853084c-0b08-4601-9f18-983b20d0f164&#62 ;
+      nsa:temporalEnd "1566800"^^xsd:long ;
+      nsa:temporalStart "1563560"^^xsd:long ;text
+      nsa:temporalUnit "npt" ;
+      ma:isFragmentOf &#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457&#62 .
+
+&#60http://data.linkedtv.eu/text/3c70a875-b6f4-4901-aa0a-fec873c8a166&#62
+      a       str:String ;
+      str:label "Drei Viertel glauben,        dass eine Rückkehr schwierig ist. "^^xsd:string .
+
+&#60http://data.linkedtv.eu/entity/c415a7b4-4335-462d-a4ca-d15f4f79aff2&#62
+      a       &#60http://data.linkedtv.eu/Entity&#62 , nerd:Person ;
+      rdfs:label "Franziska Weber" ;
+      linkedtv:hasConfidence
+              "0.296908"^^xsd:float ;
+      linkedtv:hasRelevance
+              "0.5"^^xsd:float ;
+      dc:identifier "37877" ;
+      dc:source "alchemyapi" ;
+      dc:type "Person" .
+
+&#60http://data.linkedtv.eu/text/0baea21e-52ff-473c-8c96-c4f2adaef6b7&#62
+      a       str:String ;
+      str:label "ein Finanzierungskonzept vorlegen. "^^xsd:string .
+
+&#60http://data.linkedtv.eu/annotation/fe068766-9c5c-44ab-832d-b547002725a3&#62
+      a       oa:Annotation , opmv:Artifact ;
+      opmv:wasDerivedFrom &#60http://data.linkedtv.eu/text/4099c687-74f7-4153-8d06-e84f3f4457bd&#62 ;
+      opmv:wasGeneratedAt "2012-12-03T09:13:15.985Z"^^xsd:dateTime ;
+      opmv:wasGeneratedBy
+              [ a       opmv:Process ;
+                opmv:wasPerformedBy &#60http://data.linkedtv.eu/organization/EURECOM&#62
+              ] ;
+      oa:hasBody &#60http://data.linkedtv.eu/entity/f9048b92-cae8-4fa3-a72d-91506cfa8f10&#62 ;
+      oa:hasTarget &#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457#t=1649200,1652080&#62 , &#60http://data.linkedtv.eu/text/4099c687-74f7-4153-8d06-e84f3f4457bd#offset_17827_17833_Fische&#62 .
+
+&#60http://data.linkedtv.eu/text/c1c61ad1-1b2e-4d4c-9282-54a8c934886e#offset_10501_10509_Potsdame&#62
+      a       str:OffsetBasedString ;
+      str:beginIndex "10501"^^xsd:long ;
+      str:endIndex "10509"^^xsd:long ;
+      str:subString &#60http://data.linkedtv.eu/text/c1c61ad1-1b2e-4d4c-9282-54a8c934886e&#62 .
+
+&#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457#t=1476440,1477920&#62
+      a       nsa:TemporalFragment , ma:MediaFragment ;
+      linkedtv:hasSubtitle
+              &#60http://data.linkedtv.eu/text/12537ae9-9563-4964-b747-cb5470da4003&#62 ;
+      nsa:temporalEnd "1477920"^^xsd:long ;
+      nsa:temporalStart "1476440"^^xsd:long ;
+      nsa:temporalUnit "npt" ;
+      ma:isFragmentOf &#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457&#62 .
+
+&#60http://data.linkedtv.eu/text/b1e5d7be-92e2-4a36-80e4-31b2fc9795dd&#62
+      a       str:String ;
+      str:label "Hier geht es weiter mit unseren   Tipps für Ihr schönes Wochenende. "^^xsd:string .
+
+&#60http://data.linkedtv.eu/text/06d8505a-49b2-4999-81d7-51cab7b0d73a&#62
+      a       str:String ;
+      str:label "Sie sprachen direkt zum Publikum. "^^xsd:string .
+
+&#60http://data.linkedtv.eu/text/43176caa-36b7-443b-b007-98fd825f800d&#62
+      a       str:String ;
+      str:label "Zu ähnlichen Schlüssen kam die Bundesärztekammer bei ihrem Treffen "^^xsd:string .
+
+&#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457#t=132360,136920&#62
+      a       nsa:TemporalFragment , ma:MediaFragment ;
+      linkedtv:hasSubtitle
+              &#60http://data.linkedtv.eu/text/9d1721fb-3c5d-4430-ba79-219e0a188186&#62 ;
+      nsa:temporalEnd "136920"^^xsd:long ;
+      nsa:temporalStart "132360"^^xsd:long ;
+      nsa:temporalUnit "npt" ;
+      ma:isFragmentOf &#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457&#62 .
+
+&#60http://data.linkedtv.eu/text/5744f29f-3c7d-438e-b831-fafac724b886&#62
+      a       str:String ;
+      str:label "Er war                   im April entlassen worden. "^^xsd:string .
+
+&#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457#t=1689800,1694360&#62
+      a       nsa:TemporalFragment , ma:MediaFragment ;
+      linkedtv:hasSubtitle
+              &#60http://data.linkedtv.eu/text/db784105-1207-44dd-8ca5-029e7d0198b0&#62 ;
+      nsa:temporalEnd "1694360"^^xsd:long ;
+      nsa:temporalStart "1689800"^^xsd:long ;
+      nsa:temporalUnit "npt" ;
+      ma:isFragmentOf &#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457&#62 .
+
+&#60http://data.linkedtv.eu/text/c1c61ad1-1b2e-4d4c-9282-54a8c934886e&#62
+      a       str:String ;
+      str:label "Auch die Potsdamer         Peter Kretschmer und Kurt Kuschela "^^xsd:string .
+
+&#60http://data.linkedtv.eu/text/51157a77-3037-4112-91a3-b0da44356c66&#62
+      a       str:String ;
+      str:label "Seit Monaten tut sich nur wenig       auf der Riesenbaustelle. "^^xsd:string .
+
+&#60http://data.linkedtv.eu/text/397fd47f-f42c-4643-b562-f33e1725fec7&#62
+      a       str:String ;
+      str:label "die wieder zu Familie              und Freunden wollen. "^^xsd:string .
+
+&#60http://data.linkedtv.eu/text/7f1e6cca-12e9-478b-a960-aaa412d0ba48&#62
+      a       str:String ;
+      str:label "Die Geschäftsführung warf ihm vor, "^^xsd:string .
+
+&#60http://data.linkedtv.eu/text/b88a5fff-73ce-4b85-8bc4-9f6511fe18fe&#62
+      a       str:String ;
+      str:label "Informationen aus Berlin               und Brandenburg. "^^xsd:string .
+
+&#60http://data.linkedtv.eu/text/62227978-80ba-4c41-bcf4-63147967ace3#offset_11366_11376_Olympia_De&#62
+      a       str:OffsetBasedString ;
+      str:beginIndex "11366"^^xsd:long ;
+      str:endIndex "11376"^^xsd:long ;
+      str:subString &#60http://data.linkedtv.eu/text/62227978-80ba-4c41-bcf4-63147967ace3&#62 .
+
+&#60http://data.linkedtv.eu/text/926d2c55-e97b-4ffc-ae99-f2dfa10238ae&#62
+      a       str:String ;
+      str:label "Jahrelang waren sie aus dem     Stadtbild so gut wie verschwunden, "^^xsd:string .
+
+&#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457#t=1275880,1278920&#62
+      a       nsa:TemporalFragment , ma:MediaFragment ;
+      linkedtv:hasSubtitle
+              &#60http://data.linkedtv.eu/text/e53b3e5d-2704-4912-8f9e-3237eef4c5bd&#62 ;
+      nsa:temporalEnd "1278920"^^xsd:long ;
+      nsa:temporalStart "1275880"^^xsd:long ;
+      nsa:temporalUnit "npt" ;
+      ma:isFragmentOf &#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457&#62 .
+
+&#60http://data.linkedtv.eu/text/7a2aa88f-ab42-4e6b-bc05-ded4cf608b7d&#62
+      a       str:String ;
+      str:label "Aber was wird denn                 bis dahin mit uns? "^^xsd:string .
+
+&#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457#t=253120,256520&#62
+      a       nsa:TemporalFragment , ma:MediaFragment ;
+      linkedtv:hasSubtitle
+              &#60http://data.linkedtv.eu/text/763ac8f7-916d-4c87-a4d9-e9b60b1181e0&#62 ;
+      nsa:temporalEnd "256520"^^xsd:long ;
+      nsa:temporalStart "253120"^^xsd:long ;
+      nsa:temporalUnit "npt" ;
+      ma:isFragmentOf &#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457&#62 .
+
+&#60http://data.linkedtv.eu/entity/2a42d791-2012-4dca-b3a9-c8b4c6b1cb1e&#62
+      a       &#60http://data.linkedtv.eu/Entity&#62 , nerd:Organization ;
+      rdfs:label "Deutschen Haus" ;
+      linkedtv:hasConfidence
+              "0.206037"^^xsd:float ;
+      linkedtv:hasRelevance
+              "0.5"^^xsd:float ;
+      dc:identifier "37893" ;
+      dc:source "alchemyapi" ;
+      dc:type "Organization" .
+
+&#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457#t=1113560,1116120&#62
+      a       nsa:TemporalFragment , ma:MediaFragment ;
+      linkedtv:hasSubtitle
+              &#60http://data.linkedtv.eu/text/6e658666-7641-4b3f-b489-77ded3318b28&#62 ;
+      nsa:temporalEnd "1116120"^^xsd:long ;
+      nsa:temporalStart "1113560"^^xsd:long ;
+      nsa:temporalUnit "npt" ;
+      ma:isFragmentOf &#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457&#62 .
+
+&#60http://data.linkedtv.eu/annotation/66665e11-ab0b-480c-a9ec-be8fcb018b7a&#62
+      a       oa:Annotation , opmv:Artifact ;
+      opmv:wasDerivedFrom &#60http://data.linkedtv.eu/text/b3758262-2d7e-4b3d-9049-ce3850e89aa1&#62 ;
+      opmv:wasGeneratedAt "2012-12-03T09:13:15.993Z"^^xsd:dateTime ;
+      opmv:wasGeneratedBy
+              [ a       opmv:Process ;
+                opmv:wasPerformedBy &#60http://data.linkedtv.eu/organization/EURECOM&#62
+              ] ;
+      oa:hasBody &#60http://data.linkedtv.eu/entity/a4338c79-afe3-4363-a2a3-79b2816e0854&#62 ;
+      oa:hasTarget &#60http://data.linkedtv.eu/text/b3758262-2d7e-4b3d-9049-ce3850e89aa1#offset_19072_19079_Polizei&#62 , &#60http://data.linkedtv.eu/media/e2899e7f-67c1-4a08-9146-5a205f6de457#t=1760680,1764480&#62 .
+
+</pre>
+
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-fileupload.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+    <script src="js/bootstrap-affix.js"></script>
+
+    <script src="js/holder/holder.js"></script>
+    <script src="js/google-code-prettify/prettify.js"></script>
+
+    <script src="js/application.js"></script>
+  	<script src="js/jquery-ui-1.10.0.custom.js"></script>
+
+    <!-- Analytics
+    ================================================== -->
+    <script>
+
+    //http://stream4.noterik.com/progressive/stream4/domain/linkedtv/user/avro/video/5/rawvideo/4/raw.mp4
+
+      function startSurvey(){
+    	 $("#video-url").css('display','block');
+    	  
+ 	     $('html, body').animate({
+	         scrollTop: $("#video-url").offset().top
+	     }, 2000);
+
+    	 $("#listInstructions").attr('class','');
+    	 $("#listVideo").attr('class','active');
+
+    	 
+    }
+
+
+      function selectMetadataFiles(){
+
+
+  		if (($("#selectmetadatabutton").attr('class')).indexOf("disabled") == -1){
+  	   		
+  	     	 $("#metadata").css('display','block');
+  	     	  
+  	  	     $('html, body').animate({
+  	 	         scrollTop: $("#metadata").offset().top
+  	 	     }, 2000);
+
+  	     	 $("#listVideo").attr('class','');
+  	     	 $("#listMetadata").attr('class','active');
+  	  		    
+
+   		}
+
+
+
+ 	     
+     }
+      
+
+    
+  function showRDFUpload(){
+    	$('#progresBarUploadLabel').empty();
+    	$('#progresBarUploadLabel').append('<strong>RDF files have been sucessfully uploaded to the LinkedTV triplestore!!</strong>');
+
+
+    	$('#uploadingPicture').attr('src','img/uploading2_finished.png')
+    		    		    			
+    	$('#filesubentuploaded').empty();
+    	
+    	$('#filesubentuploaded').append('The file <strong>rbbaktuell_20120809_sdg_subtitles_entities.ttl</strong> has been uploaded to the server. ');
+
+
+
+	     $('html, body').animate({
+	         scrollTop: $("#playRDFButton").offset().top
+	     }, 2000);
+
+	     
+    }
+    
+    
+  function progressBarUploadRun(){
+
+    	   var progress2 = setInterval(function() {
+
+    		   ram = Math.floor(Math.random() * 10)
+    		   $('#ProgressBarUpload').text(Math.floor(($('#ProgressBarUpload').width()/$('#progressdivupload').width())*100) + "%");
+    		   
+    		   if (ram > 4){
+        	   
+	    		    var $bar = $('#ProgressBarUpload');
+	
+	    		    if ($bar.width() >= $('#progressdivupload').width()) {
+
+	    		    	$bar.width($('#progressdivupload').width());
+	        		    $bar.text(100 + "%");
+	    		    	
+	    		        clearInterval(progress2);
+	    		        $('#progressdivupload').removeClass('active');
+	    		        showRDFUpload();
+	    		        
+	    		    } else {
+
+		    		    
+		    		    newValue = $bar.width()+  Math.floor(Math.random() * 200) ;
+		    		    if (newValue >= $('#progressdivupload').width()){
+		    		    	$bar.width($('#progressdivupload').width());
+			    		}
+		    		    else{
+		    		    	$bar.width(newValue);
+				    	}
+
+		    		    $bar.text(Math.floor(($bar.width()/$('#progressdivupload').width())*100) + "%");
+
+		    		    $bar.css('display','block');
+		    		    $bar.text(Math.floor(($bar.width()/$('#progressdivupload').width())*100) + "%");
+
+
+		    		    if($bar.width() >= ($('#progressdivupload').width()/3)){
+		    		    		$('#fileanalysisuploaded').empty();
+		    	           		$('#fileanalysisuploaded').append('The file <strong>rbbaktuell_20120809_sdg_analysis.ttl</strong> has been uploaded to the server.'); 
+			    		    }
+		    		    if($bar.width() >= ($('#progressdivupload').width()*2/3)){
+			    		    
+	    		    			$('#filelegacyuploaded').empty();
+			    	           	$('#filelegacyuploaded').append('The file <strong>rbbaktuell_20120809_sdg_legacy_main.ttl</strong> has been uploaded to the server.');
+			    		    }
+		    		  }
+    		   }  
+    		}, 800);
+
+      		
+     }
+
+
+
+
+         
+    function showRDFResults(){
+    	$('#progresBarLabel').empty();
+    	$('#progresBarLabel').append('<strong>RDF generation processs finished sucessfully!!</strong>');
+    	$('#tabsOutput').css('display','block');
+    	
+    }
+
+
+
+    
+     function progressBarRun(){
+
+	         
+    	   var progress = setInterval(function() {
+
+    		   ram = Math.floor(Math.random() * 10)
+    		   $('#ProgressBar').text(Math.floor(($('#ProgressBar').width()/$('#progressdiv').width())*100) + "%");
+    		   
+    		   if (ram > 4){
+        	   
+	    		    var $bar = $('#ProgressBar');
+	
+	    		    if ($bar.width() >= $('#progressdiv').width()) {
+
+	    		    	$bar.width($('#progressdiv').width());
+	        		    $bar.text(100 + "%");
+	    		    	
+	    		        clearInterval(progress);
+	    		        $('#progressdiv').removeClass('active');
+						showRDFResults();
+	    		        
+	    		    } else {
+
+		    		    
+		    		    newValue = $bar.width()+  Math.floor(Math.random() * 200) ;
+		    		    if (newValue >= $('#progressdiv').width()){
+		    		    	$bar.width($('#progressdiv').width());
+			    		}
+		    		    else{
+		    		    	$bar.width(newValue);
+				    	}
+
+		    		    $bar.text(Math.floor(($bar.width()/$('#progressdiv').width())*100) + "%");
+
+		    		    $bar.css('display','block');
+		    		    $bar.text(Math.floor(($bar.width()/$('#progressdiv').width())*100) + "%");
+		    		    
+	    		    	//alert("paso");
+	    		    }
+    		   }  
+    		}, 800);
+
+      		
+     }
+        
+    function processRDF(){
+
+    		if (($("#generateRDFButton").attr('class')).indexOf("disabled") == -1){
+    
+    	     $('html, body').animate({
+    	         scrollTop: $("#results").offset().top
+    	     }, 2000);
+
+
+    	     progressBarRun();
+    		}
+	}
+        
+
+
+    
+    function uploadRDF(){
+
+    
+    	     $('html, body').animate({
+    	         scrollTop: $("#upload").offset().top
+    	     }, 2000);
+
+
+    	     progressBarUploadRun();
+    		
+	}
+
+
+    
+    function checkMetadata(){
+
+    	exmeraldaIsOk = $('#exmeraldaFileError').attr('class');
+    	legacyIsOk = $('#legacyFileError').attr('class');
+    	subtitlesIsOk = $('#subtitlesFileError').attr('class');
+    	entitiesIsOk = $('#entitiesFileError').attr('class');
+
+
+
+    	if (exmeraldaIsOk.indexOf("success") !== -1  && subtitlesIsOk.indexOf("success") !== -1  && !entitiesIsOk.indexOf("success")  !== -1 && !legacyIsOk.indexOf("success") !== -1 ){
+			//alert("Todas Listas!!");
+    		$('#generateRDFButton').attr('class','btn btn-large btn-primary');
+			$('#URLerror').css('display','block');
+
+       	}
+
+	}
+        	
+
+    function submitVideo(){
+        	//remove
+        	$('#currentVideo').empty();
+			$('#currentVideo').append('<source src="'+ $('#videoURL').val() +'" type="video/mp4">');
+			$('#URLerror').css('display','block');
+	}
+
+    
+    function submitFile(){
+
+
+		
+		$('#exmeraldaFileError').empty();
+		
+		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+		$('#exmeraldaFileError').append('<strong>File loaded! </strong> The Exmaralda file has been read sucessfully.');
+		$('#exmeraldaFileError').attr('class','alert alert-success');
+		$('#exmeraldaFileError').css('display','block');
+	}
+
+
+    function progressHandlingFunction(e){
+        if(e.lengthComputable){
+            $('progress').attr({value:e.loaded,max:e.total});
+        }
+    }
+
+
+    function submitEntitiesFile(){
+        var formData = new FormData($('form')[4]);
+		//alert(formData);
+	    $.ajax({
+	        url: 'UploadServlet',  //server script to process data
+	        type: 'POST',
+	        xhr: function() {  // custom xhr
+	            myXhr = $.ajaxSettings.xhr();
+	            if(myXhr.upload){ // check if upload property exists
+	                myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
+	            }
+	            return myXhr;
+	        },
+
+
+	        success: function () {
+
+	      		$('#entitiesFileError').empty();
+	    		
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#entitiesFileError').append('<strong>File loaded! </strong> The SRT file with the subtitles has been read sucessfully.');
+	    		$('#entitiesFileError').attr('class','alert alert-success');
+	    		$('#entitiesFileError').css('display','block');
+
+	    		checkMetadata();
+	        	},
+	        error:  function () {
+
+
+	      		$('#entitiesFileError').empty();
+	    		
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#entitiesFileError').append('<strong>Error loading File </strong> The file is corrupted or does not contain NER entities in JSON format.');
+	    		$('#entitiesFileError').attr('class','alert alert-error');
+	    		$('#entitiesFileError').css('display','block');
+
+	            $('#entitiesCode').empty();
+
+        	},
+
+        	
+	        // Form data
+	        data: formData,
+	        //Options to tell JQuery not to process data or worry about content-type
+	        cache: false,
+	        contentType: false,
+	        processData: false
+	    });
+	}
+
+
+	
+    function submitSubtitlesFile(){
+        var formData = new FormData($('form')[3]);
+		//alert(formData);
+	    $.ajax({
+	        url: 'UploadServlet',  //server script to process data
+	        type: 'POST',
+	        xhr: function() {  // custom xhr
+	            myXhr = $.ajaxSettings.xhr();
+	            if(myXhr.upload){ // check if upload property exists
+	                myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
+	            }
+	            return myXhr;
+	        },
+	        success: function () {
+	      		$('#subtitlesFileError').empty();
+
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#subtitlesFileError').append('<strong>File loaded! </strong> The subtitles file has been read sucessfully.');
+	    		$('#subtitlesFileError').attr('class','alert alert-success');
+	    		$('#subtitlesFileError').css('display','block');
+	    		checkMetadata();
+	        	},
+	        error:  function () {
+	      		$('#exmeraldaFileError').empty();
+	    		
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#subtitlesFileError').append('<strong>Error loading File </strong> The file is corrupted or does not contain subtitles in SRT format.');
+	    		$('#subtitlesFileError').attr('class','alert alert-error');
+	    		$('#subtitlesFileError').css('display','block');
+
+	            $('#subtitlesCode').empty();
+        	},
+
+	        // Form data
+	        data: formData,
+	        //Options to tell JQuery not to process data or worry about content-type
+	        cache: false,
+	        contentType: false,
+	        processData: false
+	    });
+	}
+
+
+    
+    
+
+    function submitExmeraldaFile(){
+        var formData = new FormData($('form')[1]);
+		//alert(formData);
+	    $.ajax({
+	        url: 'UploadServlet',  //server script to process data
+	        type: 'POST',
+	        xhr: function() {  // custom xhr
+	            myXhr = $.ajaxSettings.xhr();
+	            if(myXhr.upload){ // check if upload property exists
+	                myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
+	            }
+	            return myXhr;
+	        },
+	        success: function () {
+	      		$('#exmeraldaFileError').empty();
+
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#exmeraldaFileError').append('<strong>File loaded! </strong> The Exmaralda file has been read sucessfully.');
+	    		$('#exmeraldaFileError').attr('class','alert alert-success');
+	    		$('#exmeraldaFileError').css('display','block');
+	    		checkMetadata();
+	        	},
+	        error:  function () {
+	      		$('#exmeraldaFileError').empty();
+	    		
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#exmeraldaFileError').append('<strong>Error loading File </strong> The file is corrupted or does not contain analysis results.');
+	    		$('#exmeraldaFileError').attr('class','alert alert-error');
+	    		$('#exmeraldaFileError').css('display','block');
+
+	            $('#exmeraldaCode').empty();
+        	},
+
+	        // Form data
+	        data: formData,
+	        //Options to tell JQuery not to process data or worry about content-type
+	        cache: false,
+	        contentType: false,
+	        processData: false
+	    });
+	}
+
+    function submitLegacyFile(){
+        var formData = new FormData($('form')[2]);
+		//alert(formData);
+	    $.ajax({
+	        url: 'UploadServlet',  //server script to process data
+	        type: 'POST',
+	        xhr: function() {  // custom xhr
+	            myXhr = $.ajaxSettings.xhr();
+	            if(myXhr.upload){ // check if upload property exists
+	                myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
+	            }
+	            return myXhr;
+	        },
+
+
+	        success: function () {
+
+	      		$('#legacyFileError').empty();
+	    		
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#legacyFileError').append('<strong>File loaded! </strong> The Legacy Metadata file has been read sucessfully.');
+	    		$('#legacyFileError').attr('class','alert alert-success');
+	    		$('#legacyFileError').css('display','block');
+	    		checkMetadata();
+	        	},
+	        error:  function () {
+
+
+	      		$('#legacyFileError').empty();
+	    		
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#legacyFileError').append('<strong>Error loading File </strong> The file is corrupted or does not contain Legacy Metadata.');
+	    		$('#legacyFileError').attr('class','alert alert-error');
+	    		$('#legacyFileError').css('display','block');
+
+	            $('#legacyCode').empty();
+
+        	},
+
+        	
+	        // Form data
+	        data: formData,
+	        //Options to tell JQuery not to process data or worry about content-type
+	        cache: false,
+	        contentType: false,
+	        processData: false
+	    });
+	}
+
+
+    function handleFileEntitiesSelect(evt) {
+
+
+    	var files = evt.target.files; // FileList object
+
+
+        // files is a FileList of File objects. List some properties.
+        var output = [];
+
+        for (var i = 0, f; f = files[i]; i++) {
+          //alert(escape(f.name));
+          // Only process image files.
+
+          if (!(f.name.indexOf(".json") !== -1)) {
+            //alert("This is not an exmeralda file");
+
+      		$('#entitiesFileError').empty();
+    		
+    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+    		$('#entitiesFileError').append('<strong>Error loading File </strong> The file is corrupted or does not contain NER entities results in JSON format.');
+    		$('#entitiesFileError').attr('class','alert alert-error');
+    		$('#entitiesFileError').css('display','block');
+
+            $('#entitiesFileError').empty();
+    		
+            continue;
+          }
+
+          var reader = new FileReader();
+
+          // Closure to capture the file information.
+          reader.onload = (function(theFile) {
+            return function(e) {
+	            // Render thumbnail.
+	            $('#entitiesCode').empty();
+	            $('#entitiesCode').text(e.target.result);
+	      		//prettyPrint();
+
+
+
+	   		 	//submitEntitiesFile();
+
+	      		$('#entitiesFileError').empty();
+	    		
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#entitiesFileError').append('<strong>File loaded! </strong> The SRT file with the subtitles has been read sucessfully.');
+	    		$('#entitiesFileError').attr('class','alert alert-success');
+	    		$('#entitiesFileError').css('display','block');
+
+	    		checkMetadata();
+
+	            };
+          })(f);
+
+          // Read in the image file as a data URL.
+          reader.readAsText(f, "UTF-8");
+          
+        }
+      }
+
+
+
+    
+    function handleFileSubtitlesSelect(evt) {
+
+
+    	var files = evt.target.files; // FileList object
+
+
+        // files is a FileList of File objects. List some properties.
+        var output = [];
+
+        for (var i = 0, f; f = files[i]; i++) {
+          //alert(escape(f.name));
+          // Only process image files.
+
+          if (!(f.name.indexOf(".srt") !== -1)) {
+            //alert("This is not an exmeralda file");
+
+      		$('#subtitlesFileError').empty();
+    		
+    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+    		$('#subtitlesFileError').append('<strong>Error loading File </strong> The file is corrupted or does not contain subtitles in SRT format.');
+    		$('#subtitlesFileError').attr('class','alert alert-error');
+    		$('#subtitlesFileError').css('display','block');
+
+            $('#subtitlesCode').empty();
+    		
+            continue;
+          }
+
+          var reader = new FileReader();
+
+          // Closure to capture the file information.
+          reader.onload = (function(theFile) {
+            return function(e) {
+	            // Render thumbnail.
+	            $('#subtitlesCode').empty();
+	            $('#subtitlesCode').text(e.target.result);
+	      		//prettyPrint();
+
+
+
+	   		 	//submitSubtitlesFile();
+	   		 	
+	   		 	
+	      		$('#subtitlesFileError').empty();
+
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#subtitlesFileError').append('<strong>File loaded! </strong> The subtitles file has been read sucessfully.');
+	    		$('#subtitlesFileError').attr('class','alert alert-success');
+	    		$('#subtitlesFileError').css('display','block');
+	    		checkMetadata();
+
+	            };
+          })(f);
+
+          // Read in the image file as a data URL.
+          reader.readAsText(f, "UTF-8");
+          
+        }
+      }
+
+    
+    function handleFileExmeraldaSelect(evt) {
+
+
+    	var files = evt.target.files; // FileList object
+
+
+        // files is a FileList of File objects. List some properties.
+        var output = [];
+
+        for (var i = 0, f; f = files[i]; i++) {
+          //alert(escape(f.name));
+          // Only process image files.
+
+          if (!(f.name.indexOf(".exb") !== -1)) {
+            //alert("This is not an exmeralda file");
+
+      		$('#exmeraldaFileError').empty();
+    		
+    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+    		$('#exmeraldaFileError').append('<strong>Error loading File </strong> The file is corrupted or does not contain analysis results.');
+    		$('#exmeraldaFileError').attr('class','alert alert-error');
+    		$('#exmeraldaFileError').css('display','block');
+
+            $('#exmeraldaCode').empty();
+    		
+            continue;
+          }
+
+          var reader = new FileReader();
+
+          // Closure to capture the file information.
+          reader.onload = (function(theFile) {
+            return function(e) {
+	            // Render thumbnail.
+	            $('#exmeraldaCode').empty();
+	            $('#exmeraldaCode').text(e.target.result);
+	      		//prettyPrint();
+
+
+
+	   		 	//submitExmeraldaFile();
+
+	      		$('#exmeraldaFileError').empty();
+
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#exmeraldaFileError').append('<strong>File loaded! </strong> The Exmaralda file has been read sucessfully.');
+	    		$('#exmeraldaFileError').attr('class','alert alert-success');
+	    		$('#exmeraldaFileError').css('display','block');
+	    		checkMetadata();
+	            };
+          })(f);
+
+          // Read in the image file as a data URL.
+          reader.readAsText(f, "UTF-8");
+          
+        }
+      }
+
+    function handleFileLegacySelect(evt) {
+
+
+    	var files = evt.target.files; // FileList object
+
+
+        // files is a FileList of File objects. List some properties.
+        var output = [];
+
+        for (var i = 0, f; f = files[i]; i++) {
+          //alert(escape(f.name));
+          // Only process image files.
+
+          if (!(f.name.indexOf(".xml") !== -1)) {
+            //alert("This is not an exmeralda file");
+
+      		$('#legacyFileError').empty();
+    		
+    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+    		$('#legacyFileError').append('<strong>Error loading File </strong> The file is corrupted or does not contain Legacy Metadata.');
+    		$('#legacyFileError').attr('class','alert alert-error');
+    		$('#legacyFileError').css('display','block');
+
+            $('#legacyCode').empty();
+    		
+            continue;
+          }
+
+          var reader = new FileReader();
+
+          // Closure to capture the file information.
+          reader.onload = (function(theFile) {
+            return function(e) {
+	            // Render thumbnail.
+	            $('#legacyCode').empty();
+	            $('#legacyCode').text(e.target.result);
+	      		//prettyPrint();
+
+
+
+	      		//submitLegacyFile();
+
+
+	      		$('#legacyFileError').empty();
+	    		
+	    		//$('#exmeraldaFileError').append('<strong>ERROR loading Exmeralda file</strong> The expecified path does not correspond to a valid Exmaralda file.');
+	    		$('#legacyFileError').append('<strong>File loaded! </strong> The Legacy Metadata file has been read sucessfully.');
+	    		$('#legacyFileError').attr('class','alert alert-success');
+	    		$('#legacyFileError').css('display','block');
+	    		checkMetadata();
+
+
+	            };
+          })(f);
+
+          // Read in the image file as a data URL.
+          reader.readAsText(f, "UTF-8");
+          
+        }
+      }
+
+    
+   	$(document).ready(function() {
+   	   	
+   	   $('#videoURL').bind("enterKey",function(e){
+   			submitVideo();
+   	   });
+	   	$('#videoURL').keyup(function(e){
+	    	if(e.keyCode == 13)
+	    	{
+	    	  $(this).trigger("enterKey");
+	    	}
+	    }); 
+	   	$('#currentVideo').on('canplay', function(){
+			$('#URLerror').empty();
+			$('#URLerror').append('<strong>URL loaded successfully</strong> The Video is now ready for further processings.');
+			$('#URLerror').attr('class','alert alert-success');
+			$('#URLerror').css('display','block');
+			
+			$('#selectmetadatabutton').attr('class','btn btn-large btn-primary');
+
+		}); 	
+
+		$( "#tabsInput" ).tabs();
+		$( "#tabsOutput" ).tabs();
+
+		
+		document.getElementById('fileChooserExmeralda').addEventListener('change', handleFileExmeraldaSelect, false);
+		document.getElementById('fileChooserLegacy').addEventListener('change', handleFileLegacySelect, false);
+		document.getElementById('fileChooserSubtitles').addEventListener('change', handleFileSubtitlesSelect, false);
+		document.getElementById('fileChooserEntities').addEventListener('change', handleFileEntitiesSelect, false);
+		
+    });
+    
+
+	
+	
+      var _gauges = _gauges || [];
+      (function() {
+        var t   = document.createElement('script');
+        t.type  = 'text/javascript';
+        t.async = true;
+        t.id    = 'gauges-tracker';
+        t.setAttribute('data-site-id', '4f0dc9fef5a1f55508000013');
+        t.src = '//secure.gaug.es/track.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(t, s);
+      })();
+
+
+
+      
+    </script>
+
+  </body>
+</html>

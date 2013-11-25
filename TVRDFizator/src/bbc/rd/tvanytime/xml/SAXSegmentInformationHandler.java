@@ -674,7 +674,7 @@ class SAXSegmentInformationHandler extends DefaultHandler {
 					mediaLocator.setMediaURI(new bbc.rd.tvanytime.URI(characterData.trim()));
 				}
 				catch (TVAnytimeException tvae) {
-					addError("MediaUri: "+tvae.getMessage());
+					addError("MediaUri 2: "+tvae.getMessage());
 				}
 				state = MEDIA_LOCATOR_SEG_INFO;
 				break;
@@ -686,7 +686,7 @@ class SAXSegmentInformationHandler extends DefaultHandler {
 					sourceMediaLocator.setMediaURI(new bbc.rd.tvanytime.URI(characterData.trim()));
 				}
 				catch (TVAnytimeException tvae) {
-					addError("MediaUri: "+tvae.getMessage());
+					addError("MediaUri 1: "+tvae.getMessage());
 				}
 				state = SOURCE_MEDIA_LOCATOR_SEG_INFO;
 				break;
@@ -718,7 +718,7 @@ class SAXSegmentInformationHandler extends DefaultHandler {
 					mediaLocator.setMediaURI(new URI(characterData.trim()));
 				}
 				catch (TVAnytimeException tvae) {
-					addError("MediaUri: "+tvae.getMessage());
+					addError("MediaUri: 3"+tvae.getMessage());
 				}
 				state = MEDIA_LOCATOR_SEG_GROUP_INFO;
 				break;

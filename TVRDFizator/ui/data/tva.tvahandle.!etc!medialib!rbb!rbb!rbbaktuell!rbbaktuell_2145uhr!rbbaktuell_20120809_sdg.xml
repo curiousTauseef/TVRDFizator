@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Updateskript -->
+<tva:TVAMain xml:lang="de" xmlns:tva="urn:tva:metadata:2005" xmlns:mpeg7="urn:tva:mpeg7:2005" xmlns:ard="urn:ard:web:tva:metadata:0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:ard:web:tva:metadata:0.2 http://doku-extern.ard.de/AVportal/tva/Schemas/ard_web_tva_extensions_v02.xsd">
+	<tva:ProgramDescription>
+		<tva:ProgramInformationTable>
+			<!-- Beschreibung fuer die gesamte Sendung (Description for whole show) -->
+			
+			<tva:ProgramInformation programId="crid://rbb-online.de/rbbaktuell/41e10d19-e9f8-4248-8a98-027fd65954b8">
+				<tva:BasicDescription> 
+					<tva:Title type="main"><![CDATA[rbb AKTUELL]]></tva:Title>
+				</tva:BasicDescription>
+				
+				
+
+				<tva:MemberOf xsi:type="tva:MemberOfType" crid="crid://rbb-online.de/rbbaktuell"/>
+				<tva:MemberOf xsi:type="tva:MemberOfType" crid="crid://ard.de/sendung"/>
+			</tva:ProgramInformation>
+			
+
+			<!-- Beschreibung für Clip/Beitrag einer Sendung (Description for a clip) -->
+			<tva:ProgramInformation programId="crid://rbb-online.de/rbbaktuell/2b34a720-4dc6-46dc-99ac-a7fd53f4106a">
+				<tva:BasicDescription>
+					<tva:Title type="main"><![CDATA[rbb AKTUELL vom 09.08.2012, 21:45 Uhr]]></tva:Title>
+					<tva:Title type="secondary"><![CDATA[]]></tva:Title>
+					<tva:Synopsis length="long"><![CDATA[Flughafen in Geldnot +++ Zurück in der Heimat +++ Olympisches Gold für die Region +++ Moderation: Raiko Thal]]></tva:Synopsis>
+					<tva:Synopsis length="short"><![CDATA[Flughafen in Geldnot +++ Zurück in der Heimat +++ Olympisches Gold für die Region +++ Moderation: Raiko Thal]]></tva:Synopsis>
+					
+					<!-- Stichwörter (Keywords) -->
+					<tva:Keyword type="main"><![CDATA[Nachrichten]]></tva:Keyword>
+					<tva:Keyword type="main"><![CDATA[Regionales]]></tva:Keyword>
+					<tva:Keyword type="main"><![CDATA[Politik]]></tva:Keyword>
+					 
+					<!-- Produzenten (Producers)/Quellen (Sources)-->
+					<tva:CreditsList>
+						<tva:CreditsItem role="urn:ard:tva:metadata:cs:ARDRoleCS:2007:17.1">
+							<tva:OrganizationName><![CDATA[Rundfunk Berlin-Brandenburg]]></tva:OrganizationName>
+						</tva:CreditsItem>
+					</tva:CreditsList>
+					
+					<!-- Bild URL (Nico: image URL >> common availability issue: image URL is temporary! but relevant in the "real world", because it will remain online as long as the show. Nico: Might make sense to download these image files under their original filename and replace only the first part of the url (http://www.rbb-online.de/etc/medialib/rbb/) automatically!? Is that feasible?) -->
+					<tva:RelatedMaterial xsi:type="ard:ARDRelatedMaterialType">
+						<tva:HowRelated href="urn:ard:tva:metadata:cs:ARDHowRelatedCS:2007:3.2"/>
+						<tva:Format href="urn:ard:tva:metadata:cs:ARDFormatCS:2010:4.5"/>
+						<tva:MediaLocator>
+							<mpeg7:MediaUri>http://www.rbb-online.de/etc/medialib/rbb/rbb/rbbaktuell/rbbaktuell_2145uhr/rbbaktuell_20120809_sdg.file.jpg</mpeg7:MediaUri>
+						</tva:MediaLocator>
+						<ard:alternativeText>Logo: rbb Aktuell (Quelle: rbb)</ard:alternativeText>
+						<ard:reference><![CDATA[Rundfunk Berlin-Brandenburg]]></ard:reference>
+					</tva:RelatedMaterial>
+					<tva:RelatedMaterial xsi:type="ard:ARDRelatedMaterialType">
+						<tva:HowRelated href="urn:ard:tva:metadata:cs:ARDHowRelatedCS:2007:3.2"/>
+						<tva:Format href="urn:ard:tva:metadata:cs:ARDFormatCS:2010:4.8"/>
+						<tva:MediaLocator>
+							<mpeg7:MediaUri>http://www.rbb-online.de/etc/medialib/rbb/rbb/rbbaktuell/rbbaktuell_2145uhr/rbbaktuell_20120809_sdg.file.256.144.jpg</mpeg7:MediaUri>
+						</tva:MediaLocator>
+						<ard:alternativeText>Logo: rbb Aktuell (Quelle: rbb)</ard:alternativeText>
+						<ard:reference><![CDATA[Rundfunk Berlin-Brandenburg]]></ard:reference>
+					</tva:RelatedMaterial>
+					<tva:RelatedMaterial xsi:type="ard:ARDRelatedMaterialType">
+						<tva:HowRelated href="urn:ard:tva:metadata:cs:ARDHowRelatedCS:2007:3.2"/>
+						<tva:Format href="urn:ard:tva:metadata:cs:ARDFormatCS:2010:4.11"/>
+						<tva:MediaLocator>
+							<mpeg7:MediaUri>http://www.rbb-online.de/etc/medialib/rbb/rbb/rbbaktuell/rbbaktuell_2145uhr/rbbaktuell_20120809_sdg.file.128.72.jpg</mpeg7:MediaUri>
+						</tva:MediaLocator>
+						<ard:alternativeText>Logo: rbb Aktuell (Quelle: rbb)</ard:alternativeText>
+						<ard:reference><![CDATA[Rundfunk Berlin-Brandenburg]]></ard:reference>
+					</tva:RelatedMaterial>
+					
+					<!-- Heimat URL (home URL, i.e. programme website presenting the whole show and separate chapters online) -->
+					<tva:RelatedMaterial xsi:type="ard:ARDRelatedMaterialType">
+						<tva:HowRelated href="urn:ard:tva:metadata:cs:ARDHowRelatedCS:2007:4.1"/>
+						<tva:MediaLocator>
+							<mpeg7:MediaUri>http://www.rbb-online.de/rbbaktuell/archiv/rbb_aktuell_vom_08.html</mpeg7:MediaUri>
+						</tva:MediaLocator>
+						<ard:alternativeText><![CDATA[rbb AKTUELL vom 18.10.2012]]></ard:alternativeText>
+					</tva:RelatedMaterial>
+					
+					<tva:Duration>PT00H30M35S</tva:Duration>
+				</tva:BasicDescription>
+				<!-- Bewertbarkeit (rating otion) -->
+				<tva:MemberOf xsi:type="tva:MemberOfType" crid="crid://ard.de/bewertbar"/>
+				<!-- Verweis auf die Sendung des Beitrags (reference to show boradcast)-->
+				<tva:MemberOf xsi:type="tva:MemberOfType" index="0" crid="crid://rbb-online.de/rbbaktuell/41e10d19-e9f8-4248-8a98-027fd65954b8"/>
+								
+			</tva:ProgramInformation>
+		</tva:ProgramInformationTable>
+		<tva:ProgramLocationTable>
+			<tva:Schedule serviceIDRef="990020">
+				<tva:ScheduleEvent>
+					<tva:Program crid="crid://rbb-online.de/rbbaktuell/41e10d19-e9f8-4248-8a98-027fd65954b8"/>
+					<tva:PublishedStartTime>2012-10-18T21:45:00</tva:PublishedStartTime>
+					<!-- Start Time 21:45:00 is a default value; any delays in the actual broadcast are not reflected here! -->
+				</tva:ScheduleEvent>
+			</tva:Schedule>
+
+			
+			
+			<tva:OnDemandProgram>
+				<tva:Program crid="crid://rbb-online.de/rbbaktuell/2b34a720-4dc6-46dc-99ac-a7fd53f4106a"/>
+				<tva:ProgramURL><![CDATA[ondemand.rbb-online.de/ondemand/	rtmp://ondemand.rbb-online.de/ondemand/mp4:rbb/rbbaktuell/rbbaktuell_2145uhr/rbbaktuell_20120809_sdg_m_16_9_512x288.mp4]]></tva:ProgramURL>
+				<tva:InstanceDescription>
+					<tva:AVAttributes>
+						<tva:FileFormat href="urn:ard:tva:metadata:cs:ARDFormatCS:2010:1.24"/>
+					</tva:AVAttributes>
+					<tva:MemberOf xsi:type="tva:MemberOfType" crid="crid://ard.de/videoondemand"/>
+				</tva:InstanceDescription>
+				<tva:StartOfAvailability>2012-08-09T21:45:00</tva:StartOfAvailability>
+				<tva:EndOfAvailability>2012-08-16T00:00:00</tva:EndOfAvailability>
+			</tva:OnDemandProgram>
+			
+			<tva:OnDemandProgram>
+				<tva:Program crid="crid://rbb-online.de/rbbaktuell/2b34a720-4dc6-46dc-99ac-a7fd53f4106a"/>
+				<tva:ProgramURL><![CDATA[.../rbb/rbbaktuell/rbbaktuell_2145uhr/rbbaktuell_20120809_sdg_m_16_9_512x288.mp4]]></tva:ProgramURL>
+				<tva:InstanceDescription>
+					<tva:AVAttributes>
+						<tva:FileFormat href="urn:ard:tva:metadata:cs:ARDFormatCS:2010:90.3"/>
+					</tva:AVAttributes>
+					<tva:MemberOf xsi:type="tva:MemberOfType" crid="crid://ard.de/videoondemand"/>
+				</tva:InstanceDescription>
+				<tva:StartOfAvailability>2012-08-09T21:45:00</tva:StartOfAvailability>
+				<tva:EndOfAvailability>2012-08-16T00:00:00</tva:EndOfAvailability>
+			</tva:OnDemandProgram>
+			
+			<tva:OnDemandProgram>
+				<tva:Program crid="crid://rbb-online.de/rbbaktuell/2b34a720-4dc6-46dc-99ac-a7fd53f4106a"/>
+				<tva:ProgramURL><![CDATA[.../rbbaktuell/rbbaktuell_2145uhr/rbbaktuell_20120809_sdg_m_16_9_512x288.mp4]]></tva:ProgramURL>
+				<tva:InstanceDescription>
+					<tva:AVAttributes>
+						<tva:FileFormat href="urn:ard:tva:metadata:cs:ARDFormatCS:2010:1.54"/>
+					</tva:AVAttributes>
+					<tva:MemberOf xsi:type="tva:MemberOfType" crid="crid://ard.de/videoondemand"/>
+				</tva:InstanceDescription>
+				<tva:StartOfAvailability>2012-08-09T21:45:00</tva:StartOfAvailability>
+				<tva:EndOfAvailability>2012-08-16T00:00:00</tva:EndOfAvailability>
+			</tva:OnDemandProgram>
+			</tva:ProgramLocationTable>
+	</tva:ProgramDescription>
+</tva:TVAMain>

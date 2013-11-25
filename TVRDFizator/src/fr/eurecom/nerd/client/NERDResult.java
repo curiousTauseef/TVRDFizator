@@ -123,8 +123,8 @@ public class NERDResult extends Request{
         params.add("key", apiKey);
         params.add("extractor", extractor);
         params.add("idDocument", document.getIdDocument().toString());
-        params.add("force", "true");
-        //params.add("cache", "false");
+        //params.add("force", "false");
+        params.add("cache", "false");
         if(timeout!=null) params.add("timeout", timeout.toString());
         String jsonAnnotation = request(uri.concat("annotation"), RequestType.POST, params);
         Annotation annotation = gson.fromJson(jsonAnnotation, Annotation.class);

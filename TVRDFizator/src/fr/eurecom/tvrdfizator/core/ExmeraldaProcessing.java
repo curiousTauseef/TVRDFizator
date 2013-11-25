@@ -42,9 +42,10 @@ public class ExmeraldaProcessing extends Thread {
         System.out.println("Entering Processing!");
 		GridFS gfsmr = new GridFS(db);
 
-        
+		UUID idtransaction = UUID.randomUUID();
+
 		 //Create inputFile & outputFile
-		 File metadataFileDisk = new File("./data/exmeralda_"+idMediaResource+".exb");
+		 File metadataFileDisk = new File("./data/exmeralda_"+idMediaResource+idtransaction+".exb");
 		try {
 			FileUtils.writeStringToFile(metadataFileDisk, metadataFile, "UTF-8");
 		} catch (IOException e) {
@@ -52,12 +53,12 @@ public class ExmeraldaProcessing extends Thread {
 			e.printStackTrace();
 		}
 		
-		 File fileSerializationDisk  = new File("./data/exmeralda_"+idMediaResource+".ttl");
+		 File fileSerializationDisk  = new File("./data/exmeralda_"+idMediaResource+idtransaction+".ttl");
 
 
 		//SERIALIZATION
 		 Processing p = new Processing();
-		 if (p.analisys_process( "./data/exmeralda_"+idMediaResource+".exb",  "./data/exmeralda_"+idMediaResource+".ttl", idMediaResource.toString(), namespace, locator)){
+		 if (p.analisys_process( "./data/exmeralda_"+idMediaResource+idtransaction+".exb",  "./data/exmeralda_"+idMediaResource+idtransaction+".ttl", idMediaResource.toString(), namespace, locator)){
 
 		 
 

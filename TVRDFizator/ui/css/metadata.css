@@ -1,0 +1,145 @@
+#videoSelectionField
+{
+	text-align: center; 
+	margin-top: 30px;
+	width:100%;
+}
+
+
+#videoPanel
+{
+	text-align: center; 
+	margin-top: 50px;
+}
+
+
+#currentVideo {
+	padding: 10px;
+	border: 5px solid #61625d;
+		
+	-moz-border-radius: 5px; /* FF1+ */
+        -ms-border-radius: 5px; /* IE future proofing */
+	-webkit-border-radius: 5px; /* Saf3+, Chrome */
+	border-radius: 5px; /* Opera 10.5, IE 9 */
+		width:640px;
+	
+	background: #000000;
+	background-image: -moz-linear-gradient(top, #313131, #000000); /* FF3.6 */
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #313131),color-stop(1, #000000)); /* Saf4+, Chrome */
+	
+	box-shadow: inset 0 15px 35px #535353;
+}
+
+#tabheader{
+	border: 0px solid rgb(0, 0, 0);
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, rgb(26, 171, 240)),color-stop(1, rgb(15, 45, 165)));
+}
+
+
+#URLerror {
+		display: none;
+		margin-top: 50px;
+}
+
+#exmeraldaFileError {
+		margin-top: 30px;
+		margin-bottom: 0px;
+		
+}
+
+
+#exmeraldaFilePanel{
+	min-height: 300px;
+	max-height: 300px;
+	overflow: auto;
+	
+}
+
+#legacyFilePanel{
+	min-height: 300px;
+	max-height: 300px;
+	overflow: auto;
+	
+}
+
+#legacyFileError {
+		margin-top: 30px;
+		margin-bottom: 0px;
+		
+}
+
+
+#subtitlesFilePanel{
+	min-height: 300px;
+	max-height: 300px;
+	overflow: auto;
+	
+}
+
+#subtitlesFileError {
+		margin-top: 30px;
+		margin-bottom: 0px;
+		
+}
+
+#entitiesFilePanel{
+	min-height: 300px;
+	max-height: 300px;
+	overflow: auto;
+	
+}
+
+#entitiesFileError {
+		margin-top: 30px;
+		margin-bottom: 0px;
+		
+}
+
+#generateRDFButton {
+		margin: 40px;
+			
+}
+
+
+#tabsOutput{
+}
+
+#tabResultsHeader{
+	border: 0px solid rgb(0, 0, 0);
+background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, rgb(134, 134, 134)),color-stop(1, rgb(0, 0, 0)));
+}
+
+#exmeraldaFilePanelResult{
+	min-height: 300px;
+	max-height: 300px;
+	overflow: auto;
+	
+}
+
+
+#legacyFilePanelResult{
+	min-height: 300px;
+	max-height: 300px;
+	overflow: auto;
+	
+}
+
+#subentFilePanelResult{
+	min-height: 300px;
+	max-height: 300px;
+	overflow: auto;
+	
+}
+
+#uploadRDFButton{
+	margin: 40px;
+}
+
+.hiddenn{
+	display:none;
+}
+
+.queries{
+	padding: 20px;;
+}
+

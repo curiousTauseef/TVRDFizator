@@ -3,6 +3,7 @@ package fr.eurecom.tvrdfizator.web;
 
 import java.io.IOException;
 
+import com.sun.grizzly.http.SelectorThread;
 import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import com.sun.grizzly.http.servlet.ServletAdapter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
@@ -16,6 +17,14 @@ public class Server {
               
         // static content is linked from here
         GrizzlyWebServer server = new GrizzlyWebServer(8003);
+        
+        
+        
+        //For very slow response extractors:
+        SelectorThread st = server.getSelectorThread();
+        st.setTransactionTimeout(700000);
+        
+        
        
         //create UI resources
         ServletAdapter ui = new ServletAdapter();
@@ -36,13 +45,12 @@ public class Server {
         
         // static content adapter
         ServletAdapter staticContent = new ServletAdapter("ui");
-        staticContent.setContextPath("/ui");
+        staticContent.setContextPath("/");
         staticContent.setHandleStaticResources(true);
                 
         // register all above defined adapters
-        server.addGrizzlyAdapter(ui, new String[] {"/"});
         server.addGrizzlyAdapter(api, new String[] {"/api"});
-        server.addGrizzlyAdapter(staticContent, new String[] {"/ui"});
+        server.addGrizzlyAdapter(staticContent, new String[] {"/"});
         
         
               

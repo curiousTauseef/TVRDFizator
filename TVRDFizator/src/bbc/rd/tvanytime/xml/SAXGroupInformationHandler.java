@@ -477,7 +477,7 @@ class SAXGroupInformationHandler extends DefaultHandler {
           mediaLocator.setMediaURI(new bbc.rd.tvanytime.URI(characterData.trim()));
         }
         catch (TVAnytimeException tvae) {
-          addError("MediaUri: "+tvae.getMessage());
+          addError("MediaUri 6: "+tvae.getMessage());
         }
         state = MEDIA_LOCATOR;
         break;
@@ -499,7 +499,7 @@ class SAXGroupInformationHandler extends DefaultHandler {
           sourceMediaLocator.setMediaURI(new bbc.rd.tvanytime.URI(characterData.trim()));
         }
         catch (TVAnytimeException tvae) {
-          addError("SourceMediaUri: "+tvae.getMessage());
+          addError("SourceMediaUri 7: "+tvae.getMessage());
         }
         state = SOURCE_MEDIA_LOCATOR;
         break;

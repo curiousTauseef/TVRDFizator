@@ -26,5 +26,6 @@ public enum ExtractorType {
     YAHOO,
     ZEMANTA,
     TEXTRAZOR,
-    COMBINED
+    COMBINED,
+    THD
 }

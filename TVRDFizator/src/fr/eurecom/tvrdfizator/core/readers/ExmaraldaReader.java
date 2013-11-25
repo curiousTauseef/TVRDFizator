@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -41,7 +42,15 @@ public class ExmaraldaReader{
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder;
 			dBuilder = dbFactory.newDocumentBuilder();
+
+			//String texto = FileUtils.readFileToString(fXmlFile);
+			//System.out.println(texto.substring(0, 20));
+			
+			
 			doc = dBuilder.parse(fXmlFile);
+			//doc = dBuilder.parse(fXmlFile);
+			
+			
 			doc.getDocumentElement().normalize();
 			
 

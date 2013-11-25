@@ -52,7 +52,7 @@ public class RDFWriterLegacy {
 	private OntModel modelMA = null;
 	private OntModel modelOA = null;
 	private OntModel modelFOAF = null;
-	private OntModel modelOPMV = null;
+	private OntModel modelPROV = null;
 	private OntModel modelLSCOM = null;
 	
 	
@@ -60,18 +60,21 @@ public class RDFWriterLegacy {
 	
 	private String BBC_ontology_URL = "http://purl.org/ontology/po/";
 	private String Dublin_Core_URL = "http://purl.org/dc/elements/1.1/";
-	private String Media_Resources_URL = "http://www.w3.org/ns/ma-ont/";
-	private String Open_Annotation_URL = "http://www.w3.org/ns/openannotation/core/";
+	private String Media_Resources_URL = "http://www.w3.org/ns/ma-ont#";
+	private String Open_Annotation_URL = "http://www.w3.org/ns/oa#";
 	private String Event_URL = "http://purl.org/NET/c4dm/event.owl/";
 	private String Time_URL = "http://purl.org/NET/c4dm/timeline.owl/";
 	private String LSCOM_URL = "http://vocab.linkeddata.es/lscom/";
 	private String FOAF_URL = "http://xmlns.com/foaf/0.1/";
-	private String OPMV_URL = "http://purl.org/net/opmv/ns/";
+	private String PROV_URL = "http://www.w3.org/ns/prov#";
 	private String LINKEDTV_URL = "http://data.linkedtv.eu/";
-	private String LINKEDTV_URL_ONT = "http://data.linkedtv.eu/ontology/";
+	private String LINKEDTV_URL_ONT = "http://data.linkedtv.eu/ontologies/core#";
+	private String DBPEDIA_URL_ONT = "http://dbpedia.org/ontology/";
+	private String NINSUNA_URL_ONT = "http://multimedialab.elis.ugent.be/organon/ontologies/ninsuna#";
+	private String NERD_URL_ONT = "http://nerd.eurecom.fr/ontology#";
+	private String STRING_URL_ONT = "http://nlp2rdf.lod2.eu/schema/string/";
 
 
-	
 	public RDFWriterLegacy(String f_legacy, String f_exmaralda, VideoMetaData md, String idMediaResource, String namespace, String locator){
 		file_legacy = f_legacy;
 		file_exmaralda = f_exmaralda;
@@ -98,16 +101,7 @@ public class RDFWriterLegacy {
 					
 
 	}
-	
-	public void create_exmeralda() throws FileNotFoundException{
 
-			createModel();
-			generateExmaralda();
-			writeExmaralda();
-			
-
-	}
-	
 
 
 	public void createModel() throws FileNotFoundException{
@@ -122,10 +116,10 @@ public class RDFWriterLegacy {
 			 modelMA = ModelFactory.createOntologyModel();
 			 modelOA = ModelFactory.createOntologyModel();
 			 modelFOAF= ModelFactory.createOntologyModel();
-			 modelOPMV= ModelFactory.createOntologyModel();
+			 modelPROV= ModelFactory.createOntologyModel();
 			 modelLSCOM= ModelFactory.createOntologyModel();
 	
-			 
+
 			 model_legacy.setNsPrefix( "po", BBC_ontology_URL );
 			 model_legacy.setNsPrefix( "ma", Media_Resources_URL );
 			 model_legacy.setNsPrefix( "oa", Open_Annotation_URL );
@@ -133,22 +127,15 @@ public class RDFWriterLegacy {
 			 model_legacy.setNsPrefix( "event", Event_URL );
 			 model_legacy.setNsPrefix( "timeline", Time_URL );
 			 model_legacy.setNsPrefix( "foaf", FOAF_URL );
-			 model_legacy.setNsPrefix( "opmv", OPMV_URL );
+			 model_legacy.setNsPrefix( "prov", PROV_URL );
 			 model_legacy.setNsPrefix( "lscom", LSCOM_URL );
 			 model_legacy.setNsPrefix( "linkedtv", LINKEDTV_URL_ONT );
+			 model_legacy.setNsPrefix( "dbpedia-owl", DBPEDIA_URL_ONT );
+			 model_legacy.setNsPrefix( "nsa", NINSUNA_URL_ONT );
+			 model_legacy.setNsPrefix( "nerd", NERD_URL_ONT );
+			 model_legacy.setNsPrefix( "str", STRING_URL_ONT );
 
-		 
-			 model_exmaralda.setNsPrefix( "po", BBC_ontology_URL );
-			 model_exmaralda.setNsPrefix( "ma", Media_Resources_URL );
-			 model_exmaralda.setNsPrefix( "oa", Open_Annotation_URL );
-			 model_exmaralda.setNsPrefix( "dc", Dublin_Core_URL );
-			 model_exmaralda.setNsPrefix( "event", Event_URL );
-			 model_exmaralda.setNsPrefix( "timeline", Time_URL );
-			 model_exmaralda.setNsPrefix( "foaf", FOAF_URL );
-			 model_exmaralda.setNsPrefix( "opmv", OPMV_URL );
-			 model_exmaralda.setNsPrefix( "lscom", LSCOM_URL );
-			 model_exmaralda.setNsPrefix( "linkedtv", LINKEDTV_URL_ONT );
-
+			 
 
 
      	 FileInputStream bbcOntology_File = new FileInputStream(new File("ontologies/2009-09-07.rdf"));
@@ -285,7 +272,14 @@ public class RDFWriterLegacy {
 				if (v.getService() != null){
 					
 					OntClass ServiceOWL = modelBBC.getOntClass( BBC_ontology_URL + "Service" );
-					Individual service1 = model_legacy.createIndividual(v.getService(), ServiceOWL );	
+					//Check if the service string has spaces (problem in TVAnytime from BBC)
+					String serviceName = v.getService();
+
+					while (serviceName.indexOf("\t") >= 0){
+						serviceName = serviceName.substring(serviceName.indexOf("\t") +1, serviceName.length());
+					}
+					 
+					Individual service1 = model_legacy.createIndividual(serviceName, ServiceOWL );	
 
 					//service1.addProperty(RDFS.label, v.getService());
 					
@@ -329,7 +323,7 @@ public class RDFWriterLegacy {
 				annotation1.addProperty(targetProperty, episode1);
 				
 		
-				//Provenance
+/*
 				OntClass organizationOWL = modelFOAF.getOntClass( FOAF_URL + "Organization" );
 				Individual organizationI = modelOPMV.createIndividual("http://data.linkedtv.eu/organization/RBB", organizationOWL );
 				organizationI.addProperty(RDF.type, modelOPMV.createClass(OPMV_URL + "Agent"));	
@@ -351,6 +345,30 @@ public class RDFWriterLegacy {
 				Literal value = model_legacy.createTypedLiteral(cal);		
 				OntProperty wasgeneratedatOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedAt");
 				annotation1.addProperty(wasgeneratedatOWL, value);
+				*/
+				
+				
+				//Provenance Ontology
+				//Add info to the artifact
+				annotation1.addProperty(RDF.type, modelPROV.createClass(PROV_URL + "Entity"));	
+
+
+				OntClass organizationOWL = modelFOAF.getOntClass( FOAF_URL + "Organization" );
+				Individual organizationI = model_linkedtv.createIndividual(LINKEDTV_URL + "organization/"+"RBB", organizationOWL );
+				organizationI.addProperty(RDF.type, modelPROV.createClass(PROV_URL + "Agent"));
+				OntProperty wasattributedtoOWL = modelPROV.createObjectProperty(PROV_URL + "wasAttributedTo");
+				annotation1.addProperty(wasattributedtoOWL, organizationI);
+
+				Calendar cal = GregorianCalendar.getInstance();
+				Literal value = model_exmaralda.createTypedLiteral(cal);		
+				OntProperty startedattimeOWL = modelPROV.createObjectProperty(PROV_URL + "startedAtTime");
+				annotation1.addProperty(startedattimeOWL, value);
+
+				//DerivedFrom
+				OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
+				Individual exmeraldaResource = modelPROV.createIndividual(file_legacy, RDFS.Resource );
+				annotation1.addProperty(wasderivedfromOWL, exmeraldaResource);
+				
 				
 			}
 			
@@ -396,427 +414,9 @@ public class RDFWriterLegacy {
 		}
 	}
 
-	private void generateExmaralda() {
-		createSpeakers();
-		createLayers();
-	}
-	
-
-	private void createSpeakers() {
-		for (int i  = 0; i  < mdata.getSpeakers().size(); i++){
-			Speaker spk = mdata.getSpeakers().get(i);
-			OntClass personOWL = modelFOAF.getOntClass( FOAF_URL + "Person" );
-			Individual personI = model_exmaralda.createIndividual(spk.getId(), personOWL );
-			
-			
-			if (spk.getName() != null){
-				OntProperty speakername = modelFOAF.getOntProperty(FOAF_URL + "name");
-				personI.addProperty(speakername, spk.getName());
-			}
-			
-			if (spk.getSex() != null){
-				OntProperty gendername = modelFOAF.getOntProperty(FOAF_URL + "gender");
-				personI.addProperty(gendername, spk.getSex());
-			}
-			
-			if (spk.getAbbreviation() != null){
-				OntProperty abbreviation = modelFOAF.getOntProperty(FOAF_URL + "nick");
-				personI.addProperty(abbreviation, spk.getAbbreviation());
-			}
-			
-			if (spk.getComment() != null){
-				personI.addProperty(RDFS.comment, spk.getComment());
-			}
-			else{
-				personI.addProperty(RDFS.comment, "");			
-			}
-			
-			if (!spk.getLanguages().isEmpty()){
-				OntProperty languajeSpeaker = modelFOAF.createOntProperty(FOAF_URL + "lang");
-				for (int j = 0; j < spk.getLanguages().size(); j++){
-					personI.addProperty(languajeSpeaker, spk.getLanguages().elementAt(i));
-				}
-			}
-	
-		}
-	}
-	
-	
-	private void createLayers() {
-		//Generate the RDF of every of the layers: 
-		/*
-		for (int i = 0; i < mdata.getLayers().size(); i++){
-			Layer l = mdata.getLayers().get(i);
-			
-			if (l.getName().equals("FhG_ASR-1_utterance")){
-				createLayer_ARS_FhG_1_utterance(l);
-			}
-			
-			if (l.getName().equals("FhG_ASR-1_word")){
-				createLayer_ARS_FhG_1_word(l);
-			}
-			if (l.getName().equals("UEP_Keywords-1")){
-				createLayer_UEP_Keywords_1(l);
-			}
-			if (l.getName().equals("CERTH_Shot")){
-				createLayer_CERTH_Shot(l);
-			}
-			
-			if (l.getName().equals("CERTH_Scene")){
-				createLayer_CERTH_Scene(l);
-			}
-			
-			if (l.getName().equals("CERTH_Concept-1_best-1")){
-				createLayer_CERTH_Concept_1_best(l, 1);
-			}
-			
-			if (l.getName().equals("CERTH_Concept-1_best-2")){
-				createLayer_CERTH_Concept_1_best(l, 2);
-			}
-			
-		}*/
-	}
 
 	
-	private void createLayer_CERTH_Concept_1_best(Layer l, int id) {
-		
-		for (int i = 0; i < l.getFragments().size(); i ++){
-			ItemLayer mf = l.getFragments().elementAt(i);
-			OntClass mediaFragmentOWL = modelMA.createClass( Media_Resources_URL + "MediaFragment" );
-			Individual mediaFragmentI = model_exmaralda.createIndividual(mf.getMediaFragmentURL(), mediaFragmentOWL );
-			
-			
-			//Annotation for the Speaker 
-			//Create annotation
-			OntClass annotationOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotation1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Speaker_CERTH_Concept_1_best_"+id, annotationOWL );
-			OntProperty bodyProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasBody");
-			annotation1.addProperty(bodyProperty, mediaFragmentI);
-			OntProperty targetProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasTarget");
-			annotation1.addProperty(targetProperty, l.getSpeaker());
-			
-			//Anotation for the data ifself
-			
-			OntClass annotationDataOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotationData1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Data_CERTH_Concept_1_best_"+id, annotationDataOWL );
-			annotationData1.addProperty(bodyProperty, mediaFragmentI);
-
-			OntClass lscomclassOWL = modelLSCOM.createClass( LSCOM_URL + mf.getValue() );
-			annotationData1.addProperty(targetProperty, lscomclassOWL);
-			
-			OntProperty typeAnnotationProperty = modelOA.createOntProperty(Open_Annotation_URL+"type");
-			annotationData1.addProperty(typeAnnotationProperty, "Concept");
-			
-			OntProperty confidenceAnnotationProperty = modelOA.createOntProperty(Open_Annotation_URL+"confidence");
-			annotationData1.addProperty(confidenceAnnotationProperty, mf.get_first_ud_information());
-			
-			//Provenance Ontology
-			//Create the organization.
-			OntClass organizationOWL = modelFOAF.getOntClass( FOAF_URL + "Organization" );
-			Individual organizationI = model_exmaralda.createIndividual("CERTH", organizationOWL );
-			organizationI.addProperty(RDF.type, "opmv:Agent");			
-			//Add info to the artifact
-			annotationData1.addProperty(RDF.type, "opmv:Artifact");	
-			
-			OntClass processOWL = modelOPMV.createClass(OPMV_URL + "Process" );
-			Individual processI = model_exmaralda.createIndividual(processOWL);
-
-			OntProperty wasperformedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasPerformedBy");
-			processI.addProperty(wasperformedbyOWL, organizationI);	
-			
-			OntProperty wasgeneratedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedBy");
-			annotationData1.addProperty(wasgeneratedbyOWL, processI);
-			
-			
-			Calendar cal = GregorianCalendar.getInstance();
-			Literal value = model_exmaralda.createTypedLiteral(cal);		
-			OntProperty wasgeneratedatOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedAt");
-			annotationData1.addProperty(wasgeneratedatOWL, value);
-
-		}
-		
-	}
-
-	private void createLayer_CERTH_Scene(Layer l) {
-		for (int i = 0; i < l.getFragments().size(); i ++){
-			ItemLayer mf = l.getFragments().elementAt(i);
-			OntClass mediaFragmentOWL = modelMA.createClass( Media_Resources_URL + "MediaFragment" );
-			Individual mediaFragmentI = model_exmaralda.createIndividual(mf.getMediaFragmentURL(), mediaFragmentOWL );
-			
-			
-			//Annotation for the Speaker 
-			//Create annotation
-			OntClass annotationOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotation1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Speaker_CERTH_Scene", annotationOWL );
-			OntProperty bodyProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasBody");
-			annotation1.addProperty(bodyProperty, mediaFragmentI);
-			OntProperty targetProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasTarget");
-			annotation1.addProperty(targetProperty, l.getSpeaker());
-			
-			//Anotation for the data ifself
-			
-			OntClass annotationDataOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotationData1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Data_CERTH_Scene", annotationDataOWL );
-			annotationData1.addProperty(bodyProperty, mediaFragmentI);
-			
-
-			annotationData1.addProperty(targetProperty, model_exmaralda.createTypedLiteral(mf.getValue()));
-			
-			OntProperty typeAnnotationProperty = modelOA.createOntProperty(Open_Annotation_URL+"type");
-			annotationData1.addProperty(typeAnnotationProperty, "Scene");
-			
-			//Provenance Ontology
-			//Create the organization.
-			OntClass organizationOWL = modelFOAF.getOntClass( FOAF_URL + "Organization" );
-			Individual organizationI = model_exmaralda.createIndividual("CERTH", organizationOWL );
-			organizationI.addProperty(RDF.type, "opmv:Agent");			
-			//Add info to the artifact
-			annotationData1.addProperty(RDF.type, "opmv:Artifact");	
-			
-			OntClass processOWL = modelOPMV.createClass(OPMV_URL + "Process" );
-			Individual processI = model_exmaralda.createIndividual(processOWL);
-
-			OntProperty wasperformedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasPerformedBy");
-			processI.addProperty(wasperformedbyOWL, organizationI);	
-			
-			OntProperty wasgeneratedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedBy");
-			annotationData1.addProperty(wasgeneratedbyOWL, processI);
-			
-			
-			Calendar cal = GregorianCalendar.getInstance();
-			Literal value = model_exmaralda.createTypedLiteral(cal);		
-			OntProperty wasgeneratedatOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedAt");
-			annotationData1.addProperty(wasgeneratedatOWL, value);
-			
-		}
-		
-	}
-
-	private void createLayer_CERTH_Shot(Layer l) {
-		for (int i = 0; i < l.getFragments().size(); i ++){
-			ItemLayer mf = l.getFragments().elementAt(i);
-			OntClass mediaFragmentOWL = modelMA.createClass( Media_Resources_URL + "MediaFragment" );
-			Individual mediaFragmentI = model_exmaralda.createIndividual(mf.getMediaFragmentURL(), mediaFragmentOWL );
-			
-			
-			//Annotation for the Speaker 
-			//Create annotation
-			OntClass annotationOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotation1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Speaker_CERTH_Shot", annotationOWL );
-			OntProperty bodyProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasBody");
-			annotation1.addProperty(bodyProperty, mediaFragmentI);
-			OntProperty targetProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasTarget");
-			annotation1.addProperty(targetProperty, l.getSpeaker());
-			
-			//Anotation for the data ifself
-			
-			OntClass annotationDataOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotationData1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Data_CERTH_Shot", annotationDataOWL );
-			annotationData1.addProperty(bodyProperty, mediaFragmentI);
-			
-
-			annotationData1.addProperty(targetProperty, model_exmaralda.createTypedLiteral(mf.getValue()));
-			
-			OntProperty typeAnnotationProperty = modelOA.createOntProperty(Open_Annotation_URL+"type");
-			annotationData1.addProperty(typeAnnotationProperty, "Shot");
-			
-			//Provenance Ontology
-			//Create the organization.
-			OntClass organizationOWL = modelFOAF.getOntClass( FOAF_URL + "Organization" );
-			Individual organizationI = model_exmaralda.createIndividual("CERTH", organizationOWL );
-			organizationI.addProperty(RDF.type, "opmv:Agent");			
-			//Add info to the artifact
-			annotationData1.addProperty(RDF.type, "opmv:Artifact");	
-			
-			OntClass processOWL = modelOPMV.createClass(OPMV_URL + "Process" );
-			Individual processI = model_exmaralda.createIndividual(processOWL);
-
-			OntProperty wasperformedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasPerformedBy");
-			processI.addProperty(wasperformedbyOWL, organizationI);	
-			
-			OntProperty wasgeneratedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedBy");
-			annotationData1.addProperty(wasgeneratedbyOWL, processI);
-			
-			
-			Calendar cal = GregorianCalendar.getInstance();
-			Literal value = model_exmaralda.createTypedLiteral(cal);		
-			OntProperty wasgeneratedatOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedAt");
-			annotationData1.addProperty(wasgeneratedatOWL, value);
-			
-		}
-		
-	}
-
-	private void createLayer_UEP_Keywords_1(Layer l) {
-		for (int i = 0; i < l.getFragments().size(); i ++){
-			ItemLayer mf = l.getFragments().elementAt(i);
-			OntClass mediaFragmentOWL = modelMA.createClass( Media_Resources_URL + "MediaFragment" );
-			Individual mediaFragmentI = model_exmaralda.createIndividual(mf.getMediaFragmentURL(), mediaFragmentOWL );
-			
-			
-			//Annotation for the Speaker 
-			//Create annotation
-			OntClass annotationOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotation1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Speaker_UEP_Keywords_1", annotationOWL );
-			OntProperty bodyProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasBody");
-			annotation1.addProperty(bodyProperty, mediaFragmentI);
-			OntProperty targetProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasTarget");
-			annotation1.addProperty(targetProperty, l.getSpeaker());
-			
-			//Anotation for the data ifself
-			
-			OntClass annotationDataOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotationData1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Data_UEP_Keywords_1", annotationDataOWL );
-			annotationData1.addProperty(bodyProperty, mediaFragmentI);
-			
-
-			annotationData1.addProperty(targetProperty, model_exmaralda.createTypedLiteral(mf.getValue()));
-			
-			OntProperty typeAnnotationProperty = modelOA.createOntProperty(Open_Annotation_URL+"type");
-			annotationData1.addProperty(typeAnnotationProperty, "Keyword");
-			
-			//Provenance Ontology
-			//Create the organization.
-			OntClass organizationOWL = modelFOAF.getOntClass( FOAF_URL + "Organization" );
-			Individual organizationI = model_exmaralda.createIndividual("UEP", organizationOWL );
-			organizationI.addProperty(RDF.type, "opmv:Agent");			
-			//Add info to the artifact
-			annotationData1.addProperty(RDF.type, "opmv:Artifact");	
-			
-			OntClass processOWL = modelOPMV.createClass(OPMV_URL + "Process" );
-			Individual processI = model_exmaralda.createIndividual(processOWL);
-
-			OntProperty wasperformedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasPerformedBy");
-			processI.addProperty(wasperformedbyOWL, organizationI);	
-			
-			OntProperty wasgeneratedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedBy");
-			annotationData1.addProperty(wasgeneratedbyOWL, processI);
-			
-			
-			Calendar cal = GregorianCalendar.getInstance();
-			Literal value = model_exmaralda.createTypedLiteral(cal);		
-			OntProperty wasgeneratedatOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedAt");
-			annotationData1.addProperty(wasgeneratedatOWL, value);
-			
-		}
-	}
-
-	private void createLayer_ARS_FhG_1_word(Layer l) {
-		for (int i = 0; i < l.getFragments().size(); i ++){
-			ItemLayer mf = l.getFragments().elementAt(i);
-			OntClass mediaFragmentOWL = modelMA.createClass( Media_Resources_URL + "MediaFragment" );
-			Individual mediaFragmentI = model_exmaralda.createIndividual(mf.getMediaFragmentURL(), mediaFragmentOWL );
-			
-			
-			//Annotation for the Speaker 
-			//Create annotation
-			OntClass annotationOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotation1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Speaker_ARS_FhG_1_word", annotationOWL );
-			OntProperty bodyProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasBody");
-			annotation1.addProperty(bodyProperty, mediaFragmentI);
-			OntProperty targetProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasTarget");
-			annotation1.addProperty(targetProperty, l.getSpeaker());
-			
-			//Anotation for the data ifself
-			
-			OntClass annotationDataOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotationData1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Data_ARS_FhG_1_word", annotationDataOWL );
-			annotationData1.addProperty(bodyProperty, mediaFragmentI);
-
-			annotationData1.addProperty(targetProperty, model_exmaralda.createTypedLiteral(mf.getValue()));
-			
-			OntProperty typeAnnotationProperty = modelOA.createOntProperty(Open_Annotation_URL+"type");
-			annotationData1.addProperty(typeAnnotationProperty, "ASR_word");
-			
-			OntProperty confidenceAnnotationProperty = modelOA.createOntProperty(Open_Annotation_URL+"confidence");
-			annotationData1.addProperty(confidenceAnnotationProperty, mf.get_first_ud_information());
-			
-			//Provenance Ontology
-			//Create the organization.
-			OntClass organizationOWL = modelFOAF.getOntClass( FOAF_URL + "Organization" );
-			Individual organizationI = model_exmaralda.createIndividual("FhG", organizationOWL );
-			organizationI.addProperty(RDF.type, "opmv:Agent");			
-			//Add info to the artifact
-			annotationData1.addProperty(RDF.type, "opmv:Artifact");	
-			
-			OntClass processOWL = modelOPMV.createClass(OPMV_URL + "Process" );
-			Individual processI = model_exmaralda.createIndividual(processOWL);
-
-			OntProperty wasperformedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasPerformedBy");
-			processI.addProperty(wasperformedbyOWL, organizationI);	
-			
-			OntProperty wasgeneratedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedBy");
-			annotationData1.addProperty(wasgeneratedbyOWL, processI);
-			
-			
-			Calendar cal = GregorianCalendar.getInstance();
-			Literal value = model_exmaralda.createTypedLiteral(cal);		
-			OntProperty wasgeneratedatOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedAt");
-			annotationData1.addProperty(wasgeneratedatOWL, value);
-
-		}
-	}
-
-	private void createLayer_ARS_FhG_1_utterance(Layer l) {
-		for (int i = 0; i < l.getFragments().size(); i ++){
-			ItemLayer mf = l.getFragments().elementAt(i);
-			OntClass mediaFragmentOWL = modelMA.createClass( Media_Resources_URL + "MediaFragment" );
-			Individual mediaFragmentI = model_exmaralda.createIndividual(mf.getMediaFragmentURL(), mediaFragmentOWL );
-			
-			
-			//Annotation for the Speaker 
-			//Create annotation
-			OntClass annotationOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotation1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Speaker_ARS_FhG_1_utterance", annotationOWL );
-			OntProperty bodyProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasBody");
-			annotation1.addProperty(bodyProperty, mediaFragmentI);
-			OntProperty targetProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasTarget");
-			annotation1.addProperty(targetProperty, l.getSpeaker());
-			
-			//Anotation for the data ifself
-			
-			OntClass annotationDataOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
-			Individual annotationData1 = model_exmaralda.createIndividual(Open_Annotation_URL+ "Anno_"+i+"_Data_ARS_FhG_1_utterance", annotationDataOWL );
-			annotationData1.addProperty(bodyProperty, mediaFragmentI);
-			
-
-			annotationData1.addProperty(targetProperty, model_exmaralda.createTypedLiteral(mf.getValue()));
-			
-			OntProperty typeAnnotationProperty = modelOA.createOntProperty(Open_Annotation_URL+"type");
-			annotationData1.addProperty(typeAnnotationProperty, "ASR");
-			
-			//Provenance Ontology
-			//Create the organization.
-			OntClass organizationOWL = modelFOAF.getOntClass( FOAF_URL + "Organization" );
-			Individual organizationI = model_exmaralda.createIndividual("FhG", organizationOWL );
-			organizationI.addProperty(RDF.type, "opmv:Agent");			
-			//Add info to the artifact
-			annotationData1.addProperty(RDF.type, "opmv:Artifact");	
-			
-			OntClass processOWL = modelOPMV.createClass(OPMV_URL + "Process" );
-			Individual processI = model_exmaralda.createIndividual(processOWL);
-
-			OntProperty wasperformedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasPerformedBy");
-			processI.addProperty(wasperformedbyOWL, organizationI);	
-			
-			OntProperty wasgeneratedbyOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedBy");
-			annotationData1.addProperty(wasgeneratedbyOWL, processI);
-			
-			
-			Calendar cal = GregorianCalendar.getInstance();
-			Literal value = model_exmaralda.createTypedLiteral(cal);		
-			OntProperty wasgeneratedatOWL = modelOPMV.createObjectProperty(OPMV_URL + "wasGeneratedAt");
-			annotationData1.addProperty(wasgeneratedatOWL, value);
-			
-			//Data
-			/*
-			OntProperty roleMF_OWL = modelMA.createOntProperty( Media_Resources_URL + "role" );
-			mediaFragmentI.addProperty(roleMF_OWL, "ASR");
-
-			OntProperty captioning_OWL = modelMA.createOntProperty( Media_Resources_URL + "hasCaptioning" );
-			mediaFragmentI.addProperty(captioning_OWL, mf.getValue());*/
-		}
-	}
+	
 	private void writeLegacy() throws FileNotFoundException {
 
 			FileOutputStream out_File = new FileOutputStream(new File(file_legacy));
@@ -825,15 +425,6 @@ public class RDFWriterLegacy {
 		//model.write(System.out, "TURTLE");
 	}
 	
-	private void writeExmaralda() throws FileNotFoundException {
-		
-
-			FileOutputStream out_File = new FileOutputStream(new File(file_exmaralda));
-			model_exmaralda.write(out_File, "TURTLE");
-
-
-		//model.write(System.out, "TURTLE");
-	}
 
 	private String extractId(String crid){
 		String id = crid;

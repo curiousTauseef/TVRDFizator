@@ -66,9 +66,9 @@ public class RDFWriterAnalisys {
 	private String FOAF_URL = "http://xmlns.com/foaf/0.1/";
 	private String PROV_URL = "http://www.w3.org/ns/prov#";
 	private String LINKEDTV_URL = "http://data.linkedtv.eu/";
-	private String LINKEDTV_URL_ONT = "http://data.linkedtv.eu/ontology/";
 	private String DBPEDIA_URL_ONT = "http://dbpedia.org/ontology/";
 	private String NINSUNA_URL_ONT = "http://multimedialab.elis.ugent.be/organon/ontologies/ninsuna#";
+	private String LINKEDTV_URL_ONT = "http://data.linkedtv.eu/ontologies/core#";
 
 	
 	
@@ -84,6 +84,7 @@ public class RDFWriterAnalisys {
 	
 	
 	public RDFWriterAnalisys(String f_analisys, VideoMetaData md, String media_item_id, String namespace, String locator){
+		
 		file_exmaralda = f_analisys;
 		mediaResourceID = media_item_id;
 		
@@ -351,7 +352,7 @@ public class RDFWriterAnalisys {
 			float startAppearance = appearance.getStart();
 			float endAppearance = appearance.getEnd();
 			OntClass mediaFragmentOWL = modelMA.createClass( Media_Resources_URL + "MediaFragment" );
-			Individual mediaFragmentAppearance = model_exmaralda.createIndividual(LINKEDTV_URL + "media/" + mediaResource.getLocalName() + "#t=" +startAppearance +","+endAppearance , mediaFragmentOWL );
+			Individual mediaFragmentAppearance = model_exmaralda.createIndividual(mediaResource + "#t=" +startAppearance +","+endAppearance , mediaFragmentOWL );
 			
 			mediaFragmentAppearance.addProperty(RDF.type, modelNSA.createClass(NINSUNA_URL_ONT + "TemporalFragment"));
 
@@ -362,6 +363,10 @@ public class RDFWriterAnalisys {
 			Literal temporalEnd = model_exmaralda.createTypedLiteral(endAppearance);	
 			OntProperty temporalEndProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalEnd");
 			mediaFragmentAppearance.addProperty(temporalEndProperty, temporalEnd);
+			
+			Literal duration = model_exmaralda.createTypedLiteral(endAppearance-startAppearance);	
+			OntProperty temporalDurationProperty = modelMA.createOntProperty(Media_Resources_URL+"duration");
+			mediaFragmentAppearance.addProperty(temporalDurationProperty, duration);
 			
 			
 			OntProperty temporalUnitProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalUnit");
@@ -449,7 +454,7 @@ public class RDFWriterAnalisys {
 				String boundinbox = boundingboxes[bb];
 				
 	
-				Individual mediaFragmentBoundingbox = model_exmaralda.createIndividual(LINKEDTV_URL + "media/" + mediaResource.getLocalName() + "#t=" +bbStart +","+bbEnd + "&xywh=percent:" + boundinbox, mediaFragmentOWL );
+				Individual mediaFragmentBoundingbox = model_exmaralda.createIndividual(mediaResource + "#t=" +bbStart +","+bbEnd + "&xywh=percent:" + boundinbox, mediaFragmentOWL );
 				
 				mediaFragmentBoundingbox.addProperty(RDF.type, modelNSA.createClass(NINSUNA_URL_ONT + "TemporalFragment"));
 				mediaFragmentBoundingbox.addProperty(RDF.type, model_linkedtv.createClass( LINKEDTV_URL_ONT + "BoundingBox" ));
@@ -554,7 +559,7 @@ public class RDFWriterAnalisys {
 
 			//Create Scene Media Fragment. Relate it with the media resource.
 			OntClass mediaFragmentOWL = modelMA.createClass( Media_Resources_URL + "MediaFragment" );
-			Individual mediaFragmentScene = model_exmaralda.createIndividual(LINKEDTV_URL + "media/" + mediaResource.getLocalName() + mf.getMediaFragmentURL(), mediaFragmentOWL );
+			Individual mediaFragmentScene = model_exmaralda.createIndividual(mediaResource + mf.getMediaFragmentURL(), mediaFragmentOWL );
 			
 			
 			//Ninsuna Ontology.
@@ -568,6 +573,9 @@ public class RDFWriterAnalisys {
 			OntProperty temporalEndProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalEnd");
 			mediaFragmentScene.addProperty(temporalEndProperty, temporalEnd);
 			
+			Literal duration = model_exmaralda.createTypedLiteral(mf.getEnd()-mf.getStart());	
+			OntProperty temporalDurationProperty = modelMA.createOntProperty(Media_Resources_URL+"duration");
+			mediaFragmentScene.addProperty(temporalDurationProperty, duration);
 			
 			OntProperty temporalUnitProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalUnit");
 			mediaFragmentScene.addProperty(temporalUnitProperty, "npt");
@@ -796,8 +804,10 @@ public class RDFWriterAnalisys {
 			
 			ItemLayer mf = layer.getFragments().elementAt(i);
 			OntClass mediaFragmentOWL = modelMA.createClass( Media_Resources_URL + "MediaFragment" );
-			Individual mediaFragmentI = model_exmaralda.createIndividual(LINKEDTV_URL + "media/" + mediaResource.getLocalName() + mf.getMediaFragmentURL(), mediaFragmentOWL );
+			Individual mediaFragmentI = model_exmaralda.createIndividual(mediaResource + mf.getMediaFragmentURL(), mediaFragmentOWL );
 			
+			
+			//System.out.println("LOCAL NAME: "+mediaResource.getLocalName() +" // "+mediaResource);
 			
 			//Ninsuna Ontology.
 			mediaFragmentI.addProperty(RDF.type, modelNSA.createClass(NINSUNA_URL_ONT + "TemporalFragment"));
@@ -810,6 +820,10 @@ public class RDFWriterAnalisys {
 			OntProperty temporalEndProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalEnd");
 			mediaFragmentI.addProperty(temporalEndProperty, temporalEnd);
 			
+			
+			Literal duration = model_exmaralda.createTypedLiteral(mf.getEnd()-mf.getStart());	
+			OntProperty temporalDurationProperty = modelMA.createOntProperty(Media_Resources_URL+"duration");
+			mediaFragmentI.addProperty(temporalDurationProperty, duration);
 			
 			OntProperty temporalUnitProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalUnit");
 			mediaFragmentI.addProperty(temporalUnitProperty, "npt");
