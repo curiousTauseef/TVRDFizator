@@ -108,7 +108,7 @@ public class Processing {
 	}
 	
 	
-	public boolean entity_process(String in_entity_file_path, String in_subtitle_file_path, String out_entity_file_path, String media_resource_id, String namespace, String locator){
+	public boolean entity_process(String in_entity_file_path, String in_subtitle_file_path, String out_entity_file_path, String media_resource_id, String namespace, String locator, String subtitleFile){
 		
 		List <Subtitle> subtitles = null;
 		// - Entities file.
@@ -142,7 +142,7 @@ public class Processing {
 
 		//Write the RDF Data from subtitles and entities
 		try {
-			RDFWriterSubtitleEntity wt = new RDFWriterSubtitleEntity (out_entity_file_path, subtitles, entities, media_resource_id, namespace, locator);	
+			RDFWriterSubtitleEntity wt = new RDFWriterSubtitleEntity (out_entity_file_path, subtitles, entities, media_resource_id, namespace, locator, subtitleFile);	
 			wt.create_subtitles_entities();
 		} catch (Exception e) {
 			e.printStackTrace();

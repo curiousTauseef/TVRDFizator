@@ -39,6 +39,7 @@ import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
 
+import fr.eurecom.nerd.client.type.Extractor;
 import fr.eurecom.tvrdfizator.core.ExmeraldaProcessing;
 import fr.eurecom.tvrdfizator.core.LegacyProcessing;
 import fr.eurecom.tvrdfizator.core.SubtitleProcessing;
@@ -202,6 +203,8 @@ public class MediaResource {
 	@Consumes(MediaType.TEXT_XML)
 	public Response doPOSTMETADATA(String metadataFile,
 			@QueryParam("metadataType") String metadataType,
+			@QueryParam("extractor") String extractor,
+			@QueryParam("apiKey") String apiKey,
             @PathParam("idMediaResource") String idMediaResourceString) {
  
 		
@@ -217,7 +220,7 @@ public class MediaResource {
 		} catch (IllegalArgumentException e) {
 			System.out.println("Illegal UUID ");
 			e.printStackTrace();
-			return Response.status(501).build();
+			return Response.status(501).entity("Illegal UUID").build();
 		}
 		
 		
@@ -226,7 +229,7 @@ public class MediaResource {
 		//We need to know the type of the data we are 
 		if (metadataType == null || !isValidMetadataType(metadataType)){
 			System.out.println("Wrong metadata type or not specified.");
-			return Response.status(404).build();
+			return Response.status(404).entity("Wrong metadata type or not specified.").build();
 		}
 			    
 
@@ -243,7 +246,7 @@ public class MediaResource {
 
 		if (cursor.count() == 0 ){ //There is no MediaResource
 			System.out.println("MediaResource "+idMediaResource+" not found.");
-	        return Response.status(404).build();
+	        return Response.status(404).entity("MediaResource "+idMediaResource+" not found.").build();
 		}
 		else{ //update existing mediaresource
 			
@@ -270,9 +273,12 @@ public class MediaResource {
 				} catch (MalformedURLException e) {
 					System.out.println("ERROR creating the URL specified.");
 					e.printStackTrace();
+			        return Response.status(404).entity("ERROR creating the URL specified.").build();
+					
 				} catch (IOException e) {
 					System.out.println("ERROR accessing the Web resource " + resourceURLString);
 					e.printStackTrace();
+			        return Response.status(404).entity("ERROR accessing the Web resource.").build();
 				}
 				
 			}
@@ -295,8 +301,8 @@ public class MediaResource {
 			try {
 				FileUtils.writeStringToFile(metadataFileDisk, metadataFile, "UTF-8");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+		        return Response.status(404).entity("Fatal ERROR on the server side. Contact TV2RDF admin.").build();
 			}
 			
 			GridFS gfsmrAdd = new GridFS(db);
@@ -312,7 +318,23 @@ public class MediaResource {
 			}
 			metadataFileDisk.delete();
 			
+			
+			//NERD PARAMETERS
 			mr.put(metadataType, gfsFile);
+			if (extractor != null && metadataType.equals("subtitle")){
+				try {
+					Extractor.getType(extractor);
+				} catch (Exception e) {
+					e.printStackTrace();
+			        return Response.status(404).entity("Unknown NERD extractor. Please specify a valid extractor type.").build();
+				}
+				mr.put("extractor", extractor);
+			}
+			if (apiKey != null && metadataType.equals("subtitle")){
+				mr.put("apiKey", apiKey);
+			}
+			
+			
 			mediaresources.save(mr);
 
 			

@@ -91,19 +91,21 @@ public class RDFWriterSubtitleEntity {
 		
 
 	private String mediaResource = "e2899e7f-67c1-4a08-9146-5a205f6de457";
+	private String subtitleFile = "";
+
 	//private String fileSRT = "rbbaktuell_120809.srt";
 	private double threshold = 0.1; //in miliseconds.
 
 	
 	Individual documentI = null;
 	
-	public RDFWriterSubtitleEntity (String f_entity, List<Subtitle> subtitles, List<NERDEntity> entities, String media_resource_id, String namespace, String locator){
+	public RDFWriterSubtitleEntity (String f_entity, List<Subtitle> subtitles, List<NERDEntity> entities, String media_resource_id, String namespace, String locator, String subtitleFile){
 	
 		file_entity_json = f_entity;
 		this.entities = entities;
 		this.subtitles = subtitles;
 		this.mediaResource = media_resource_id;
-		
+		this.subtitleFile = subtitleFile;
 		if (!namespace.equals("")){
 			LINKEDTV_URL = namespace;
 		}
@@ -132,14 +134,28 @@ public class RDFWriterSubtitleEntity {
 
 		//Recreate upper MediaResource
 		OntClass mediaResourceOWL = modelMA.createClass( Media_Resources_URL + "MediaResource" );
-		Individual mediaResouceI = modelExmeralda.createIndividual(LINKEDTV_URL + "media/" + mediaResource, mediaResourceOWL );
-		
+		Individual mediaResouceI = modelMA.createIndividual(LINKEDTV_URL + "media/" + mediaResource, mediaResourceOWL );
+;
 		//Create the Textualresource
 		//OntClass documentOWL = modelString.createClass( STRING_URL_ONT + "Document" );
 		//documentI = model_entity.createIndividual(LINKEDTV_URL + "text/" + UUID.randomUUID(), documentOWL );
 		//OntProperty sourceURLProperty = modelString.createOntProperty(STRING_URL_ONT+"sourceURL");
 		//documentI.addProperty(sourceURLProperty, fileSRT);
 		
+		if (subtitleFile != null) {
+			if (!subtitleFile.equals("")){
+				mediaResouceI = model_entity.createIndividual(LINKEDTV_URL + "media/" + mediaResource, mediaResourceOWL );
+				OntProperty subtitleProperty = modelMA.createOntProperty(Media_Resources_URL+"hasSubtitling");
+				Individual subtitleResource = modelMA.createIndividual(subtitleFile, mediaResourceOWL );	
+				mediaResouceI.addProperty(subtitleProperty, subtitleResource);
+			}
+			else{
+				modelExmeralda.createIndividual(LINKEDTV_URL + "media/" + mediaResource, mediaResourceOWL );
+			}
+		}
+		else{
+			modelExmeralda.createIndividual(LINKEDTV_URL + "media/" + mediaResource, mediaResourceOWL );
+		}
 		
 		mediaFragmentsSub = new Hashtable <Float, Entry<Individual, Individual>>();
 		

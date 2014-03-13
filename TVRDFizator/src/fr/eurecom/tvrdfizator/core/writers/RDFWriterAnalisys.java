@@ -74,7 +74,7 @@ public class RDFWriterAnalisys {
 	
 	private String mediaResourceID = "e2899e7f-67c1-4a08-9146-5a205f6de457";
 	private String exmeraldaFile = "ftp://ftp.condat.de/Processing/SV/12_02_SV/FhG/EXMARaLDA/12_11_07";
-	private String subtitleFile = "http://stream6.noterik.com/progressive/stream6/domain/linkedtv/user/SV/subtitle/TUSSEN_KUNST_AVR000080E2.srt";
+	private String vsubtitleFile = "http://stream6.noterik.com/progressive/stream6/domain/linkedtv/user/SV/subtitle/TUSSEN_KUNST_AVR000080E2.srt";
 
 	
 	//private String mediaResourceID = "6026703a-c02c-41bc-9ac3-9923b23ef8f5";
@@ -194,13 +194,12 @@ public class RDFWriterAnalisys {
 		Individual locatorResource = modelMA.createIndividual(mdata.getVideoURL(), RDFS.Resource );	
 		mediaResource.addProperty(locatorProperty, locatorResource);
 		
-		OntProperty subtitleProperty = modelMA.createOntProperty(Media_Resources_URL+"hasSubtitling");
-		
-		Individual subtitleResource = modelMA.createIndividual(subtitleFile, mediaResourceOWL );	
-		mediaResource.addProperty(subtitleProperty, subtitleResource);
-		
+		//OntProperty subtitleProperty = modelMA.createOntProperty(Media_Resources_URL+"hasSubtitling");
+		//Individual subtitleResource = modelMA.createIndividual(subtitleFile, mediaResourceOWL );	
+		//mediaResource.addProperty(subtitleProperty, subtitleResource);
 		
 		
+
 		
 		
 		

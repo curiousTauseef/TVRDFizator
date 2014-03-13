@@ -21,13 +21,13 @@ public class LookUp {
     
     
 
-    protected static String mapExtractor(ExtractorType extractor) 
+    public static String mapExtractor(ExtractorType extractor) 
     {
         switch(extractor) 
         {
         case ALCHEMYAPI: 
             return "alchemyapi";
-        case DBPEDIA_SPOTLIGHT:
+        case DBSPOTLIGHT:
             return "dbspotlight";
         case TEXTRAZOR:
             return "textrazor";

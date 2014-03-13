@@ -15,8 +15,10 @@ import com.mongodb.DBObject;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSInputFile;
 
+import fr.eurecom.nerd.client.LookUp;
 import fr.eurecom.nerd.client.NERD;
 import fr.eurecom.nerd.client.type.DocumentType;
+import fr.eurecom.nerd.client.type.Extractor;
 import fr.eurecom.nerd.client.type.ExtractorType;
 
 public class SubtitleProcessing extends Thread {
@@ -51,7 +53,9 @@ public class SubtitleProcessing extends Thread {
     public void run() {
         System.out.println("Entering Processing!");
 		GridFS gfsmr = new GridFS(db);
-
+		String subtitleFile = null;
+		String apiKey = "loq6asma69tgfq2aijbubh2t5klm7pk0";
+		ExtractorType extractor = ExtractorType.COMBINED;
 
 		
 		UUID idtransaction = UUID.randomUUID();
@@ -64,11 +68,29 @@ public class SubtitleProcessing extends Thread {
 			e.printStackTrace();
 		}
 		
-	    NERD nerd = new NERD("loq6asma69tgfq2aijbubh2t5klm7pk0");
+
+		if (mr.containsField("subtitleURL")){
+			subtitleFile = (String) mr.get("subtitleURL");
+			System.out.println("Subtitle resource available");
+		}
+		if (mr.containsField("apiKey")){
+			apiKey = (String) mr.get("apiKey");
+		}
+		if (mr.containsField("extractor")){
+			try {
+				extractor = Extractor.getType((String) mr.get("extractor"));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println("Launching NERD extraction, ("+apiKey+", "+ LookUp.mapExtractor(extractor)+")");
+	    NERD nerd = new NERD(apiKey);
 	    //NERD nerd = new NERD("1g0stre00us2jjgtb2g80190rv7bpm4v");
 
 
-		String json = nerd.annotateJSON(ExtractorType.TEXTRAZOR, 
+		String json = nerd.annotateJSON(extractor, 
 	                                    DocumentType.TIMEDTEXT,
 	                                    metadataFile);
 	    
@@ -86,7 +108,7 @@ public class SubtitleProcessing extends Thread {
 		 
 		//SERIALIZATION
 		 Processing p = new Processing();
-		 if (p.entity_process("./data/entities_"+idMediaResource+idtransaction+".json", "./data/subtitle_"+idMediaResource+idtransaction+".str", "./data/entities_"+idMediaResource+idtransaction+".ttl", idMediaResource.toString(), namespace, locator)){
+		 if (p.entity_process("./data/entities_"+idMediaResource+idtransaction+".json", "./data/subtitle_"+idMediaResource+idtransaction+".str", "./data/entities_"+idMediaResource+idtransaction+".ttl", idMediaResource.toString(), namespace, locator, subtitleFile)){
 		 
 		 
 			 //Storing in the database
