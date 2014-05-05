@@ -31,8 +31,6 @@ public class LookUp {
             return "dbspotlight";
         case TEXTRAZOR:
             return "textrazor";
-        case EXTRACTIV:
-            return "extractiv"; 
         case LUPEDIA:
             return "lupedia";           
         case OPENCALAIS:
@@ -49,6 +47,8 @@ public class LookUp {
             return "zemanta";
         case COMBINED:
             return "combined";
+        case DATATXT:
+            return "datatxt";
     	case THD:
     		return "thd";
     	}

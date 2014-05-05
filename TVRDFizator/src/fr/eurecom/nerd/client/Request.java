@@ -28,7 +28,7 @@ public class Request {
       POST
     }    
     
-    static int timeout = 600000;
+    static int timeout = 60000;
     protected static synchronized String request(
                                         String uri,
                                         RequestType method, 

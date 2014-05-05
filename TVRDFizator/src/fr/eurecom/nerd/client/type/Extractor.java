@@ -15,10 +15,6 @@ public class Extractor {
         else if (extractor.equals("dbspotlight"))
             return ExtractorType.DBSPOTLIGHT;
         
-
-        else if (extractor.equals("extractiv"))
-            return ExtractorType.EXTRACTIV;
-        
         else if (extractor.equals("lupedia"))
             return ExtractorType.LUPEDIA;
         
@@ -46,6 +42,10 @@ public class Extractor {
         else if(extractor.equals("thd"))
             return ExtractorType.THD;
         
+        else if(extractor.equals("datatxt"))
+            return ExtractorType.DATATXT;
+        
+        
         else
             throw new Exception(extractor + " is not supported by the NERD platform yet. " +
             		"If you are interested to use this extractor through NERD, please send an " +
@@ -61,8 +61,6 @@ public class Extractor {
             return "alchemyapi";
         case DBSPOTLIGHT:
             return "dbspotlight";
-        case EXTRACTIV:
-            return "extractiv"; 
         case OPENCALAIS:
             return "opencalais";  
         case LUPEDIA:
@@ -83,6 +81,8 @@ public class Extractor {
             return "zemanta";
         case COMBINED:
             return "combined";
+        case DATATXT:
+        	return "datatxt";
         default:
             break;        
         }

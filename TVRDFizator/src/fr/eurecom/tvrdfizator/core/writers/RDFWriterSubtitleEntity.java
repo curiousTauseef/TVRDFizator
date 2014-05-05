@@ -29,6 +29,7 @@ import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
+import fr.eurecom.nerd.types.TypeNormalizer;
 import fr.eurecom.tvrdfizator.core.datastructures.ItemLayer;
 import fr.eurecom.tvrdfizator.core.datastructures.Layer;
 import fr.eurecom.tvrdfizator.core.datastructures.NERDEntity;
@@ -364,6 +365,19 @@ public class RDFWriterSubtitleEntity {
 				//Type nerd
 				nerdI.addProperty(RDF.type, modelNerd.createClass(entity.getNerdType()));
 
+				
+				//NORMALIZE TYPES
+				TypeNormalizer tn = new TypeNormalizer();
+				List<String> normalizedTypes = tn.normalizeTypes(entity.getExtractorType(), entity.getExtractor());
+				if (normalizedTypes!=null){
+					for (String type : normalizedTypes){
+						System.out.println("[Normalized type]    --> "+type);
+						nerdI.addProperty(RDF.type, modelNerd.createClass(type));
+					}
+				}
+				
+
+				
 				//Type plaintext
 				if (entity.getExtractorType() != null){
 					OntProperty typeProperty = modelDC.createOntProperty(Dublin_Core_URL+"type");
