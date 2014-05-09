@@ -14,7 +14,7 @@ import fr.eurecom.nerd.client.NERD;
 import fr.eurecom.nerd.client.type.DocumentType;
 import fr.eurecom.nerd.client.type.ExtractorType;
 import fr.eurecom.nerd.client.type.GranularityType;
-import fr.eurecom.nerd.types.TypeNormalizer;
+import fr.eurecom.nerd.normalization.DBpediaTypeNormalizer;
 import fr.eurecom.tvrdfizator.core.datastructures.NERDEntity;
 
 public class TypesTest {
@@ -30,7 +30,7 @@ public class TypesTest {
 		
 		String text = "";
 		try {
-			text = FileUtils.readFileToString(new File("typetext_long.txt"));
+			text = FileUtils.readFileToString(new File("typetext.txt"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -39,7 +39,7 @@ public class TypesTest {
 		NERD nerd = new NERD("loq6asma69tgfq2aijbubh2t5klm7pk0");
 
 
-		String json = nerd.annotateJSON(ExtractorType.TEXTRAZOR,
+		String json = nerd.annotateJSON(ExtractorType.COMBINED,
 	                                    DocumentType.PLAINTEXT,
 	                                    text, GranularityType.OEN, 1000L);
 		
@@ -53,7 +53,7 @@ public class TypesTest {
 		
 		for (NERDEntity entity: entities){
 			System.out.println(entity.getExtractor() + ",    "+ entity.getExtractorType() + ",   "+entity.getLabel() + ",    " + entity.getUri());
-			TypeNormalizer tn = new TypeNormalizer();
+			DBpediaTypeNormalizer tn = new DBpediaTypeNormalizer();
 			List<String> normalizedTypes = tn.normalizeTypes(entity.getExtractorType(), entity.getExtractor());
 			if (normalizedTypes!=null){
 				for (String type : normalizedTypes){

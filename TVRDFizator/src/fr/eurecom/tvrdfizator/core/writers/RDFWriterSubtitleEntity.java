@@ -29,7 +29,8 @@ import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
-import fr.eurecom.nerd.types.TypeNormalizer;
+import fr.eurecom.nerd.normalization.DBpediaTypeNormalizer;
+import fr.eurecom.nerd.normalization.DBpediaURLNormalizer;
 import fr.eurecom.tvrdfizator.core.datastructures.ItemLayer;
 import fr.eurecom.tvrdfizator.core.datastructures.Layer;
 import fr.eurecom.tvrdfizator.core.datastructures.NERDEntity;
@@ -321,6 +322,10 @@ public class RDFWriterSubtitleEntity {
 		organizationI.addProperty(RDF.type, modelPROV.createClass(PROV_URL + "Agent"));
 		
 
+		DBpediaURLNormalizer un = new DBpediaURLNormalizer();
+		DBpediaTypeNormalizer tn = new DBpediaTypeNormalizer();
+
+		
 		for (int i = 0; i<entities.size(); i++){
 
 			NERDEntity entity = entities.get(i);
@@ -354,10 +359,21 @@ public class RDFWriterSubtitleEntity {
 				
 				if (entity.getUri() != null){
 					if (!entity.getUri().equals("") && !entity.getUri().equals("null") && !entity.getUri().equals("NORDF")) {
+						
+						
 						//Create Resource
 						String desambiguationuri = entity.getUri().replaceAll(" ", "%20");
 						Individual resource = modelExmeralda.createIndividual(desambiguationuri, RDFS.Resource );
-						nerdI.addProperty(OWL.sameAs, resource);			
+						nerdI.addProperty(OWL.sameAs, resource);	
+						
+		
+						String normalizedUrl = un.normalizeUrls(entity.getUri());
+						if (normalizedUrl!=null){
+							System.out.println("    --> "+normalizedUrl);
+							Individual resourceNormalized = modelExmeralda.createIndividual(normalizedUrl, RDFS.Resource );
+							nerdI.addProperty(OWL.sameAs, resourceNormalized);	
+						}
+
 					}
 				}
 
@@ -367,7 +383,6 @@ public class RDFWriterSubtitleEntity {
 
 				
 				//NORMALIZE TYPES
-				TypeNormalizer tn = new TypeNormalizer();
 				List<String> normalizedTypes = tn.normalizeTypes(entity.getExtractorType(), entity.getExtractor());
 				if (normalizedTypes!=null){
 					for (String type : normalizedTypes){
