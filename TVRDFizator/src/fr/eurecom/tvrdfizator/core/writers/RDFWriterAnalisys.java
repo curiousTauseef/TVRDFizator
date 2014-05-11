@@ -205,19 +205,50 @@ public class RDFWriterAnalisys {
 		
 		System.out.println("Processing Analysis for video: "+mdata.getVideoURL());
 		
+		mdata.printLayersNames();
+		
 		//Create Shots.
 		Layer layer;
+		
+		//OLD IMPLEMENTATION
 		layer = mdata.getLayer("CERTH_Shot-1");
+		List <Layer> certh_segments = null;
 		if (layer == null){
-			System.out.println("No information about Shots. ABORTING");
-
+			
+			//NEW IMPLEMENTATION
+			certh_segments = mdata.getLayersStartingBy("CERTH_Segments-");
+			
+			layer = extractShotLayer(certh_segments);
+			
+			if (layer == null) {
+				System.out.println("No information about Shots. ABORTING");
+				return;
+			}
 		}
-		else {
+
 			
 			
 			
 			createShots(layer, mediaResource, shots);
 			System.out.println("Shots parsed.");
+			
+			
+			//Processing other Temporal segments:
+			layer = extractChapterLayer(certh_segments);
+			if (layer != null){
+				createChapters(layer, mediaResource);
+				System.out.println("Chapters parsed.");
+			}
+			else System.out.println("No information about Chapters");
+			//Scenes
+			layer = extractSceneLayer(certh_segments);
+			if (layer != null){
+				createScenes(layer, mediaResource, shots, scenes);
+				System.out.println("Scenes parsed.");
+			}
+			else System.out.println("No information about Scenes");
+			
+
 
 			//Keywords
 			layer = mdata.getLayer("UEP_Keywords-1");
@@ -294,15 +325,7 @@ public class RDFWriterAnalisys {
 	
 	
 	
-			//Scenes
-			layer = mdata.getLayer("CERTH_Scene");
-			if (layer != null){
-				createScenes(layer, mediaResource, shots, scenes);
-				System.out.println("Shots parsed.");
-			}
-			else System.out.println("No information about Scenes");
-			//Scenes
-			
+
 			
 			//Spacial Objects
 			int object = 1;
@@ -323,8 +346,59 @@ public class RDFWriterAnalisys {
 				System.out.println("ASR parsed.");
 			}
 			else System.out.println("No information about ASR");*/
-		}
+
 	}
+
+
+
+
+
+	private Layer extractSceneLayer(List<Layer> certh_segments) {
+		if (certh_segments == null)  return null;
+		for (Layer l : certh_segments){
+			
+			if (l.getFragments().size() > 0) {
+				if (l.getFragments().get(0).getValue().contains("Sc")){
+					certh_segments.remove(l);
+					return l;
+				}
+			}
+		}
+		return null;
+	}
+
+
+
+	private Layer extractChapterLayer(List<Layer> certh_segments) {
+
+		if (certh_segments == null)  return null;
+		for (Layer l : certh_segments){
+			
+			if (l.getFragments().size() > 0) {
+				if (l.getFragments().get(0).getValue().contains("Ch")){
+					certh_segments.remove(l);
+					return l;
+				}
+			}
+		}
+		return null;
+	}
+
+	private Layer extractShotLayer(List<Layer> certh_segments) {
+
+		if (certh_segments == null)  return null;
+		for (Layer l : certh_segments){
+			
+			if (l.getFragments().size() > 0) {
+				if (l.getFragments().get(0).getValue().contains("Sh")){
+					certh_segments.remove(l);
+					return l;
+				}
+			}
+		}
+		return null;
+	}
+
 
 
 	private void createSpatialObject(Layer layer, Individual mediaResource) {
@@ -775,12 +849,12 @@ public class RDFWriterAnalisys {
 
 			if (key.getKey().getStart() <= start && start < key.getKey().getEnd()){
 				candidateShots.add(key.getValue());
-				//if (end >= key.getKey().getEnd()) System.out.println("keyword Problem‡tico " + start + " " + end);
+				//if (end >= key.getKey().getEnd()) System.out.println("keyword Problematico " + start + " " + end);
 			}
 			else{
 				if (key.getKey().getStart() < end && end <= key.getKey().getEnd()){
 					candidateShots.add(key.getValue());
-					//if (start < key.getKey().getStart()) System.out.println("keyword Problem‡tico " + start + " " + end);
+					//if (start < key.getKey().getStart()) System.out.println("keyword Problematico " + start + " " + end);
 				}
 				else {
 					//Fragment contains the shot.
@@ -797,6 +871,89 @@ public class RDFWriterAnalisys {
 	}
 
 
+	
+
+	private void createChapters(Layer layer, Individual mediaResource) {
+
+
+	for (int i = 0; i < layer.getFragments().size(); i ++){
+			
+			ItemLayer mf = layer.getFragments().elementAt(i);
+			OntClass mediaFragmentOWL = modelMA.createClass( Media_Resources_URL + "MediaFragment" );
+			Individual mediaFragmentI = model_exmaralda.createIndividual(mediaResource + mf.getMediaFragmentURL(), mediaFragmentOWL );
+			
+			
+			//System.out.println("LOCAL NAME: "+mediaResource.getLocalName() +" // "+mediaResource);
+			
+			//Ninsuna Ontology.
+			mediaFragmentI.addProperty(RDF.type, modelNSA.createClass(NINSUNA_URL_ONT + "TemporalFragment"));
+
+			Literal temporalStart = model_exmaralda.createTypedLiteral(mf.getStart());	
+			OntProperty temporalStartProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalStart");
+			mediaFragmentI.addProperty(temporalStartProperty, temporalStart);
+			
+			Literal temporalEnd = model_exmaralda.createTypedLiteral(mf.getEnd());	
+			OntProperty temporalEndProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalEnd");
+			mediaFragmentI.addProperty(temporalEndProperty, temporalEnd);
+			
+			
+			Literal duration = model_exmaralda.createTypedLiteral(mf.getEnd()-mf.getStart());	
+			OntProperty temporalDurationProperty = modelMA.createOntProperty(Media_Resources_URL+"duration");
+			mediaFragmentI.addProperty(temporalDurationProperty, duration);
+			
+			OntProperty temporalUnitProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalUnit");
+			mediaFragmentI.addProperty(temporalUnitProperty, "npt");
+			
+
+			//Link with the mediaResource.
+			OntProperty isfragmentofProperty = modelMA.createOntProperty(Media_Resources_URL+"isFragmentOf");
+			mediaFragmentI.addProperty(isfragmentofProperty, mediaResource);
+			
+			
+			
+			//Anotation for the data ifself
+			OntClass annotationDataOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
+			Individual annotationData1 = model_exmaralda.createIndividual(LINKEDTV_URL + "annotation/" + UUID.randomUUID(), annotationDataOWL );
+			OntProperty  targetProperty= modelOA.createObjectProperty(Open_Annotation_URL + "hasTarget");
+			annotationData1.addProperty(targetProperty, mediaFragmentI);
+			OntProperty bodyProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasBody");
+			
+			//Create the shot itself
+			OntClass chapterOWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "Chapter" );
+			Individual chapter = model_exmaralda.createIndividual(LINKEDTV_URL + "chapter/"+  UUID.randomUUID(), chapterOWL );
+			chapter.addProperty(RDFS.label, mf.getValue());			
+
+			annotationData1.addProperty(bodyProperty, chapter);
+
+			
+			
+			//Provenance Ontology
+			//Add info to the artifact
+			annotationData1.addProperty(RDF.type, modelPROV.createClass(PROV_URL + "Entity"));	
+
+
+			OntClass organizationOWL = modelFOAF.getOntClass( FOAF_URL + "Organization" );
+			Individual organizationI = model_linkedtv.createIndividual(LINKEDTV_URL + "organization/"+"CERTH", organizationOWL );
+			organizationI.addProperty(RDF.type, modelPROV.createClass(PROV_URL + "Agent"));
+			OntProperty wasattributedtoOWL = modelPROV.createObjectProperty(PROV_URL + "wasAttributedTo");
+			annotationData1.addProperty(wasattributedtoOWL, organizationI);
+
+			Calendar cal = GregorianCalendar.getInstance();
+			Literal value = model_exmaralda.createTypedLiteral(cal);		
+			OntProperty startedattimeOWL = modelPROV.createObjectProperty(PROV_URL + "startedAtTime");
+			annotationData1.addProperty(startedattimeOWL, value);
+
+			//DerivedFrom
+			OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
+			Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
+			annotationData1.addProperty(wasderivedfromOWL, exmeraldaResource);
+
+			
+		}
+	}
+	
+	
+	
 
 	private void createShots(Layer layer, Individual mediaResource, Hashtable  <Pair, Individual> shots) {
 		for (int i = 0; i < layer.getFragments().size(); i ++){
