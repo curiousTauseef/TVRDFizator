@@ -1,6 +1,9 @@
 package fr.eurecom.tvrdfizator.core.datastructures;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 public class VideoMetaData {
@@ -70,5 +73,22 @@ public class VideoMetaData {
 
 	public void setVideoURL(String videoURL) {
 		this.videoURL = videoURL;
+	}
+	
+	public void printLayersNames(){
+		for (String l : layers.keySet()){
+			System.out.println("  -> [layer] "+ l);
+		}
+	}
+
+
+	public List<Layer> getLayersStartingBy(String string) {
+
+		List <Layer> candidateLayers = new ArrayList <Layer> ();
+		
+		for (Entry<String, Layer> entry : this.layers.entrySet()){
+			if (entry.getKey().startsWith(string)) candidateLayers.add(entry.getValue());
+		}
+		return candidateLayers;
 	}
 }

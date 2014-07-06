@@ -206,16 +206,27 @@ public class ExmaraldaReader{
 						 mf.set_ud_information(ud_name, ud_value);
 					 }					
 				 }
-				 if (eventElement.getChildNodes().getLength() == 1){
+				 if (eventElement.getChildNodes().getLength() > 0 ){
 					NodeList nlList = eventElement.getChildNodes();
-					Node nValue = (Node) nlList.item(0);
+					Node nValue = (Node) nlList.item(eventElement.getChildNodes().getLength() -1);
 					mf.setValue(nValue.getNodeValue());
 				 }
-				 if (eventElement.getChildNodes().getLength() == 2){
+			/*	 if (eventElement.getChildNodes().getLength() == 2){
 					NodeList nlList = eventElement.getChildNodes();
 					Node nValue = (Node) nlList.item(1);
 					mf.setValue(nValue.getNodeValue());
+					System.out.println("ALLIII");
+
 				 }
+			*/
+			/*	 if(eventElement.getChildNodes().getLength() > 2){
+						System.out.println("ESTA SI " + eventElement.getChildNodes().getLength());
+						for(int i = 0; i <  eventElement.getChildNodes().getLength() ; i++){
+							Node nodito = (Node) (eventElement.getChildNodes().item(i));
+							System.out.println("{"+i+"}  "+nodito.getNodeName() + "   " + nodito.getNodeValue() + "   " + nodito.getNodeType());
+						}
+				 }*/
+				 
 				 l.addFragment(mf);
 			 }
 			 

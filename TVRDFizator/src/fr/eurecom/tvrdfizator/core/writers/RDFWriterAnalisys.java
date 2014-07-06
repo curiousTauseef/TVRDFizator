@@ -11,6 +11,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -249,6 +250,13 @@ public class RDFWriterAnalisys {
 			else System.out.println("No information about Scenes");
 			
 
+			List <Layer> layers_faces = mdata.getLayersStartingBy("EURECOM_FaceAnalysis");
+			if (layers_faces.size() > 0){
+				createFaces(layers_faces, mediaResource);
+				System.out.println("Faces parsed.");
+			}
+			else System.out.println("No information about Faces");
+			
 
 			//Keywords
 			layer = mdata.getLayer("UEP_Keywords-1");
@@ -350,6 +358,125 @@ public class RDFWriterAnalisys {
 	}
 
 
+
+
+
+	private void createFaces(List<Layer> layers_faces, Individual mediaResource) {
+		
+
+		
+		  /*  <tier category="face" display-name="EURECOM_FaceAnalysis-1_0" id="TIE12" speaker="X" type="a">
+		      <ud-tier-information/>
+		      <event end="T303" start="T302">
+		        <ud-information attribute-name="occurrence-779"> 39,84 19,44 18,16 32,29 55.68</ud-information>
+		        <ud-information attribute-nam */
+		System.out.println("Number of face layers: " + layers_faces.size());
+		
+		for (Layer layer : layers_faces){
+			System.out.println(layer.getName());
+			if(layer.getFragments().size() >0){
+				ItemLayer face_appearance = layer.getFragments().get(0);
+				float start = face_appearance.getStart();
+				float end = face_appearance.getEnd();
+
+				//System.out.println(face_appearance.getStart() + "  " + face_appearance.getEnd());
+				Set<Entry<String, String>> faces_keyframes = face_appearance.get_table_ud_information();
+				//System.out.println("     Number of elements:" + faces_keyframes.size());
+				if (faces_keyframes.iterator().hasNext()){
+					Entry<String, String> firstFaceframe = faces_keyframes.iterator().next();
+					//System.out.println(firstFaceframe.getValue());
+					String[] Faceframe_features = firstFaceframe.getValue().split(" ");
+					if (Faceframe_features.length >= 5){
+						//Ignoring whitespaces at the beginning
+						int i = 0;
+						while (Faceframe_features[i].equals("")) i++;
+						
+						String x = Faceframe_features[i].replace(",", ".");
+						String y = Faceframe_features[i+1].replace(",", ".");
+						String w = Faceframe_features[i+2].replace(",", ".");
+						String h = Faceframe_features[i+3].replace(",", ".");
+						String t = Faceframe_features[i+4].replace(",", ".");
+						//System.out.println(Float.parseFloat(x) + "  " + Float.parseFloat(y) + "  " + Float.parseFloat(w) + "  " + Float.parseFloat(h) + "  " + Float.parseFloat(t));
+					
+					
+					
+					
+						//Generating MediaFragment
+						//Create upper mediafragment.
+						OntClass mediaFragmentOWL = modelMA.createClass( Media_Resources_URL + "MediaFragment" );
+						String boundingBox = x + "," + y + "," + w + "," + h + "," + t;
+
+						Individual mediaFragmentFace = model_exmaralda.createIndividual(mediaResource + "#t=" +start +","+end + "&xywh=" + boundingBox, mediaFragmentOWL );
+
+						mediaFragmentFace.addProperty(RDF.type, modelNSA.createClass(NINSUNA_URL_ONT + "TemporalFragment"));
+
+						Literal temporalStart = model_exmaralda.createTypedLiteral(start);	
+						OntProperty temporalStartProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalStart");
+						mediaFragmentFace.addProperty(temporalStartProperty, temporalStart);
+						
+						Literal temporalEnd = model_exmaralda.createTypedLiteral(end);	
+						OntProperty temporalEndProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalEnd");
+						mediaFragmentFace.addProperty(temporalEndProperty, temporalEnd);
+						
+						Literal duration = model_exmaralda.createTypedLiteral(end-start);	
+						OntProperty temporalDurationProperty = modelMA.createOntProperty(Media_Resources_URL+"duration");
+						mediaFragmentFace.addProperty(temporalDurationProperty, duration);
+						
+						
+						OntProperty temporalUnitProperty = modelNSA.createOntProperty(NINSUNA_URL_ONT+"temporalUnit");
+						mediaFragmentFace.addProperty(temporalUnitProperty, "npt");
+					
+						OntProperty isfragmentofProperty = modelMA.createOntProperty(Media_Resources_URL+"isFragmentOf");
+						mediaFragmentFace.addProperty(isfragmentofProperty, mediaResource);
+						
+						
+						
+						//Generating annotation and linkedtv:Face class
+
+						
+						OntClass faceclass = model_linkedtv.createClass( LINKEDTV_URL_ONT + "Face" );
+						Individual face = model_exmaralda.createIndividual(LINKEDTV_URL + "face/"+  UUID.randomUUID(), faceclass );
+						face.addProperty(RDFS.label, layer.getName());
+
+						//ANNOTATION
+						//Anotation for the data ifself
+						OntClass annotationOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
+						Individual annotationAppearance = model_exmaralda.createIndividual(LINKEDTV_URL + "annotation/" + UUID.randomUUID(), annotationOWL );
+						OntProperty  targetProperty= modelOA.createObjectProperty(Open_Annotation_URL + "hasTarget");
+						annotationAppearance.addProperty(targetProperty, mediaFragmentFace);
+
+						OntProperty bodyProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasBody");
+						annotationAppearance.addProperty(bodyProperty, face);
+						
+						//Provenance Ontology
+						//Add info to the artifact
+						annotationAppearance.addProperty(RDF.type, modelPROV.createClass(PROV_URL + "Entity"));	
+
+
+						OntClass organizationOWL = modelFOAF.getOntClass( FOAF_URL + "Organization" );
+						Individual organizationI = model_linkedtv.createIndividual(LINKEDTV_URL + "organization/"+"EURECOM", organizationOWL );
+						organizationI.addProperty(RDF.type, modelPROV.createClass(PROV_URL + "Agent"));
+						OntProperty wasattributedtoOWL = modelPROV.createObjectProperty(PROV_URL + "wasAttributedTo");
+						annotationAppearance.addProperty(wasattributedtoOWL, organizationI);
+
+						Calendar cal = GregorianCalendar.getInstance();
+						Literal value = model_exmaralda.createTypedLiteral(cal);		
+						OntProperty startedattimeOWL = modelPROV.createObjectProperty(PROV_URL + "startedAtTime");
+						annotationAppearance.addProperty(startedattimeOWL, value);
+
+						//DerivedFrom
+						OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
+						Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
+						annotationAppearance.addProperty(wasderivedfromOWL, exmeraldaResource);
+						
+						
+					}
+				}
+			}
+			
+		}
+		
+	}
 
 
 
@@ -909,7 +1036,8 @@ public class RDFWriterAnalisys {
 			OntProperty isfragmentofProperty = modelMA.createOntProperty(Media_Resources_URL+"isFragmentOf");
 			mediaFragmentI.addProperty(isfragmentofProperty, mediaResource);
 			
-			
+			//keyframes in case they are:
+			createKeyframes(mf, mediaResource, mediaFragmentI);
 			
 			//Anotation for the data ifself
 			OntClass annotationDataOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
@@ -918,14 +1046,13 @@ public class RDFWriterAnalisys {
 			annotationData1.addProperty(targetProperty, mediaFragmentI);
 			OntProperty bodyProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasBody");
 			
-			//Create the shot itself
+			//Create the chapter itself
 			OntClass chapterOWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "Chapter" );
 			Individual chapter = model_exmaralda.createIndividual(LINKEDTV_URL + "chapter/"+  UUID.randomUUID(), chapterOWL );
 			chapter.addProperty(RDFS.label, mf.getValue());			
 
 			annotationData1.addProperty(bodyProperty, chapter);
 
-			
 			
 			//Provenance Ontology
 			//Add info to the artifact
@@ -954,6 +1081,46 @@ public class RDFWriterAnalisys {
 	
 	
 	
+
+	private void createKeyframes(ItemLayer mf, Individual mediaResource, Individual mediaFragment) {
+		// TODO Auto-generated method stub
+		//<ud-information attribute-name="keyframes">41811 46259 46406 47805 48158</ud-information>
+		String keyframes = mf.get_ud_information("keyframes");
+		if (keyframes!=null){
+			System.out.println("Generating keyframes for Chapter " + mf.getValue());
+
+			String[] individual_keyframes = keyframes.split(" ");
+			for (int i = 0; i < individual_keyframes.length; i++){
+				float temporalReference = Float.parseFloat(individual_keyframes[i]);
+						
+				
+				//Link to image URL
+				//hack while waiting for materialized images
+				String URLkeyframe = "null";
+				if (true) URLkeyframe = "http://data.linkedtv.eu/media/keyframe_"+mf.getValue().replaceAll("\n", "").replaceAll("\r", "").replaceAll(" ", "").replaceAll("\t", "")+"_" + i+".jpeg";
+				
+
+				OntProperty relatedimageProperty = modelMA.createOntProperty(Media_Resources_URL+"hasRelatedImage");
+				Individual keyframeResource = model_exmaralda.createIndividual(URLkeyframe, RDFS.Resource );	
+				mediaFragment.addProperty(relatedimageProperty, keyframeResource);
+				
+				
+				//Annotate as keyframe
+				OntClass keyframeOWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "Keyframe" );
+				keyframeResource.addProperty(RDF.type, keyframeOWL);
+
+				//Time
+				Literal value = model_exmaralda.createTypedLiteral(temporalReference);		
+				OntProperty startedattimeOWL = modelPROV.createObjectProperty(PROV_URL + "startedAtTime");
+				keyframeResource.addProperty(startedattimeOWL, value);
+
+				
+				
+			}
+		}
+	}
+
+
 
 	private void createShots(Layer layer, Individual mediaResource, Hashtable  <Pair, Individual> shots) {
 		for (int i = 0; i < layer.getFragments().size(); i ++){

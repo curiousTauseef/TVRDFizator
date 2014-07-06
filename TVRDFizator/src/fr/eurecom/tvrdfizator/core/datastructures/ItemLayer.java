@@ -1,6 +1,8 @@
 package fr.eurecom.tvrdfizator.core.datastructures;
 
 import java.util.Hashtable;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class ItemLayer {
 	private String MediaFragmentURL = "";
@@ -32,6 +34,10 @@ public class ItemLayer {
 		if (table_ud_information.size() > 0)
 			return table_ud_information.values().iterator().next();
 		return null;
+	}
+	
+	public Set<Entry<String, String>> get_table_ud_information () {
+		return table_ud_information.entrySet();
 	}
 
 	public String getValue() {
