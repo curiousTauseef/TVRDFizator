@@ -906,10 +906,13 @@ public class RDFWriterAnalisys {
 				
 				//Create the concept itself
 				OntClass conceptOWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "Concept" );
-				Individual concept = model_exmaralda.createIndividual( LSCOM_URL + mf.getValue(), conceptOWL );
-				concept.addProperty(RDFS.label, mf.getValue());
+				
+				//Hack for wrong exmaralda files: 
+				String conceptLabel = mf.getValue().replaceAll("\n", "").replaceAll("\r", "").replaceAll(" ", "").replaceAll("\t", "");
+				Individual concept = model_exmaralda.createIndividual( LSCOM_URL + conceptLabel, conceptOWL );
+				concept.addProperty(RDFS.label, conceptLabel);
 					
-				Individual dbpediaClass = modelMA.createIndividual(DBPEDIA_URL_ONT+mf.getValue(), RDFS.Resource );	
+				Individual dbpediaClass = modelMA.createIndividual(DBPEDIA_URL_ONT+conceptLabel, RDFS.Resource );	
 				concept.addProperty(OWL.sameAs, dbpediaClass);
 					
 				annotationConcept.addProperty(bodyProperty, concept);
@@ -1049,7 +1052,11 @@ public class RDFWriterAnalisys {
 			//Create the chapter itself
 			OntClass chapterOWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "Chapter" );
 			Individual chapter = model_exmaralda.createIndividual(LINKEDTV_URL + "chapter/"+  UUID.randomUUID(), chapterOWL );
-			chapter.addProperty(RDFS.label, mf.getValue());			
+			
+			//Remove possible breaklines and carriage returns
+			String chapterLabel =  mf.getValue().replaceAll("\n", "").replaceAll("\r", "").replaceAll(" ", "").replaceAll("\t", "");
+			
+			chapter.addProperty(RDFS.label, chapterLabel);			
 
 			annotationData1.addProperty(bodyProperty, chapter);
 
