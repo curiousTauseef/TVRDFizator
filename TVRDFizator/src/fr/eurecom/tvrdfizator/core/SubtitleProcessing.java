@@ -18,8 +18,8 @@ import com.mongodb.gridfs.GridFSInputFile;
 import fr.eurecom.nerd.client.LookUp;
 import fr.eurecom.nerd.client.NERD;
 import fr.eurecom.nerd.client.type.DocumentType;
-import fr.eurecom.nerd.client.type.Extractor;
 import fr.eurecom.nerd.client.type.ExtractorType;
+import fr.eurecom.nerd.client.type.GranularityType;
 
 public class SubtitleProcessing extends Thread {
 
@@ -46,7 +46,6 @@ public class SubtitleProcessing extends Thread {
 		this.metadataFile = metadataFile;
 		this.mediaresources = mediaresources;
 		this.mr=mr;
-		
 	}
 	
 	
@@ -55,7 +54,7 @@ public class SubtitleProcessing extends Thread {
 		GridFS gfsmr = new GridFS(db);
 		String subtitleFile = null;
 		String apiKey = "loq6asma69tgfq2aijbubh2t5klm7pk0";
-		ExtractorType extractor = ExtractorType.COMBINED;
+		ExtractorType extractor = ExtractorType.NERDML;
 
 		
 		UUID idtransaction = UUID.randomUUID();
@@ -78,7 +77,7 @@ public class SubtitleProcessing extends Thread {
 		}
 		if (mr.containsField("extractor")){
 			try {
-				extractor = Extractor.getType((String) mr.get("extractor"));
+				extractor = LookUp.mapExtractorStringType((String) mr.get("extractor"));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -89,10 +88,22 @@ public class SubtitleProcessing extends Thread {
 	    NERD nerd = new NERD(apiKey);
 	    //NERD nerd = new NERD("1g0stre00us2jjgtb2g80190rv7bpm4v");
 
-
+	    DocumentType dt = null;
+	    boolean is_plaintext = false;
+	    if (mr.containsField("plaintext")){
+	    	dt = DocumentType.TIMEDTEXT;
+	    }
+	    else {
+	    	dt = DocumentType.PLAINTEXT;
+	    	is_plaintext = true;
+	    }
 		String json = nerd.annotateJSON(extractor, 
-	                                    DocumentType.TIMEDTEXT,
-	                                    metadataFile);
+	                                    dt,
+	                                    metadataFile, 
+	                                    GranularityType.OEN,
+		                                50L,
+		                                false,
+		                                true);
 	    
 
 	    File entitiesNerd = new File("./data/entities_"+idMediaResource+idtransaction+".json");
@@ -108,7 +119,7 @@ public class SubtitleProcessing extends Thread {
 		 
 		//SERIALIZATION
 		 Processing p = new Processing();
-		 if (p.entity_process("./data/entities_"+idMediaResource+idtransaction+".json", "./data/subtitle_"+idMediaResource+idtransaction+".str", "./data/entities_"+idMediaResource+idtransaction+".ttl", idMediaResource.toString(), namespace, locator, subtitleFile)){
+		 if (p.entity_process("./data/entities_"+idMediaResource+idtransaction+".json", "./data/subtitle_"+idMediaResource+idtransaction+".str", "./data/entities_"+idMediaResource+idtransaction+".ttl", idMediaResource.toString(), namespace, locator, subtitleFile, is_plaintext)){
 		 
 		 
 			 //Storing in the database

@@ -43,10 +43,13 @@ public class Title implements Cloneable
 	public static final int ALBUMTITLE = 7;
 	public static final int SERIESTITLE = 8;
 	public static final int EPISODETITLE = 9;
+	//RBB TVAnytime
+	public static final int TOPLINE = 10;
 
 	private String text;
 	private String language;  
 	private int titleType = MAIN;
+	private int maxTypesTitle = 10;
 
 	/**
 	 * Constructor for objects of type Title
@@ -126,7 +129,8 @@ public class Title implements Cloneable
 	 */
 	public void setType(int titleType) throws TVAnytimeException
 	{
-		if ((titleType >= 0) && (titleType <= 9))
+		//System.out.println(titleType);
+		if ((titleType >= 0) && (titleType <= maxTypesTitle))
 		{
 			this.titleType = titleType;
 		}
@@ -192,6 +196,9 @@ public class Title implements Cloneable
 				break;
 			case EPISODETITLE:
 				titleTypeAsString = "episodeTitle";
+				break;
+			case TOPLINE:
+				titleTypeAsString = "topline";
 				break;
 			default:
 				titleTypeAsString = "main";
@@ -280,9 +287,13 @@ public class Title implements Cloneable
 			case EPISODETITLE:
 				titleTypeAsString = "episodeTitle";
 				break;
+			case TOPLINE:
+				titleTypeAsString = "topline";
+				break;
 			default:
 				titleTypeAsString = "main";
-				break;
+				break;	
+				
 		}
 
 		sysOut += "Title: " + text + ", type = "+ titleTypeAsString + ", language = " + language;

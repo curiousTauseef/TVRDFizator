@@ -45,6 +45,7 @@ public class RDFWriterSubtitleEntity {
 
 	private List<NERDEntity> entities = null;
 	private List<Subtitle> subtitles = null;
+	private boolean is_plaintext = false;
 	
 	private Hashtable <Float, Entry<Individual, Individual>> mediaFragmentsSub = null;
 
@@ -101,7 +102,7 @@ public class RDFWriterSubtitleEntity {
 	
 	Individual documentI = null;
 	
-	public RDFWriterSubtitleEntity (String f_entity, List<Subtitle> subtitles, List<NERDEntity> entities, String media_resource_id, String namespace, String locator, String subtitleFile){
+	public RDFWriterSubtitleEntity (String f_entity, List<Subtitle> subtitles, List<NERDEntity> entities, String media_resource_id, String namespace, String locator, String subtitleFile, boolean is_plaintext){
 	
 		file_entity_json = f_entity;
 		this.entities = entities;
@@ -111,6 +112,7 @@ public class RDFWriterSubtitleEntity {
 		if (!namespace.equals("")){
 			LINKEDTV_URL = namespace;
 		}
+		this.is_plaintext = is_plaintext;
 		
 	}
 	
@@ -118,8 +120,16 @@ public class RDFWriterSubtitleEntity {
 
 			createModel();
 			
-			generateSubtitles();
-			generateEntities();
+			if (!is_plaintext) {
+				generateSubtitles();
+				generateEntities();
+
+			}
+			else {
+				System.out.println("SERIALIZING ENTITIES FOR PLAIN TEXT");
+				generateEntitiesPlain();
+
+			}
 			
 			writeAll();
 
@@ -131,6 +141,9 @@ public class RDFWriterSubtitleEntity {
 
 	
 	
+
+
+
 	private void generateSubtitles() {
 		
 
@@ -310,6 +323,187 @@ public class RDFWriterSubtitleEntity {
 		}
 	}
 
+	
+	private void generateEntitiesPlain() {
+		// TODO Auto-generated method stub
+		
+
+		//Recreate upper MediaResource
+		OntClass mediaResourceOWL = modelMA.createClass( Media_Resources_URL + "MediaResource" );
+		Individual mediaResouceI = modelMA.createIndividual(LINKEDTV_URL + "media/" + mediaResource, mediaResourceOWL );
+		Individual subtitleResource = null;
+		//Create the Textualresource
+		//OntClass documentOWL = modelString.createClass( STRING_URL_ONT + "Document" );
+		//documentI = model_entity.createIndividual(LINKEDTV_URL + "text/" + UUID.randomUUID(), documentOWL );
+		//OntProperty sourceURLProperty = modelString.createOntProperty(STRING_URL_ONT+"sourceURL");
+		//documentI.addProperty(sourceURLProperty, fileSRT);
+		
+		if (subtitleFile != null) {
+			if (!subtitleFile.equals("")){
+				mediaResouceI = model_entity.createIndividual(LINKEDTV_URL + "media/" + mediaResource, mediaResourceOWL );
+				OntProperty subtitleProperty = modelMA.createOntProperty(Media_Resources_URL+"hasSubtitling");
+				subtitleResource = modelMA.createIndividual(subtitleFile, mediaResourceOWL );	
+				mediaResouceI.addProperty(subtitleProperty, subtitleResource);
+			}
+			else{
+				modelExmeralda.createIndividual(LINKEDTV_URL + "media/" + mediaResource, mediaResourceOWL );
+			}
+		}
+		else{
+			modelExmeralda.createIndividual(LINKEDTV_URL + "media/" + mediaResource, mediaResourceOWL );
+		}
+		
+		
+		
+		//Create the organization.
+		OntClass organizationOWL = modelPROV.getOntClass( PROV_URL + "Organization" );
+		Individual organizationI = model_linkedtv.createIndividual(LINKEDTV_URL + "organization/"+"NERD", organizationOWL );
+		organizationI.addProperty(RDF.type, modelPROV.createClass(PROV_URL + "Agent"));
+		
+
+		DBpediaURLNormalizer un = new DBpediaURLNormalizer();
+		DBpediaTypeNormalizer tn = new DBpediaTypeNormalizer();
+
+		
+		for (int i = 0; i<entities.size(); i++){
+
+			NERDEntity entity = entities.get(i);
+
+
+
+			//Align to the right Media Fragment
+			float start = (entity.getStartNPT());
+			float end = (entity.getEndNPT());
+
+
+			
+
+
+				//NERD
+				OntClass nerdClassOWL = modelMA.createClass( LINKEDTV_URL_ONT + "Entity" );
+				Individual nerdI = model_entity.createIndividual(LINKEDTV_URL + "entity/" + UUID.randomUUID(), nerdClassOWL );
+
+				//identifier (DC)
+				OntProperty identifierProperty = modelDC.createOntProperty(Dublin_Core_URL+"identifier");
+				nerdI.addProperty(identifierProperty, Integer.toString(entity.getIdEntity()));
+
+				//Label
+				System.out.println(entity.getLabel());
+				nerdI.addProperty(RDFS.label, entity.getLabel());	
+				
+				if (entity.getUri() != null){
+					if (!entity.getUri().equals("") && !entity.getUri().equals("null") && !entity.getUri().equals("NORDF")) {
+						
+						
+						//Create Resource
+						String desambiguationuri = entity.getUri().replaceAll(" ", "%20");
+						Individual resource = modelExmeralda.createIndividual(desambiguationuri, RDFS.Resource );
+						nerdI.addProperty(OWL.sameAs, resource);	
+						
+		
+						String normalizedUrl = un.normalizeUrls(entity.getUri());
+						if (normalizedUrl!=null){
+							System.out.println("    --> "+normalizedUrl);
+							Individual resourceNormalized = modelExmeralda.createIndividual(normalizedUrl, RDFS.Resource );
+							nerdI.addProperty(OWL.sameAs, resourceNormalized);	
+						}
+
+					}
+				}
+
+
+				//Type nerd
+				nerdI.addProperty(RDF.type, modelNerd.createClass(entity.getNerdType()));
+
+				
+				//NORMALIZE TYPES
+				List<String> normalizedTypes = tn.normalizeTypes(entity.getExtractorType(), entity.getExtractor());
+				if (normalizedTypes!=null){
+					for (String type : normalizedTypes){
+						System.out.println("[Normalized type]    --> "+type);
+						nerdI.addProperty(RDF.type, modelNerd.createClass(type));
+					}
+				}
+				
+
+				
+				//Type plaintext
+				if (entity.getExtractorType() != null){
+					OntProperty typeProperty = modelDC.createOntProperty(Dublin_Core_URL+"type");
+					nerdI.addProperty(typeProperty, entity.getExtractorType());
+				}
+
+				//Source (extractor)
+				OntProperty sourceProperty = modelDC.createOntProperty(Dublin_Core_URL+"source");
+				nerdI.addProperty(sourceProperty, entity.getExtractor());
+
+				//Confidence
+				OntProperty confidenceProperty = model_linkedtv.createObjectProperty(LINKEDTV_URL_ONT + "hasConfidence");
+				Literal confidenceLiteral = model_entity.createTypedLiteral(entity.getConfidence());
+				nerdI.addProperty(confidenceProperty, confidenceLiteral);
+
+				//Relevance
+				OntProperty relevanceProperty = model_linkedtv.createObjectProperty(LINKEDTV_URL_ONT + "hasRelevance");
+				Literal relevanceLiteral = model_entity.createTypedLiteral(entity.getRelevance());
+				nerdI.addProperty(relevanceProperty, relevanceLiteral);
+
+
+				
+				//OntClass documentOWL = modelString.createClass( STRING_URL_ONT + "Document" );
+				//documentI = model_entity.createIndividual(LINKEDTV_URL + "text/" + UUID.randomUUID(), documentOWL );
+				//OntProperty sourceURLProperty = modelString.createOntProperty(STRING_URL_ONT+"sourceURL");
+				//documentI.addProperty(sourceURLProperty, fileSRT);
+				
+				
+
+				//TEXTUAL RESOURCE (String Ontology)				
+				OntClass offsetStringOWL = modelString.createClass( STRING_URL_ONT + "OffsetBasedString" );
+				
+
+
+				
+				
+
+				
+				
+
+
+				//ANNOTATION
+				//Anotation for the data ifself
+				OntClass annotationOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
+				Individual annotationEntity = model_entity.createIndividual(LINKEDTV_URL + "annotation/" + UUID.randomUUID(), annotationOWL );
+				OntProperty  targetProperty= modelOA.createObjectProperty(Open_Annotation_URL + "hasTarget");
+				annotationEntity.addProperty(targetProperty, mediaResouceI);
+				OntProperty bodyProperty = modelOA.createObjectProperty(Open_Annotation_URL + "hasBody");
+				annotationEntity.addProperty(bodyProperty, nerdI);
+
+				//Provenance Ontology
+				//Add info to the artifact
+				annotationEntity.addProperty(RDF.type, modelPROV.createClass(PROV_URL + "Entity"));	
+
+
+				OntProperty wasattributedtoOWL = modelPROV.createObjectProperty(PROV_URL + "wasAttributedTo");
+				annotationEntity.addProperty(wasattributedtoOWL, organizationI);
+
+				Calendar cal = GregorianCalendar.getInstance();
+				Literal value = model_entity.createTypedLiteral(cal);		
+				OntProperty startedattimeOWL = modelPROV.createObjectProperty(PROV_URL + "startedAtTime");
+				annotationEntity.addProperty(startedattimeOWL, value);
+
+				//DerivedFrom
+				if (subtitleResource != null){
+					OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
+					annotationEntity.addProperty(wasderivedfromOWL, subtitleResource); //aniadir entidad a el subtitulo
+
+				}
+
+				
+
+		}
+	}
+	
+	
+	
 	private void generateEntities() {
 		//for (int i = 0; i<entities.size(); i++){
 

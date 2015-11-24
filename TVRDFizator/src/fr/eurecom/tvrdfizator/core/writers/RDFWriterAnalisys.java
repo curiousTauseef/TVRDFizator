@@ -74,8 +74,8 @@ public class RDFWriterAnalisys {
 	
 	
 	private String mediaResourceID = "e2899e7f-67c1-4a08-9146-5a205f6de457";
-	private String exmeraldaFile = "ftp://ftp.condat.de/Processing/SV/12_02_SV/FhG/EXMARaLDA/12_11_07";
-	private String vsubtitleFile = "http://stream6.noterik.com/progressive/stream6/domain/linkedtv/user/SV/subtitle/TUSSEN_KUNST_AVR000080E2.srt";
+	private String exmeraldaFile = null;
+	//private String vsubtitleFile = "http://stream6.noterik.com/progressive/stream6/domain/linkedtv/user/SV/subtitle/TUSSEN_KUNST_AVR000080E2.srt";
 
 	
 	//private String mediaResourceID = "6026703a-c02c-41bc-9ac3-9923b23ef8f5";
@@ -84,13 +84,13 @@ public class RDFWriterAnalisys {
 
 	
 	
-	public RDFWriterAnalisys(String f_analisys, VideoMetaData md, String media_item_id, String namespace, String locator){
+	public RDFWriterAnalisys(String f_analisys, VideoMetaData md, String media_item_id, String namespace, String locator, String exmeraldaFileNAME){
 		
 		file_exmaralda = f_analisys;
 		mediaResourceID = media_item_id;
+		this.exmeraldaFile  = exmeraldaFileNAME;
 		
 		mdata = md;
-
 	
 		if (!namespace.equals("")){
 			LINKEDTV_URL = namespace;
@@ -465,10 +465,11 @@ public class RDFWriterAnalisys {
 						annotationAppearance.addProperty(startedattimeOWL, value);
 
 						//DerivedFrom
-						OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
-						Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
-						annotationAppearance.addProperty(wasderivedfromOWL, exmeraldaResource);
-						
+						if (exmeraldaFile != null){
+							OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
+							Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
+							annotationAppearance.addProperty(wasderivedfromOWL, exmeraldaResource);
+						}
 						
 					}
 				}
@@ -631,10 +632,12 @@ public class RDFWriterAnalisys {
 			annotationAppearance.addProperty(startedattimeOWL, value);
 
 			//DerivedFrom
-			OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
-			Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
-			annotationAppearance.addProperty(wasderivedfromOWL, exmeraldaResource);
-			
+			if (exmeraldaFile != null){
+
+				OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
+				Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
+				annotationAppearance.addProperty(wasderivedfromOWL, exmeraldaResource);
+			}
 			
 			
 			
@@ -738,10 +741,12 @@ public class RDFWriterAnalisys {
 				annotationASR.addProperty(startedattimeOWL, value);
 
 				//DerivedFrom
-				OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
-				Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
-				annotationASR.addProperty(wasderivedfromOWL, exmeraldaResource);
-				
+				if (exmeraldaFile != null){
+
+					OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
+					Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
+					annotationASR.addProperty(wasderivedfromOWL, exmeraldaResource);
+				}
 				
 				//System.out.println("ASR " + mf.getStart() + " " + mf.getEnd() + " is inside " + scene.getURI());
 				//else  System.out.println("Scene " + mf.getValue() + " is already one shot");
@@ -828,10 +833,11 @@ public class RDFWriterAnalisys {
 			annotationScene.addProperty(startedattimeOWL, value);
 
 			//DerivedFrom
+			if (exmeraldaFile != null){
 			OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
 			Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
 			annotationScene.addProperty(wasderivedfromOWL, exmeraldaResource);
-			
+			}
 			
 			
 			
@@ -935,10 +941,12 @@ public class RDFWriterAnalisys {
 				annotationConcept.addProperty(startedattimeOWL, value);
 
 				//DerivedFrom
+				if (exmeraldaFile != null){
+
 				OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
 				Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
 				annotationConcept.addProperty(wasderivedfromOWL, exmeraldaResource);
-				
+				}
 				
 				
 				
@@ -955,7 +963,7 @@ public class RDFWriterAnalisys {
 		
 		while (keys.hasNext()){
 			Entry<Pair, Individual> key = keys.next();
-			System.out.println("COMPARANDO CON "+ key.getKey().getStart() +"  "+ key.getKey().getEnd());
+			//System.out.println("COMPARANDO CON "+ key.getKey().getStart() +"  "+ key.getKey().getEnd());
 
 			if (key.getKey().getStart() <= start && end <= key.getKey().getEnd()){
 				candidateScenes.add(key.getValue());
@@ -1042,6 +1050,9 @@ public class RDFWriterAnalisys {
 			//keyframes in case they are:
 			createKeyframes(mf, mediaResource, mediaFragmentI);
 			
+
+			
+			
 			//Anotation for the data ifself
 			OntClass annotationDataOWL = modelOA.createClass( Open_Annotation_URL + "Annotation" );
 			Individual annotationData1 = model_exmaralda.createIndividual(LINKEDTV_URL + "annotation/" + UUID.randomUUID(), annotationDataOWL );
@@ -1052,6 +1063,8 @@ public class RDFWriterAnalisys {
 			//Create the chapter itself
 			OntClass chapterOWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "Chapter" );
 			Individual chapter = model_exmaralda.createIndividual(LINKEDTV_URL + "chapter/"+  UUID.randomUUID(), chapterOWL );
+			createAnnotation(mf, chapter);
+
 			
 			//Remove possible breaklines and carriage returns
 			String chapterLabel =  mf.getValue().replaceAll("\n", "").replaceAll("\r", "").replaceAll(" ", "").replaceAll("\t", "");
@@ -1078,10 +1091,12 @@ public class RDFWriterAnalisys {
 			annotationData1.addProperty(startedattimeOWL, value);
 
 			//DerivedFrom
+			if (exmeraldaFile != null){
+
 			OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
 			Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
 			annotationData1.addProperty(wasderivedfromOWL, exmeraldaResource);
-
+			}
 			
 		}
 	}
@@ -1089,12 +1104,55 @@ public class RDFWriterAnalisys {
 	
 	
 
+	private void createAnnotation(ItemLayer mf, Individual chapter) {
+		
+		String annotation = mf.get_ud_information("annotation");
+		
+		if (annotation !=  null){
+			
+			if (annotation.equals("News Item")){
+				OntClass news_OWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "NewsItem" );
+				chapter.addProperty(RDF.type, news_OWL);				
+			}
+			if (annotation.equals("Art Object")){
+				OntClass art_object_OWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "ArtObject" );
+				chapter.addProperty(RDF.type, art_object_OWL);
+			}
+			if (annotation.equals("Intro")){
+				OntClass art_object_OWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "Intro" );
+				chapter.addProperty(RDF.type, art_object_OWL);
+			}
+			if (annotation.equals("Closing")){
+				OntClass art_object_OWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "Closing" );
+				chapter.addProperty(RDF.type, art_object_OWL);
+			}
+			
+			if (annotation.equals("Kiosk - Weather")){
+				OntClass art_object_OWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "KioskWeather" );
+				chapter.addProperty(RDF.type, art_object_OWL);
+			}
+			
+		}		
+	}
+
+
+
 	private void createKeyframes(ItemLayer mf, Individual mediaResource, Individual mediaFragment) {
 		// TODO Auto-generated method stub
 		//<ud-information attribute-name="keyframes">41811 46259 46406 47805 48158</ud-information>
 		String keyframes = mf.get_ud_information("keyframes");
+		String keytypes = mf.get_ud_information("keytype");
+
+		
 		if (keyframes!=null){
 			System.out.println("Generating keyframes for Chapter " + mf.getValue());
+			String[] individual_keytypes = null;
+			if (keytypes != null){
+				System.out.println("Annotation keyframes with Bumper Information " + mf.getValue());	
+				individual_keytypes =  keytypes.split(" ");
+
+			}
+			
 
 			String[] individual_keyframes = keyframes.split(" ");
 			for (int i = 0; i < individual_keyframes.length; i++){
@@ -1120,11 +1178,26 @@ public class RDFWriterAnalisys {
 				Literal value = model_exmaralda.createTypedLiteral(temporalReference);		
 				OntProperty startedattimeOWL = modelPROV.createObjectProperty(PROV_URL + "startedAtTime");
 				keyframeResource.addProperty(startedattimeOWL, value);
+				
+				//BUMBER
+				if (individual_keytypes != null){
+					if( i < individual_keytypes.length){
+						if (individual_keytypes[i].equals("Bumper")){
+							OntClass bumperOWL = model_linkedtv.createClass( LINKEDTV_URL_ONT + "Bumper" );
+							keyframeResource.addProperty(RDF.type, bumperOWL);
+						}
+					}
+				}
+				
 
-				
-				
 			}
+			
+			
+			//BUMPER / BUMPER
+			
 		}
+		
+		
 	}
 
 
@@ -1202,10 +1275,12 @@ public class RDFWriterAnalisys {
 			annotationData1.addProperty(startedattimeOWL, value);
 
 			//DerivedFrom
+			if (exmeraldaFile != null){
+
 			OntProperty wasderivedfromOWL = modelPROV.createObjectProperty(PROV_URL + "wasDerivedFrom");
 			Individual exmeraldaResource = modelPROV.createIndividual(exmeraldaFile, RDFS.Resource );
 			annotationData1.addProperty(wasderivedfromOWL, exmeraldaResource);
-
+			}
 			
 		}
 	}

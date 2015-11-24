@@ -39,7 +39,7 @@ import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
 
-import fr.eurecom.nerd.client.type.Extractor;
+import fr.eurecom.nerd.client.LookUp;
 import fr.eurecom.tvrdfizator.core.ExmeraldaProcessing;
 import fr.eurecom.tvrdfizator.core.LegacyProcessing;
 import fr.eurecom.tvrdfizator.core.SubtitleProcessing;
@@ -111,7 +111,7 @@ public class MediaResource {
 
 			}
 			//relaunch Serializations with the new parameters
-			executeAll(db, idMediaResource, mediaresources, mr);
+			executeAll(db, idMediaResource, mediaresources, mr, idMediaResource.toString());
 		}
 		
 		return Response.status(200).entity("OK").build();
@@ -119,6 +119,8 @@ public class MediaResource {
 	
 	@GET
 	@Path("/list")
+	@Produces("application/json")
+
 	public Response doGETLISTRESOURCES(
             @PathParam("idMediaResource") String idMediaResourceString) {
 		
@@ -155,6 +157,8 @@ public class MediaResource {
 		
 	@GET
 	@Path("/{idMediaResource}")
+	@Produces("application/json")
+	
 	public Response doGETRESOURCE(
             @PathParam("idMediaResource") String idMediaResourceString) {
 		
@@ -204,6 +208,7 @@ public class MediaResource {
 	public Response doPOSTMETADATA(String metadataFile,
 			@QueryParam("metadataType") String metadataType,
 			@QueryParam("extractor") String extractor,
+			@QueryParam("plaintext") String plaintext,
 			@QueryParam("apiKey") String apiKey,
             @PathParam("idMediaResource") String idMediaResourceString) {
  
@@ -310,6 +315,7 @@ public class MediaResource {
 			try {
 				gfsFile = gfsmrAdd.createFile(metadataFileDisk);
 				gfsFile.setFilename(idMediaResource.toString()+"_"+metadataType);
+				gfsFile.setContentType(metadataType);
 				gfsFile.save();
 				
 			} catch (IOException e) {
@@ -323,7 +329,7 @@ public class MediaResource {
 			mr.put(metadataType, gfsFile);
 			if (extractor != null && metadataType.equals("subtitle")){
 				try {
-					Extractor.getType(extractor);
+					LookUp.mapExtractorStringType(extractor);
 				} catch (Exception e) {
 					e.printStackTrace();
 			        return Response.status(404).entity("Unknown NERD extractor. Please specify a valid extractor type.").build();
@@ -332,6 +338,9 @@ public class MediaResource {
 			}
 			if (apiKey != null && metadataType.equals("subtitle")){
 				mr.put("apiKey", apiKey);
+			}
+			if (plaintext != null && metadataType.equals("subtitle")){
+				mr.put("plaintext", true);
 			}
 			
 			
@@ -342,7 +351,7 @@ public class MediaResource {
 		}
 	
 		//Launch Serialization process 
-		executeSerialization(db, idMediaResource, metadataType, metadataFile, mediaresources, mr);
+		executeSerialization(db, idMediaResource, metadataType, metadataFile, mediaresources, mr, idMediaResource.toString());
 	
 		if (isWebResource){
 			mr.put(metadataType+"URL", resourceURLString);
@@ -355,7 +364,7 @@ public class MediaResource {
 
 	@GET
 	@Path("/{idMediaResource}/metadata")
-	@Produces({"application/rdf+xml"})
+	@Produces(MediaType.APPLICATION_XML)
 	public Response doGETMETADATA(   @Context UriInfo ui, 
                         			@Context SecurityContext context,
                         			@QueryParam("metadataType") String metadataType,
@@ -408,6 +417,10 @@ public class MediaResource {
 				//System.out.println(fileName);
 				GridFSDBFile fileText = gfsmr.findOne(fileInformation);
 				String filebody = "";
+				if (fileText == null){
+					System.out.println(idMediaResource.toString()+"_"+metadataType+ " file NOT FOUND");
+			        return Response.status(404).entity(idMediaResource.toString()+"_"+metadataType+ " file NOT FOUND").header("Access-Control-Allow-Origin", "*").build();
+				}
 				try {
 					File fileMetadataDisk  = new File("./data/metadata"+ idMediaResource.toString() +".ttl");
 					fileText.writeTo(fileMetadataDisk);
@@ -443,7 +456,7 @@ public class MediaResource {
 			
 	}
 
-	private void executeSerialization(DB db, UUID idMediaResource, String metadataType, String metadataFile, DBCollection mediaresources, DBObject mr) {
+	private void executeSerialization(DB db, UUID idMediaResource, String metadataType, String metadataFile, DBCollection mediaresources, DBObject mr, String metadataFileName) {
 		// TODO Auto-generated method stub
 		
 		//Retrieve parameters for serialization
@@ -489,14 +502,14 @@ public class MediaResource {
 		     break;
 		 case 2: 
 			 System.out.println("Starting Exmeralda serialization...");
-			 ExmeraldaProcessing threadexmeralda = new ExmeraldaProcessing(db, idMediaResource, metadataType, metadataFile, mediaresources, mr, namespace, locator);
+			 ExmeraldaProcessing threadexmeralda = new ExmeraldaProcessing(db, idMediaResource, metadataType, metadataFile, mediaresources, mr, namespace, locator, metadataFileName);
 			 threadexmeralda.start();
 		     break;
 		 }
 		
 	}
 	
-	private void executeAll(DB db, UUID idMediaResource, DBCollection mediaresources, DBObject mr){
+	private void executeAll(DB db, UUID idMediaResource, DBCollection mediaresources, DBObject mr, String metadataFileName){
 		for (int i = 0; i<metadataTypes.length; i++){
 			String metadataType = metadataTypes[i];
 			
@@ -517,7 +530,7 @@ public class MediaResource {
 					e.printStackTrace();
 				}
 				
-				executeSerialization(db, idMediaResource, metadataType, filebody, mediaresources, mr);
+				executeSerialization(db, idMediaResource, metadataType, filebody, mediaresources, mr, metadataFileName);
 			}
 			
 		}
@@ -527,7 +540,8 @@ public class MediaResource {
 	
 	@GET
 	@Path("/{idMediaResource}/serialization")
-	@Produces({"application/rdf+xml"})
+	@Produces("application/x-turtle")
+
 	public Response doGETSERIALIZATION(   @Context UriInfo ui, 
                         			@Context SecurityContext context,
                         			@QueryParam("metadataType") String metadataType,
@@ -580,11 +594,16 @@ public class MediaResource {
 				 filebody = getAllSerialization(db, mr, idMediaResource);
 				return Response.ok().entity(filebody).build();
 			}
-			
-			
+		
 			else  {    
 				
-				filebody = getSerialization(db, mr, metadataType, idMediaResource);
+				try {
+					filebody = getSerialization(db, mr, metadataType, idMediaResource);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+			        return Response.status(404).build();
+				}
 				System.out.println("Retrieving the serialization for " + metadataType);
 				if (!filebody.equals("")){
 					return Response.ok().entity(filebody).build();
@@ -606,7 +625,14 @@ public class MediaResource {
 
 		for (int i = 0; i<metadataTypes.length; i++){
 			String metadataType = metadataTypes[i];
-			String serializationPart = getSerialization(db, mr, metadataType, idMediaResource);
+			String serializationPart = "";
+			try {
+				serializationPart = getSerialization(db, mr, metadataType, idMediaResource);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
 			if (i != 0){ //remove prefixes except the first time
 				serializationPart = serializationPart.replaceAll("@prefix.*\n", "");
 			}
@@ -619,7 +645,7 @@ public class MediaResource {
 	}
 
 
-	private String getSerialization(DB db, DBObject mr, String metadataType, UUID idMediaResource) {
+	private String getSerialization(DB db, DBObject mr, String metadataType, UUID idMediaResource) throws Exception {
 		
 		
 		System.out.println("Looking for serialization about "+ metadataType);
@@ -630,6 +656,10 @@ public class MediaResource {
 			//System.out.println(fileName);
 			GridFSDBFile fileText = gfsmr.findOne(fileInformation);
 			String filebody = "";
+			if (fileText == null){
+				System.out.println(idMediaResource.toString()+"_"+metadataType+ "Serialization file NOT FOUND");
+				throw new Exception();
+			}
 			try {
 				File fileMetadataDisk  = new File("./data/serialization"+ idMediaResource +".ttl");
 				fileText.writeTo(fileMetadataDisk);

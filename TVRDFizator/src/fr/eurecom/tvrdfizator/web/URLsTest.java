@@ -42,7 +42,7 @@ public class URLsTest {
 
 		String json = nerd.annotateJSON(ExtractorType.COMBINED,
 	                                    DocumentType.PLAINTEXT,
-	                                    text, GranularityType.OEN, 1000L);
+	                                    text, GranularityType.OEN);
 		
 		System.out.println(json);
 		

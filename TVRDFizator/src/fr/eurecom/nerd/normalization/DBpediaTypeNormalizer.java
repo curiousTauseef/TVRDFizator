@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import fr.eurecom.nerd.client.type.Extractor;
+import fr.eurecom.nerd.client.LookUp;
 import fr.eurecom.nerd.client.type.ExtractorType;
 
 public class DBpediaTypeNormalizer {
@@ -128,7 +128,7 @@ public class DBpediaTypeNormalizer {
 		 //extractor is valid? throws the TypeException
         ExtractorType etype = null;
         try {
-            etype = Extractor.getType(extractor);
+            etype = LookUp.mapExtractorStringType(extractor);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -169,8 +169,8 @@ public class DBpediaTypeNormalizer {
         case ZEMANTA:
         	types = breakTypesZemanta(rawTypes);
             break;
-        case DATATXT:
-        	types = breakTypesDataTXT(rawTypes);
+        case DANDELIONAPI:
+        	types = breakTypesDandelionAPI(rawTypes);
             break;                
         default:
             break;
@@ -183,7 +183,7 @@ public class DBpediaTypeNormalizer {
 		return types;
 	}
 
-	private List<String> breakTypesDataTXT(String rawTypes) {
+	private List<String> breakTypesDandelionAPI(String rawTypes) {
 		List<String> types = new ArrayList<String> ();
 		if (rawTypes == null) return types;
 
@@ -382,7 +382,8 @@ public class DBpediaTypeNormalizer {
 		
 		//Cutting freebase types
 		if (FreebaseTypes != null){
-			FreebaseTypes = FreebaseTypes.substring(9); //Removing DBpedia:
+			System.out.println("FreebaseTypes ->> " + FreebaseTypes);
+			//FreebaseTypes = FreebaseTypes.substring(9); //Removing DBpedia:
 			String[] rawtypesFR = FreebaseTypes.split(",");
 			
 			

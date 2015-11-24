@@ -12,7 +12,6 @@
 // your option) any later version. See the file Documentation/GPL3 in the
 // original distribution for details. There is ABSOLUTELY NO warranty.
 
-
 package fr.eurecom.nerd.client;
 
 import java.lang.reflect.Type;
@@ -35,10 +34,31 @@ public class NERDResult extends Request{
     /*
      *  post object and get its id
      */
+	protected static Document getDocument (
+											String uri, 
+								            String apiKey,
+								            DocumentType docuType,
+								            String text 
+										  ) 
+	{
+        Gson gson = new Gson();
+		Integer idDocument = postDocument(uri, apiKey, docuType, text);
+		       
+        // read extraction from annotation
+        MultivaluedMap<String,String> params =  new MultivaluedMapImpl();
+        String jsonDocument = request(uri.replace("/api", "")
+        								.concat("document/")
+        								.concat(idDocument.toString()), 
+        							  RequestType.GET, params);
+        Document document = gson.fromJson(jsonDocument, Document.class);
+		return document;
+	}
+	
     protected static Integer postDocument  (   String uri, 
                                                String apiKey,
                                                DocumentType docuType,
-                                               String text ) 
+                                               String text 
+                                            ) 
     {
         Gson gson = new Gson();
         MultivaluedMap<String,String> params =  new MultivaluedMapImpl();
@@ -103,7 +123,9 @@ public class NERDResult extends Request{
                                                 DocumentType docuType,
                                                 String text, 
                                                 String granularity,
-                                                Long timeout
+                                                Long timeout,
+                                                Boolean cache,
+                                                Boolean force
                                              ) 
     {
         Gson gson = new Gson();
@@ -123,9 +145,9 @@ public class NERDResult extends Request{
         params.add("key", apiKey);
         params.add("extractor", extractor);
         params.add("idDocument", document.getIdDocument().toString());
-        //params.add("force", "false");
-        //params.add("cache", "false");
         if(timeout!=null) params.add("timeout", timeout.toString());
+        if(cache!=true) params.add("cache", cache.toString());
+        if(force==true) params.add("force", force.toString());
         String jsonAnnotation = request(uri.concat("annotation"), RequestType.POST, params);
         Annotation annotation = gson.fromJson(jsonAnnotation, Annotation.class);
         
@@ -146,12 +168,14 @@ public class NERDResult extends Request{
                                                     DocumentType docuType,
                                                     String text, 
                                                     String granularity,
-                                                    Long timeout
+                                                    Long timeout,
+                                                    Boolean cache,
+                                                    Boolean force
                                                 ) 
     {
         Gson gson = new Gson();
         
-        String json = doAnnotationJSON(uri, apiKey, extractor, docuType, text, granularity, timeout);
+        String json = doAnnotationJSON(uri, apiKey, extractor, docuType, text, granularity, timeout, cache, force);
         
         Type listType = new TypeToken<List<Entity>>(){}.getType();
         List<Entity> entities = gson.fromJson(json, listType);

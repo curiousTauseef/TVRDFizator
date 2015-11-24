@@ -16,6 +16,7 @@ package fr.eurecom.nerd.client;
 
 import java.util.List;
 
+import fr.eurecom.nerd.client.schema.Document;
 import fr.eurecom.nerd.client.schema.Entity;
 import fr.eurecom.nerd.client.type.DocumentType;
 import fr.eurecom.nerd.client.type.ExtractorType;
@@ -24,10 +25,8 @@ import fr.eurecom.nerd.client.type.GranularityType;
 public class NERD {
     
     /** API URI */
-   private String API_HOST = "http://nerd.eurecom.fr/api/";
-   //private String API_HOST = "http://localhost:8888/api/";
-
-    
+    private String API_HOST = "http://nerd.eurecom.fr/api/";
+       
     /** Currently used API key for API calls */
     private String apiKey;
 
@@ -57,7 +56,7 @@ public class NERD {
                                 String document
                               ) 
     {        
-        return annotateJSON(extType, docuType, document, GranularityType.OEN, null);
+        return annotateJSON(extType, docuType, document, GranularityType.OEN, null, true, false);
     }
     
     public String annotateJSON(
@@ -67,7 +66,7 @@ public class NERD {
                                 GranularityType granType
                                ) 
     {
-        return annotateJSON(extType, docuType, document, granType, null);
+        return annotateJSON(extType, docuType, document, granType, null, true, false);
     }
 
     public String annotateJSON(
@@ -75,7 +74,9 @@ public class NERD {
                                 DocumentType docuType,
                                 String document,
                                 GranularityType granType,
-                                Long timeout
+                                Long timeout,
+                                Boolean cache,
+                                Boolean force
                                 ) 
     {
         String extractor = LookUp.mapExtractor(extType);
@@ -87,20 +88,27 @@ public class NERD {
                                             docuType,
                                             document,
                                             granularity,
-                                            timeout);
+                                            timeout,
+                                            cache,
+                                            force);
     }
 
 
     /**
      *   Get collection of Extraction objects
      */
+    public Document getDocument (DocumentType docuType, String document) 
+    {
+        return NERDResult.getDocument( API_HOST, apiKey, docuType, document);
+    }
+    
     public List<Entity> annotate(
                                     ExtractorType extType, 
                                     DocumentType docuType,
                                     String document
                                 )
     {                
-        return annotate(extType, docuType, document, GranularityType.OEN, null);
+        return annotate(extType, docuType, document, GranularityType.OEN, null, true, false);
     }
     
     public List<Entity> annotate(  
@@ -110,7 +118,7 @@ public class NERD {
                                     GranularityType granType
                                 )
     {   
-        return annotate(extType, docuType, document, granType, null);
+        return annotate(extType, docuType, document, granType, null, true,false);
     }
 
    public List<Entity> annotate(   
@@ -118,7 +126,9 @@ public class NERD {
                                    DocumentType docuType,
                                    String document,
                                    GranularityType granType,
-                                   Long timeout
+                                   Long timeout,
+                                   Boolean cache,
+                                   Boolean force
                                ) 
    {        
        String extractor = LookUp.mapExtractor(extType);
@@ -130,6 +140,8 @@ public class NERD {
                                        docuType,
                                        document,
                                        granularity, 
-                                       timeout);
+                                       timeout,
+                                       cache,
+                                       force);
    }
 }

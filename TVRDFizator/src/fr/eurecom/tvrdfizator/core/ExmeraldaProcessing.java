@@ -23,8 +23,9 @@ public class ExmeraldaProcessing extends Thread {
 	DB db;
 	String namespace;
 	String locator;
+	String metadataFileName = "";
 	
-	public ExmeraldaProcessing (DB db, UUID idMediaResource, String metadataType, String metadataFile, DBCollection mediaresources, DBObject mr, String namespace, String locator){
+	public ExmeraldaProcessing (DB db, UUID idMediaResource, String metadataType, String metadataFile, DBCollection mediaresources, DBObject mr, String namespace, String locator, String metadataFileName){
 
 		this.locator = locator;
 		this.namespace = namespace;
@@ -34,7 +35,7 @@ public class ExmeraldaProcessing extends Thread {
 		this.metadataFile = metadataFile;
 		this.mediaresources = mediaresources;
 		this.mr=mr;
-		
+		this.metadataFileName = metadataFileName;
 	}
 	
 	
@@ -58,10 +59,11 @@ public class ExmeraldaProcessing extends Thread {
 
 		//SERIALIZATION
 		 Processing p = new Processing();
-		 if (p.analisys_process( "./data/exmeralda_"+idMediaResource+idtransaction+".exb",  "./data/exmeralda_"+idMediaResource+idtransaction+".ttl", idMediaResource.toString(), namespace, locator)){
+		 if (p.analisys_process( "./data/exmeralda_"+idMediaResource+idtransaction+".exb",  "./data/exmeralda_"+idMediaResource+idtransaction+".ttl", idMediaResource.toString(), namespace, locator, metadataFileName)){
 
 		 
 
+			
 			
 			 //Storing in the database
 	

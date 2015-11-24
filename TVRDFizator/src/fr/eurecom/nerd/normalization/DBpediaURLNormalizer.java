@@ -13,9 +13,6 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryParseException;
 import com.hp.hpl.jena.query.ResultSet;
 
-import fr.eurecom.nerd.client.type.Extractor;
-import fr.eurecom.nerd.client.type.ExtractorType;
-
 public class DBpediaURLNormalizer {
 
 	
@@ -79,6 +76,20 @@ public class DBpediaURLNormalizer {
 		
 		String query = "PREFIX dbpedia: <http://dbpedia.org/resource/> select ?b where { <"+resource+ "> ?a ?b } LIMIT 1";
 
+		if (candidate == null){
+			System.out.println("ERROR, null label to desambiguate");
+			//return false;
+		}
+		
+		
+		if(candidate.equals("")){
+			System.out.println("ERROR, Empty label to desambiguate");
+			//return false;
+		}
+		
+		
+		System.out.println("Resource: " + resource);
+		System.out.println("Query: " + query);
 	 
 		try {
 			QueryExecution qe = QueryExecutionFactory.sparqlService(service, query);

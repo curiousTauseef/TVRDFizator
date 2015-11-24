@@ -39,9 +39,9 @@ public class TypesTest {
 		NERD nerd = new NERD("loq6asma69tgfq2aijbubh2t5klm7pk0");
 
 
-		String json = nerd.annotateJSON(ExtractorType.COMBINED,
+		String json = nerd.annotateJSON(ExtractorType.NERDML,
 	                                    DocumentType.PLAINTEXT,
-	                                    text, GranularityType.OEN, 1000L);
+	                                    text, GranularityType.OEN);
 		
 		System.out.println(json);
 		
@@ -52,7 +52,7 @@ public class TypesTest {
 		
 		
 		for (NERDEntity entity: entities){
-			System.out.println(entity.getExtractor() + ",    "+ entity.getExtractorType() + ",   "+entity.getLabel() + ",    " + entity.getUri());
+			System.out.println(entity.getExtractor() + ",    "+ entity.getNerdType() +  ",    "+entity.getExtractorType() + ",   "+entity.getLabel() + ",    " + entity.getUri());
 			DBpediaTypeNormalizer tn = new DBpediaTypeNormalizer();
 			List<String> normalizedTypes = tn.normalizeTypes(entity.getExtractorType(), entity.getExtractor());
 			if (normalizedTypes!=null){

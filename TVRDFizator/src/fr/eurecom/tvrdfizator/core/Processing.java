@@ -64,7 +64,7 @@ public class Processing {
 	}
 	
 	
-	public boolean analisys_process(String in_exmaralda_file_path, String out_exmaralda_file_path, String media_item_id, String namespace, String locator){
+	public boolean analisys_process(String in_exmaralda_file_path, String out_exmaralda_file_path, String media_item_id, String namespace, String locator, String exmeraldaFile){
 		
 
 
@@ -92,8 +92,9 @@ public class Processing {
 
 		//Write the RDF Data for Legacy information
 		try {
-			RDFWriterAnalisys wt = new RDFWriterAnalisys (out_exmaralda_file_path, mdata, media_item_id, namespace, locator);	
+			RDFWriterAnalisys wt = new RDFWriterAnalisys (out_exmaralda_file_path, mdata, media_item_id, namespace, locator, exmeraldaFile);	
 			wt.create_exmeralda();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ERROR when generating the RDF model.");
@@ -108,22 +109,23 @@ public class Processing {
 	}
 	
 	
-	public boolean entity_process(String in_entity_file_path, String in_subtitle_file_path, String out_entity_file_path, String media_resource_id, String namespace, String locator, String subtitleFile){
+	public boolean entity_process(String in_entity_file_path, String in_subtitle_file_path, String out_entity_file_path, String media_resource_id, String namespace, String locator, String subtitleFile, boolean is_plaintext){
 		
 		List <Subtitle> subtitles = null;
 		// - Entities file.
-		if (!in_subtitle_file_path.equals(""))
-			try {
-				SubtitleReader subtitler = new SubtitleReader (in_subtitle_file_path);	
-				subtitles = subtitler.read();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("ERROR when generating the RDF model.");
-				return false;
-			}
-		else System.out.println("No subtitle information available. Continuing processing XML. ");
-		System.out.println("The number of subtitles is " + subtitles.size());
-
+		if (!is_plaintext){
+			if (!in_subtitle_file_path.equals(""))
+				try {
+					SubtitleReader subtitler = new SubtitleReader (in_subtitle_file_path);	
+					subtitles = subtitler.read();
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("ERROR when generating the RDF model.");
+					return false;
+				}
+			else System.out.println("No subtitle information available. Continuing processing XML. ");
+			System.out.println("The number of subtitles is " + subtitles.size());
+		}
 		
 		List <NERDEntity> entities = null;
 
@@ -142,7 +144,7 @@ public class Processing {
 
 		//Write the RDF Data from subtitles and entities
 		try {
-			RDFWriterSubtitleEntity wt = new RDFWriterSubtitleEntity (out_entity_file_path, subtitles, entities, media_resource_id, namespace, locator, subtitleFile);	
+			RDFWriterSubtitleEntity wt = new RDFWriterSubtitleEntity (out_entity_file_path, subtitles, entities, media_resource_id, namespace, locator, subtitleFile, is_plaintext);	
 			wt.create_subtitles_entities();
 		} catch (Exception e) {
 			e.printStackTrace();

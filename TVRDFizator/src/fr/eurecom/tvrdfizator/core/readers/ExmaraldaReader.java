@@ -2,14 +2,12 @@ package fr.eurecom.tvrdfizator.core.readers;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Hashtable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,7 +17,6 @@ import org.xml.sax.SAXException;
 import fr.eurecom.tvrdfizator.core.datastructures.ItemLayer;
 import fr.eurecom.tvrdfizator.core.datastructures.Layer;
 import fr.eurecom.tvrdfizator.core.datastructures.Speaker;
-import fr.eurecom.tvrdfizator.core.datastructures.Version;
 import fr.eurecom.tvrdfizator.core.datastructures.VideoMetaData;
 
 
@@ -199,11 +196,17 @@ public class ExmaraldaReader{
 				 if (eventElement.getElementsByTagName("ud-information").getLength()>0){
 					 for (int i = 0; i < eventElement.getElementsByTagName("ud-information").getLength(); i++){
 						 
-						 String ud_value = eventElement.getElementsByTagName("ud-information").item(i).getChildNodes().item(0).getNodeValue();
+						 
+						 String ud_value = "";
 						 Element event_ud_element = (Element) eventElement.getElementsByTagName("ud-information").item(i);
+
+						 if (eventElement.getElementsByTagName("ud-information").item(i).getChildNodes().getLength() >0){
+							 ud_value = eventElement.getElementsByTagName("ud-information").item(i).getChildNodes().item(0).getNodeValue();
+						 }
 						 String ud_name = event_ud_element.getAttribute("attribute-name");
 
 						 mf.set_ud_information(ud_name, ud_value);
+						
 					 }					
 				 }
 				 if (eventElement.getChildNodes().getLength() > 0 ){

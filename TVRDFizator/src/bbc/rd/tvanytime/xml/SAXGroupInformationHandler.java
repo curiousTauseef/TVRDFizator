@@ -586,6 +586,9 @@ class SAXGroupInformationHandler extends DefaultHandler {
         else if (attribute.equals("albumTitle")) title.setType(Title.ALBUMTITLE);
         else if (attribute.equals("seriesTitle")) title.setType(Title.SERIESTITLE);
         else if (attribute.equals("episodeTitle")) title.setType(Title.EPISODETITLE);
+        else if (attribute.equals("topline")) title.setType(Title.TOPLINE);
+
+        
         else addError("Title: Invalid title type");
       }
       catch (TVAnytimeException tvae) {
